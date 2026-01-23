@@ -17,17 +17,22 @@ public class Vision extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("vision: id", LimelightHelpers.getFiducialID("limelight"));
 
-    var target = LimelightHelpers.getBotPose_TargetSpace("limelight");
-    SmartDashboard.putNumber("vision: x", target[0]);
-    SmartDashboard.putNumber("vision: y", target[1]);
-    SmartDashboard.putNumber("vision: z", target[2]);
+    // var target = LimelightHelpers.getBotPose_TargetSpace("limelight");
+    // SmartDashboard.putNumber("vision: x", target[0]);
+    // SmartDashboard.putNumber("vision: y", target[1]);
+    // SmartDashboard.putNumber("vision: z", target[2]);
 
     SmartDashboard.putNumber("vision: distance to target", this.distanceToTargetInInches());
 
   }
 
   public double distanceToTargetInInches(){
+    
     var target = LimelightHelpers.getBotPose_TargetSpace("limelight");
-    return target[2] * 39.3701;
+
+    if( target.length >= 2){
+      return target[2] * -39.3701;
+    }
+    return -1;
   }
 }

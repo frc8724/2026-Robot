@@ -21,7 +21,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-
+import frc.robot.controls.MayhemExtreme3dPro;
+import frc.robot.controls.MayhemExtreme3dPro.Axis;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Shooter;
@@ -42,12 +43,13 @@ public class RobotContainer {
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
+    private final MayhemExtreme3dPro joystick = new MayhemExtreme3dPro(0);
     // private final CommandXboxController joystick = new CommandXboxController(0);
     private final Joystick testStick = new Joystick(1);
-    private final Shooter shooter = new Shooter();
+    // private final Shooter shooter = new Shooter();
     private final Vision vision = new Vision();
 
-    // public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     /* Path follower */
     // private final SendableChooser<Command> autoChooser;
@@ -64,28 +66,32 @@ public class RobotContainer {
 
     private void configureBindings() {
         // testStick.button(6,null);
-        new JoystickButton(testStick, 6).onTrue(shooter.offsetShooterSpeedCommand(0.1));
-        new JoystickButton(testStick, 7).onTrue(shooter.offsetShooterSpeedCommand(-0.1));
+        // new JoystickButton(testStick, 6).onTrue(shooter.offsetShooterSpeedCommand(0.1));
+        // new JoystickButton(testStick, 7).onTrue(shooter.offsetShooterSpeedCommand(-0.1));
 
-        new JoystickButton(testStick, 11).onTrue(shooter.offsetShooterVelocityCommand(10));
-        new JoystickButton(testStick, 10).onTrue(shooter.offsetShooterVelocityCommand(-10));
+        // new JoystickButton(testStick, 11).onTrue(shooter.offsetShooterVelocityCommand(10));
+        // new JoystickButton(testStick, 10).onTrue(shooter.offsetShooterVelocityCommand(-10));
+
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
-        // drivetrain.setDefaultCommand(
-        //     // Drivetrain will execute this command periodically
-        //     drivetrain.applyRequest(() ->
-        //         drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-        //             .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-        //             .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
-        //     )
-        // );
+        drivetrain.setDefaultCommand(
+            // Drivetrain will execute this command periodically
+            drivetrain.applyRequest(() ->
+                // drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+                //     .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+                //     .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+                drive.withVelocityX(-joystick.getRawAxis(Axis.Y) * MaxSpeed) // Drive forward with negative Y (forward)
+                    .withVelocityY(-joystick.getRawAxis(Axis.X) * MaxSpeed) // Drive left with negative X (left)
+                    .withRotationalRate(-joystick.getRawAxis(Axis.Z) * MaxAngularRate) // Drive counterclockwise with negative X (left)
+            )
+        );
 
         // Idle while the robot is disabled. This ensures the configured
         // neutral mode is applied to the drive motors while disabled.
-        // final var idle = new SwerveRequest.Idle();
-        // RobotModeTriggers.disabled().whileTrue(
-        //     drivetrain.applyRequest(() -> idle).ignoringDisable(true)
-        // );
+        final var idle = new SwerveRequest.Idle();
+        RobotModeTriggers.disabled().whileTrue(
+            drivetrain.applyRequest(() -> idle).ignoringDisable(true)
+        );
 
         // joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
         // joystick.b().whileTrue(drivetrain.applyRequest(() ->
