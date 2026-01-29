@@ -23,7 +23,7 @@ import frc.robot.auto.AutoChooser;
 import frc.robot.controls.MayhemExtreme3dPro;
 import frc.robot.controls.MayhemExtreme3dPro.Axis;
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.*;
 
 public class RobotContainer {
         private double MaxSpeed = 0.3 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired
@@ -46,8 +46,9 @@ public class RobotContainer {
         // private final CommandXboxController joystick = new CommandXboxController(0);
         private final MayhemExtreme3dPro driverStick = new MayhemExtreme3dPro(1);
 
-        public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+        public static final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
         private final AutoChooser m_auto = new AutoChooser();
+        private static final Vision vision = new Vision();
 
         public RobotContainer() {
                 // Unhandled exception instantiating robot
@@ -80,6 +81,7 @@ public class RobotContainer {
                 m_auto.addAuto("auto drive shoot", new PathPlannerAuto("auto drive shoot"));
                 m_auto.addAuto("Drive Back", new PathPlannerAuto("Drive Back"));
                 m_auto.addAuto("Triangle", new PathPlannerAuto("Triangle"));
+                m_auto.addAuto("Drive Side to Side", new PathPlannerAuto("Drive Side to Side"));
 
         }
 
