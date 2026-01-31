@@ -212,6 +212,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         configureAutoBuilder();
     }
 
+    public Command zeroBotRotationCommand() {
+        return runOnce(() -> {
+            var currentPose = this.getState().Pose;
+            this.resetPose(new Pose2d(currentPose.getX(), currentPose.getY(), new Rotation2d()));
+        });
+    }
+
     private void configureAutoBuilder() {
         try {
             var config = RobotConfig.fromGUISettings();

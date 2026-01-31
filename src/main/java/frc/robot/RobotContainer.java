@@ -82,6 +82,8 @@ public class RobotContainer {
                 m_auto.addAuto("Drive Back", new PathPlannerAuto("Drive Back"));
                 m_auto.addAuto("Triangle", new PathPlannerAuto("Triangle"));
                 m_auto.addAuto("Drive Side to Side", new PathPlannerAuto("Drive Side to Side"));
+                m_auto.addAuto("Start Corner Shoot", new PathPlannerAuto("Start Corner Shoot"));
+                m_auto.addAuto("Test X", new PathPlannerAuto("Test X"));
 
         }
 
@@ -111,6 +113,8 @@ public class RobotContainer {
                                                                                                                       // X
                                                                                                                       // (left)
                                 ));
+
+                driverStick.Button(11).onTrue(drivetrain.zeroBotRotationCommand());
 
                 // Idle while the robot is disabled. This ensures the configured
                 // neutral mode is applied to the drive motors while disabled.

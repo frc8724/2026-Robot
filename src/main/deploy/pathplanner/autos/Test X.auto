@@ -7,13 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "start path"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Shoot Left 1 Stable"
+            "pathName": "Test X"
           }
         }
       ]

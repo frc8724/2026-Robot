@@ -23,48 +23,19 @@ public class Vision extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
     SmartDashboard.putNumber("vision: id", LimelightHelpers.getFiducialID("limelight"));
-
-    // var target = LimelightHelpers.getBotPose_TargetSpace("limelight");
-    // SmartDashboard.putNumber("vision: x", target[0]);
-    // SmartDashboard.putNumber("vision: y", target[1]);
-    // SmartDashboard.putNumber("vision: z", target[2]);
-
     SmartDashboard.putNumber("vision: distance to target", this.distanceToTargetInInches());
 
-    // LimelightHelpers.LimelightResults result =
-    // LimelightHelpers.getLatestResults(limelight);
-    // SmartDashboard.putString("vision:results:string", result.error);
-    // var targetFiducials = result.targets_Fiducials;
-    // SmartDashboard.putNumber("vision:result_length",
-    // result.targets_Fiducials.length);
-    // if (targetFiducials.length > 0) {
-    // SmartDashboard.putNumber("vision:target:x", targetFiducials[0].tx);
-    // SmartDashboard.putNumber("vision:target:y", targetFiducials[0].tx);
-    // SmartDashboard.putNumber("vision:target;id", targetFiducials[0].fiducialID);
-    // botpose = LimelightHelpers.getBotPose2d(limelight);
-    // if (botpose != null) {
-    // SmartDashboard.putNumber("vision:botpose:x", botpose.getX());
-    // SmartDashboard.putNumber("vision:botpose:y", botpose.getY());
-    // SmartDashboard.putNumber("vision:botpose:rot",
-    // botpose.getRotation().getDegrees());
-
-    // RobotContainer.drivetrain.addVisionMeasurement(
-    // botpose,
-    // Timer.getFPGATimestamp());
-    // }
     botpose = LimelightHelpers.getBotPose2d_wpiBlue(limelight);
-    if (botpose != null && botpose.getX() != 0 && botpose.getY() != 0) {
+    var targetCount = LimelightHelpers.getTargetCount(limelight);
+    if (botpose != null && botpose.getX() != 0 && botpose.getY() != 0 && targetCount > 1) {
       SmartDashboard.putNumber("vision:botpose:blue:x", botpose.getX());
       SmartDashboard.putNumber("vision:botpose:blue:y", botpose.getY());
       SmartDashboard.putNumber("vision:botpose:blue:rot", botpose.getRotation().getDegrees());
 
-      RobotContainer.drivetrain.addVisionMeasurement(botpose,
-          Timer.getFPGATimestamp());
+      // RobotContainer.drivetrain.addVisionMeasurement(botpose,
+      // Timer.getFPGATimestamp());
     }
-    // }
-
   }
 
   public double distanceToTargetInInches() {
