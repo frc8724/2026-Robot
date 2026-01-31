@@ -8,17 +8,10 @@ import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.config.PIDConstants;
 
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.auto.AutoChooser;
 import frc.robot.controls.MayhemExtreme3dPro;
 import frc.robot.controls.MayhemExtreme3dPro.Axis;
@@ -51,30 +44,6 @@ public class RobotContainer {
         private static final Vision vision = new Vision();
 
         public RobotContainer() {
-                // Unhandled exception instantiating robot
-                // com.pathplanner.lib.commands.PathPlannerAuto
-                // com.pathplanner.lib.auto.AutoBuilderException: AutoBuilder was not configured
-                // before attempting to load a PathPlannerAuto from file
-                // Error
-                // AutoBuilder.configure(
-                // drivetrain::getPose,
-                // drivetrain::resetOdometry,
-                // this::getChassisSpeeds, // ChassisSpeeds supplier
-                // this::driveRobotRelative, // Method that will drive the robot
-                // new HolonomicPathFollowerConfig(
-                // new PIDConstants(5.0, 0, 0), // Translation PID
-                // new PIDConstants(5.0, 0, 0), // Rotation PID
-                // 4.5, // Max module speed (m/s)
-                // 0.4, // Drive base radius (m)
-                // new ReplanningConfig()),
-                // () -> {
-                // // Boolean supplier for alliance flipping
-                // var alliance = DriverStation.getAlliance();
-                // return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red :
-                // false;
-                // },
-                // this // Subsystem
-                // );
 
                 configureBindings();
 
@@ -115,6 +84,8 @@ public class RobotContainer {
                                 ));
 
                 driverStick.Button(11).onTrue(drivetrain.zeroBotRotationCommand());
+                driverStick.Button(5).onTrue(drivetrain.goToShootLocation1Command());
+                driverStick.Button(6).onTrue(drivetrain.goToShootLocation2Command());
 
                 // Idle while the robot is disabled. This ensures the configured
                 // neutral mode is applied to the drive motors while disabled.

@@ -15,13 +15,18 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.DistanceUnit;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -62,6 +67,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
 
+    private final double fieldLength = 16.48;
     /*
      * SysId routine for characterizing translation. This is used to find PID gains
      * for the drive motors.
@@ -219,6 +225,27 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         });
     }
 
+    public Command goToShootLocation1Command() {
+        Translation2d tran2d = new Translation2d(14, 4);
+        Rotation2d r2d = new Rotation2d(Units.degreesToRadians(180));
+        var pose = new Pose2d(tran2d, r2d);
+        var cmd = AutoBuilder.pathfindToPose(pose, new PathConstraints(1, 1, 360,
+                360));
+
+        return cmd;
+    }
+
+    public Command goToShootLocation2Command() {
+        boolean isBlueAlliance = DriverStation.getAlliance().get() == Alliance.Blue;
+        Translation2d tran2d = new Translation2d(isBlueAlliance ? fieldLength - 10 : 10, 4);
+        Rotation2d r2d = new Rotation2d(Units.degreesToRadians(isBlueAlliance ? 180 : 0));
+        var pose = new Pose2d(tran2d, r2d);
+        var cmd = AutoBuilder.pathfindToPose(pose, new PathConstraints(1, 1, 360,
+                360));
+
+        return cmd;
+    }
+
     private void configureAutoBuilder() {
         try {
             var config = RobotConfig.fromGUISettings();
@@ -317,6 +344,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         // field2d.setRobotPose(botPose.pose);
         // SmartDashboard.putData(field2d);
+
+        SmartDashboard.putNumber("shoot_location:x", AutoBuilder.getCurrentPose().getX());
+        SmartDashboard.putNumber("shoot_location:y", AutoBuilder.getCurrentPose().getY());
 
     }
 
