@@ -53,6 +53,7 @@ public class RobotContainer {
                 m_auto.addAuto("Drive Side to Side", new PathPlannerAuto("Drive Side to Side"));
                 m_auto.addAuto("Start Corner Shoot", new PathPlannerAuto("Start Corner Shoot"));
                 m_auto.addAuto("Test X", new PathPlannerAuto("Test X"));
+                m_auto.addAuto("Shoot Center Climb", new PathPlannerAuto("Shoot Center Climb"));
 
         }
 
