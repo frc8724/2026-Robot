@@ -10,7 +10,11 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.auto.AutoChooser;
 import frc.robot.controls.MayhemExtreme3dPro;
@@ -94,6 +98,7 @@ public class RobotContainer {
                 driverStick.Button(2).onTrue(drivetrain.testTriangle());
                 driverStick.Button(8).onTrue(drivetrain.trenchRightOutCommand());
                 driverStick.Button(10).onTrue(drivetrain.trenchRightInCommand());
+                driverStick.Button(1).onTrue(drivetrain.lookAtHubCommand());
 
                 // Idle while the robot is disabled. This ensures the configured
                 // neutral mode is applied to the drive motors while disabled.
