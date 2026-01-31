@@ -26,6 +26,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.DistanceUnit;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -35,6 +36,7 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.LimelightHelpers;
@@ -68,6 +70,19 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
 
     private final double fieldLength = 16.48;
+
+    public final Pose2d shooterPose1Red = new Pose2d(14, 4, new Rotation2d(Units.degreesToRadians(180)));
+    public final Pose2d shooterPose2Red = new Pose2d(10, 4, new Rotation2d(Units.degreesToRadians(0)));
+
+    public final Pose2d climbRightRed = new Pose2d(15.15, 4.7, new Rotation2d(Units.degreesToRadians(180)));
+    public final Pose2d climbLeftRed = new Pose2d(15, 4, new Rotation2d(Units.degreesToRadians(180)));
+
+    public final Pose2d trenchRightCloseStartRed = new Pose2d(13.1, 7.6, new Rotation2d(Units.degreesToRadians(180)));
+    public final Pose2d trenchRightFarEndRed = new Pose2d(10.8, 7.7, new Rotation2d(Units.degreesToRadians(180)));
+
+    public final Pose2d trenchRightCloseEndRed = new Pose2d(13.1, 7.6, new Rotation2d(Units.degreesToRadians(0)));
+    public final Pose2d trenchRightFarStartRed = new Pose2d(10.8, 7.7, new Rotation2d(Units.degreesToRadians(0)));
+
     /*
      * SysId routine for characterizing translation. This is used to find PID gains
      * for the drive motors.
@@ -225,25 +240,45 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         });
     }
 
-    public Command goToShootLocation1Command() {
-        Translation2d tran2d = new Translation2d(14, 4);
-        Rotation2d r2d = new Rotation2d(Units.degreesToRadians(180));
-        var pose = new Pose2d(tran2d, r2d);
-        var cmd = AutoBuilder.pathfindToPose(pose, new PathConstraints(1, 1, 360,
+    public Command testTriangle() {
+        return new SequentialCommandGroup(goToPoseCommand(shooterPose1Red),
+                goToPoseCommand(climbLeftRed),
+                goToPoseCommand(climbRightRed),
+                goToPoseCommand(shooterPose1Red));
+    }
+
+    public Command trenchRightOutCommand() {
+        return new SequentialCommandGroup(
+                goToPoseCommand(trenchRightCloseStartRed),
+                goToPoseCommand(trenchRightFarEndRed));
+    }
+
+    public Command trenchRightInCommand() {
+        return new SequentialCommandGroup(
+                goToPoseCommand(trenchRightFarStartRed),
+                goToPoseCommand(trenchRightCloseEndRed));
+    }
+
+    public Command goToPoseCommand(Pose2d pose) {
+        var traslatedPose = translatePose(pose);
+        var cmd = AutoBuilder.pathfindToPose(traslatedPose, new PathConstraints(1, 1, 360,
                 360));
 
         return cmd;
     }
 
-    public Command goToShootLocation2Command() {
+    private Pose2d translatePose(Pose2d pose) {
         boolean isBlueAlliance = DriverStation.getAlliance().get() == Alliance.Blue;
-        Translation2d tran2d = new Translation2d(isBlueAlliance ? fieldLength - 10 : 10, 4);
-        Rotation2d r2d = new Rotation2d(Units.degreesToRadians(isBlueAlliance ? 180 : 0));
-        var pose = new Pose2d(tran2d, r2d);
-        var cmd = AutoBuilder.pathfindToPose(pose, new PathConstraints(1, 1, 360,
-                360));
+        Pose2d newPose = new Pose2d(
+                isBlueAlliance ? fieldLength - pose.getX() : pose.getX(),
+                pose.getY(),
+                new Rotation2d(pose.getRotation().getRadians() + (isBlueAlliance ? Math.PI : 0)));
+        return newPose;
+    }
 
-        return cmd;
+    public Command stopAllCommand() {
+        return runOnce(() -> {
+        });
     }
 
     private void configureAutoBuilder() {

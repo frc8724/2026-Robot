@@ -84,8 +84,15 @@ public class RobotContainer {
                                 ));
 
                 driverStick.Button(11).onTrue(drivetrain.zeroBotRotationCommand());
-                driverStick.Button(5).onTrue(drivetrain.goToShootLocation1Command());
-                driverStick.Button(6).onTrue(drivetrain.goToShootLocation2Command());
+                driverStick.Button(12).onTrue(drivetrain.stopAllCommand());
+
+                driverStick.Button(5).onTrue(drivetrain.goToPoseCommand(drivetrain.shooterPose1Red));
+                // driverStick.Button(6).onTrue(drivetrain.goToPoseCommand(drivetrain.shooterPose2Red));
+                driverStick.Button(4).onTrue(drivetrain.goToPoseCommand(drivetrain.climbRightRed));
+                driverStick.Button(3).onTrue(drivetrain.goToPoseCommand(drivetrain.climbLeftRed));
+                driverStick.Button(2).onTrue(drivetrain.testTriangle());
+                driverStick.Button(8).onTrue(drivetrain.trenchRightOutCommand());
+                driverStick.Button(10).onTrue(drivetrain.trenchRightInCommand());
 
                 // Idle while the robot is disabled. This ensures the configured
                 // neutral mode is applied to the drive motors while disabled.
