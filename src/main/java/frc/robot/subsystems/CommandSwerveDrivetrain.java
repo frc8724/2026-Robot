@@ -7,6 +7,7 @@ import java.util.function.Supplier;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest.SwerveDriveBrake;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -22,6 +23,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
@@ -32,6 +34,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog.MotorLog;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
@@ -259,6 +262,31 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             // CommandScheduler.getInstance().schedule(c);
             // SmartDashboard.putString("debug", "look at hub command finished");
             return c;
+        });
+    }
+
+    private final SwerveRequest.SwerveDriveBrake swerveBrake = new SwerveRequest.SwerveDriveBrake();
+
+    public Command lockWheels() {
+        return run(() -> {
+            // var modules = this.getModules();
+            // modules[0].getTargetState().angle = new
+            // Rotation2d(Units.degreesToRadians(45));
+            // modules[1].getTargetState().angle = new
+            // Rotation2d(Units.degreesToRadians(45));
+            // modules[2].getTargetState().angle = new
+            // Rotation2d(Units.degreesToRadians(45));
+            // modules[3].getTargetState().angle = new
+            // Rotation2d(Units.degreesToRadians(45));
+            // var state1 = new SwerveDriveState(0.0,new
+            // Rotation2d(Units.degreesToRadians(45)));
+            // var state = new SwerveModuleState(0, Rotation2d.fromDegrees(45));
+            // this.getState().ModuleStates[0] = state;
+            // driveState = this.getState();
+            this.setControl(swerveBrake);
+            // this.applyRequest(() -> {
+            // return swerveBrake;
+            // });
         });
     }
 

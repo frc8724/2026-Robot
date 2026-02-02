@@ -35,6 +35,7 @@ public class RobotContainer {
                         .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
                         .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive
                                                                                  // motors
+
         private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
         private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
@@ -99,6 +100,8 @@ public class RobotContainer {
                 driverStick.Button(8).onTrue(drivetrain.trenchRightOutCommand());
                 driverStick.Button(10).onTrue(drivetrain.trenchRightInCommand());
                 driverStick.Button(1).onTrue(drivetrain.lookAtHubCommand());
+
+                driverStick.Button(6).whileTrue(drivetrain.lockWheels());
 
                 // Idle while the robot is disabled. This ensures the configured
                 // neutral mode is applied to the drive motors while disabled.
