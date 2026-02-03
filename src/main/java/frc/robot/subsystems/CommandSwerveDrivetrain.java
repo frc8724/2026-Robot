@@ -247,27 +247,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         });
     }
 
-    public Command lookAtHubCommand() {
-        return defer(() -> {
-            SmartDashboard.putString("debug", "look at hub command");
-            var crawlDistance = .5;
-            var currentPose = getState().Pose;
-            var hubPoseX = fieldLength - 4.6;
-            var hubPoseY = 4;
-
-            var relativeX = hubPoseX - currentPose.getX() - crawlDistance;
-            var relativeY = hubPoseY - currentPose.getY();
-
-            var angle = Math.atan2(relativeY, relativeX);
-            SmartDashboard.putString("debug", "" + angle + " x: " + relativeX + " y: " + relativeY);
-            var c = goToPoseCommand(
-                    new Pose2d(currentPose.getX() - crawlDistance, currentPose.getY(), new Rotation2d(angle)));
-            // CommandScheduler.getInstance().schedule(c);
-            // SmartDashboard.putString("debug", "look at hub command finished");
-            return c;
-        });
-    }
-
     private final SwerveRequest.SwerveDriveBrake swerveBrake = new SwerveRequest.SwerveDriveBrake();
 
     public Command lockWheels() {
@@ -327,12 +306,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                     .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage)
                     .withSteerRequestType(SwerveModule.SteerRequestType.Position);
 
-            // Safety: if no target, stop (and do NOT drift)
-            // if (!LimelightHelpers.getTV("limelight")) {
-            // this.setControl(request.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
-            // return;
-            // }
-
             // --- Rotation control (tx -> 0), using your proven sign convention ---
             // double txDeg = LimelightHelpers.getTX("limelight");
             // TODO: need to reverse alliances
@@ -343,7 +316,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             var relativeX = hubPoseX - currentPose.getX();
             var relativeY = hubPoseY - currentPose.getY();
             var angleRad = Math.atan2(relativeY, relativeX) - currentPose.getRotation().getRadians();
-            // double txDeg = Units.radiansToDegrees(angleRad);
 
             if (angleRad > Math.PI) {
                 angleRad = angleRad - 2 * Math.PI;

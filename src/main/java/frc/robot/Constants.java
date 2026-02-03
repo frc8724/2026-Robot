@@ -27,5 +27,6 @@ public class Constants {
     public static final int TALON_ID_CLIMBER_HOOK = 18;
     public static final int TALON_ID_LIMELIGHT = 19;
 
+    public static final double fieldLength = 16.48;
 
 }

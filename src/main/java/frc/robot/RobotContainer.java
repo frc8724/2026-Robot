@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.auto.AutoChooser;
 import frc.robot.controls.JoystickPOVButton;
@@ -103,7 +104,8 @@ public class RobotContainer {
                 // driverStick.Button(1).onTrue(drivetrain.lookAtHubCommand());
 
                 driverStick.Button(6).whileTrue(drivetrain.lockWheels());
-                driverStick.Button(1).whileTrue(drivetrain.pointToHubCommand());
+                driverStick.Button(1)
+                                .whileTrue(new SequentialCommandGroup(new DrivePointToHub(), drivetrain.lockWheels()));
 
                 // Idle while the robot is disabled. This ensures the configured
                 // neutral mode is applied to the drive motors while disabled.
