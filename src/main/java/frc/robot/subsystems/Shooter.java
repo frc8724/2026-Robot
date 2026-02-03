@@ -12,6 +12,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.hardware.core.CoreTalonFX;
 
 // import edu.wpi.first.wpilibj2.*;
 
@@ -24,15 +25,15 @@ public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
   public Shooter() {
     // in init function, set slot 0 gains
-var slot0Configs = new Slot0Configs();
-slot0Configs.kS = 0.1; // Add 0.1 V output to overcome static friction
-slot0Configs.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
-slot0Configs.kP = 0.11; // An error of 1 rps results in 0.11 V output
-slot0Configs.kI = 0; // no output for integrated error
-slot0Configs.kD = 0; // no output for error derivative
+    var slot0Configs = new Slot0Configs();
+    slot0Configs.kS = 0.1; // Add 0.1 V output to overcome static friction
+    slot0Configs.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
+    slot0Configs.kP = 0.11; // An error of 1 rps results in 0.11 V output
+    slot0Configs.kI = 0; // no output for integrated error
+    slot0Configs.kD = 0; // no output for error derivative
 
-shooterFx.getConfigurator().apply(slot0Configs);
-m_request = new VelocityVoltage(0).withSlot(0);
+    shooterFx.getConfigurator().apply(slot0Configs);
+    m_request = new VelocityVoltage(0).withSlot(0);
   }
 
   @Override
@@ -40,29 +41,35 @@ m_request = new VelocityVoltage(0).withSlot(0);
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("shooter velocity", shooterFx.getVelocity().getValueAsDouble());
   }
+
   public Command offsetShooterSpeedCommand(double i) {
     return runOnce(() -> {
       offsetShooterSpeed(i);
     });
   }
+
   void offsetShooterSpeed(double i) {
     currentSpeed += i;
     shooterFx.set(currentSpeed);
   }
+
   public Command setShooterSpeedCommand(double d) {
-        return runOnce(() -> {
-            setShooterSpeed(d);
-        });
-    }
-    void setShooterSpeed(double d) {
-      currentSpeed = d;
-      shooterFx.set(d);
-    }
+    return runOnce(() -> {
+      setShooterSpeed(d);
+    });
+  }
+
+  void setShooterSpeed(double d) {
+    currentSpeed = d;
+    shooterFx.set(d);
+  }
+
   public Command offsetShooterVelocityCommand(double d) {
     return runOnce(() -> {
       offsetShooterVelocity(d);
     });
   }
+
   void offsetShooterVelocity(double d) {
     targetSpeed += d;
     shooterFx.setControl(m_request.withVelocity(targetSpeed));

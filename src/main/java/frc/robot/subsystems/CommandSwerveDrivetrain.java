@@ -9,6 +9,7 @@ import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest.SwerveDriveBrake;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
+import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
@@ -18,6 +19,8 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 
+import edu.wpi.first.hal.simulation.AnalogInDataJNI;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -269,24 +272,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     public Command lockWheels() {
         return run(() -> {
-            // var modules = this.getModules();
-            // modules[0].getTargetState().angle = new
-            // Rotation2d(Units.degreesToRadians(45));
-            // modules[1].getTargetState().angle = new
-            // Rotation2d(Units.degreesToRadians(45));
-            // modules[2].getTargetState().angle = new
-            // Rotation2d(Units.degreesToRadians(45));
-            // modules[3].getTargetState().angle = new
-            // Rotation2d(Units.degreesToRadians(45));
-            // var state1 = new SwerveDriveState(0.0,new
-            // Rotation2d(Units.degreesToRadians(45)));
-            // var state = new SwerveModuleState(0, Rotation2d.fromDegrees(45));
-            // this.getState().ModuleStates[0] = state;
-            // driveState = this.getState();
             this.setControl(swerveBrake);
-            // this.applyRequest(() -> {
-            // return swerveBrake;
-            // });
         });
     }
 
@@ -328,6 +314,60 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     public Command stopAllCommand() {
         return runOnce(() -> {
+        });
+    }
+
+    public static final double ROTATE_KP_RAD_PER_SEC_PER_DEG = 0.06 * 180;
+    public static final double ROTATE_MAX_OMEGA_RAD_PER_SEC = 4.0;
+    public static final double ROTATE_DEADBAND_DEG = Units.degreesToRadians(1.0);
+
+    public Command pointToHubCommand() {
+        return run(() -> {
+            SwerveRequest.RobotCentric request = new SwerveRequest.RobotCentric()
+                    .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage)
+                    .withSteerRequestType(SwerveModule.SteerRequestType.Position);
+
+            // Safety: if no target, stop (and do NOT drift)
+            // if (!LimelightHelpers.getTV("limelight")) {
+            // this.setControl(request.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
+            // return;
+            // }
+
+            // --- Rotation control (tx -> 0), using your proven sign convention ---
+            // double txDeg = LimelightHelpers.getTX("limelight");
+            // TODO: need to reverse alliances
+            var currentPose = getState().Pose;
+            var hubPoseX = fieldLength - 4.6;
+            var hubPoseY = 4;
+
+            var relativeX = hubPoseX - currentPose.getX();
+            var relativeY = hubPoseY - currentPose.getY();
+            var angleRad = Math.atan2(relativeY, relativeX) - currentPose.getRotation().getRadians();
+            // double txDeg = Units.radiansToDegrees(angleRad);
+
+            if (angleRad > Math.PI) {
+                angleRad = angleRad - 2 * Math.PI;
+            }
+
+            SmartDashboard.putString("debug", "" + angleRad);
+            double omegaRadPerSec = 0.0;
+
+            if (Math.abs(angleRad) > ROTATE_DEADBAND_DEG) {
+                omegaRadPerSec = MathUtil.clamp(
+                        ROTATE_KP_RAD_PER_SEC_PER_DEG * angleRad,
+                        -ROTATE_MAX_OMEGA_RAD_PER_SEC,
+                        ROTATE_MAX_OMEGA_RAD_PER_SEC);
+            }
+
+            // Driver translation (robot-centric)
+            double vx = 0.0;// vxMetersPerSec.getAsDouble();
+            double vy = 0.0;// vyMetersPerSec.getAsDouble();
+
+            this.setControl(
+                    request.withVelocityX(vx)
+                            .withVelocityY(vy)
+                            .withRotationalRate(omegaRadPerSec));
+
         });
     }
 
