@@ -9,6 +9,8 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -36,6 +38,8 @@ public class DrivePointToHub extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    boolean isBlueAlliance = DriverStation.getAlliance().get() == Alliance.Blue;
+
     SwerveRequest.RobotCentric request = new SwerveRequest.RobotCentric()
         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage)
         .withSteerRequestType(SwerveModule.SteerRequestType.Position);
@@ -44,7 +48,7 @@ public class DrivePointToHub extends Command {
     // double txDeg = LimelightHelpers.getTX("limelight");
     // TODO: need to reverse alliances
     var currentPose = RobotContainer.drivetrain.getState().Pose;
-    var hubPoseX = Constants.fieldLength - 4.6;
+    var hubPoseX = isBlueAlliance ? 4.6 : Constants.fieldLength - 4.6;
     var hubPoseY = 4;
 
     var relativeX = hubPoseX - currentPose.getX();
