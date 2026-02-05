@@ -61,6 +61,8 @@ public class RobotContainer {
                 m_auto.addAuto("Start Corner Shoot", new PathPlannerAuto("Start Corner Shoot"));
                 m_auto.addAuto("Test X", new PathPlannerAuto("Test X"));
                 m_auto.addAuto("Shoot Center Climb", new PathPlannerAuto("Shoot Center Climb"));
+                m_auto.addAuto("Shoot Depot Shoot Left", new PathPlannerAuto("Shoot Depot Shoot Left"));
+                m_auto.addAuto("Shoot Outpost Shoot Right", new PathPlannerAuto("Shoot Outpost Shoot Right"));
 
         }
 
