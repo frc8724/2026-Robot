@@ -109,6 +109,8 @@ public class RobotContainer {
                 driverStick.Button(1)
                                 .whileTrue(new SequentialCommandGroup(new DrivePointToHub(), drivetrain.lockWheels()));
 
+                driverStick.PovButton(JoystickPOVButton.SOUTH).onTrue(drivetrain.bumpLeftOutCommand());
+
                 // Idle while the robot is disabled. This ensures the configured
                 // neutral mode is applied to the drive motors while disabled.
                 final var idle = new SwerveRequest.Idle();

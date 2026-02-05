@@ -2,7 +2,10 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.SignalLogger;
@@ -43,6 +46,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -90,6 +94,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public final Pose2d trenchRightCloseEndRed = new Pose2d(13.1, 7.6, new Rotation2d(Units.degreesToRadians(0)));
     public final Pose2d trenchRightFarStartRed = new Pose2d(10.8, 7.7, new Rotation2d(Units.degreesToRadians(0)));
 
+    public final Pose2d bumpLeftClose = new Pose2d(13.2, 2.5, new Rotation2d(Units.degreesToRadians(135)));
+    public final Pose2d bumpLeftFar = new Pose2d(10.4, 2.5, new Rotation2d(Units.degreesToRadians(135)));
+    public final Pose2d hubMidPoint = new Pose2d(11.8, 4.0, new Rotation2d(Units.degreesToRadians(0)));
     /*
      * SysId routine for characterizing translation. This is used to find PID gains
      * for the drive motors.
@@ -272,6 +279,29 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return new SequentialCommandGroup(
                 goToPoseCommand(trenchRightFarStartRed),
                 goToPoseCommand(trenchRightCloseEndRed));
+    }
+
+    public Command bumpLeftOutCommand() {
+        return new SequentialCommandGroup(
+                goToPoseCommand(bumpLeftClose),
+                goToPoseCommand(bumpLeftFar));
+    }
+
+    public Command bumpLeftInCommand() {
+        return new SequentialCommandGroup(
+                goToPoseCommand(bumpLeftFar),
+                goToPoseCommand(bumpLeftClose));
+    }
+
+    public DeferredCommand bumpLeftCommand() {
+        return new DeferredCommand(() -> {
+            var pose = this.getState().Pose;
+            if (pose.getX() > hubMidPoint.getX()) {
+                return bumpLeftOutCommand();
+            } else {
+                return bumpLeftInCommand();
+            }
+        }, new HashSet<Subsystem>(Arrays.asList(this)));
     }
 
     public Command goToPoseCommand(Pose2d pose) {
