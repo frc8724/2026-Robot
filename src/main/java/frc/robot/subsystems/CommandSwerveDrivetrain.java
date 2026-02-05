@@ -96,6 +96,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     public final Pose2d bumpLeftClose = new Pose2d(13.2, 2.5, new Rotation2d(Units.degreesToRadians(135)));
     public final Pose2d bumpLeftFar = new Pose2d(10.4, 2.5, new Rotation2d(Units.degreesToRadians(135)));
+
+    public final Pose2d bumpRightClose = new Pose2d(13.2, 5.5, new Rotation2d(Units.degreesToRadians(225)));
+    public final Pose2d bumpRightFar = new Pose2d(10.4, 5.5, new Rotation2d(Units.degreesToRadians(225)));
+
     public final Pose2d hubMidPoint = new Pose2d(11.8, 4.0, new Rotation2d(Units.degreesToRadians(0)));
     /*
      * SysId routine for characterizing translation. This is used to find PID gains
@@ -283,30 +287,87 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     public Command bumpLeftOutCommand() {
         return new SequentialCommandGroup(
-                goToPoseCommand(bumpLeftClose),
-                goToPoseCommand(bumpLeftFar));
+                goToPoseCommand(bumpLeftClose, 2, 2),
+                goToPoseCommand(bumpLeftFar, 2, 2));
     }
 
     public Command bumpLeftInCommand() {
         return new SequentialCommandGroup(
-                goToPoseCommand(bumpLeftFar),
-                goToPoseCommand(bumpLeftClose));
+                goToPoseCommand(bumpLeftFar, 2, 2),
+                goToPoseCommand(bumpLeftClose, 2, 2));
     }
 
-    public DeferredCommand bumpLeftCommand() {
+    public Command bumpRightOutCommand() {
+        return new SequentialCommandGroup(
+                goToPoseCommand(bumpRightClose, 2, 2),
+                goToPoseCommand(bumpRightFar, 2, 2));
+    }
+
+    public Command bumpRightInCommand() {
+        return new SequentialCommandGroup(
+                goToPoseCommand(bumpRightFar, 2, 2),
+                goToPoseCommand(bumpRightClose, 2, 2));
+    }
+
+    // TODO: need to handle blue alliance
+    // public DeferredCommand bumpLeftCommand() {
+    // return new DeferredCommand(() -> {
+    // var pose = this.getState().Pose;
+    // if (pose.getX() > hubMidPoint.getX()) {
+    // return bumpLeftOutCommand();
+    // } else {
+    // return bumpLeftInCommand();
+    // }
+    // }, new HashSet<Subsystem>(Arrays.asList(this)));
+    // }
+
+    // TODO: need to handle blue alliance
+    // public DeferredCommand bumpRightCommand() {
+    // return new DeferredCommand(() -> {
+    // var pose = this.getState().Pose;
+    // if (pose.getX() > hubMidPoint.getX()) {
+    // return bumpRightOutCommand();
+    // } else {
+    // return bumpRightInCommand();
+    // }
+    // }, new HashSet<Subsystem>(Arrays.asList(this)));
+    // }
+
+    public DeferredCommand bumpCommand() {
         return new DeferredCommand(() -> {
             var pose = this.getState().Pose;
-            if (pose.getX() > hubMidPoint.getX()) {
-                return bumpLeftOutCommand();
+            // Determine Left or Right
+            if (pose.getY() > hubMidPoint.getY()) {
+                // is Right
+                // Determine In or Out
+                if (pose.getX() > hubMidPoint.getX()) {
+                    // is Out
+                    return bumpRightOutCommand();
+                } else {
+                    // is In
+                    return bumpRightInCommand();
+                }
             } else {
-                return bumpLeftInCommand();
+                // is Left
+                if (pose.getX() > hubMidPoint.getX()) {
+                    // is Out
+                    return bumpLeftOutCommand();
+                } else {
+                    // is In
+                    return bumpLeftInCommand();
+                }
             }
         }, new HashSet<Subsystem>(Arrays.asList(this)));
+
     }
 
     public Command goToPoseCommand(Pose2d pose) {
+        return goToPoseCommand(pose, 1, 1);
+    }
+
+    public Command goToPoseCommand(Pose2d pose, double maxVel, double maxAcc) {
         var traslatedPose = translatePose(pose);
-        var cmd = AutoBuilder.pathfindToPose(traslatedPose, new PathConstraints(1, 1, 360,
+        var cmd = AutoBuilder.pathfindToPose(traslatedPose, new PathConstraints(maxVel, maxAcc, 360,
                 360));
 
         return cmd;
