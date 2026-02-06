@@ -285,62 +285,50 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 goToPoseCommand(trenchRightCloseEndRed));
     }
 
-    public Command bumpLeftOutCommand() {
-        return new SequentialCommandGroup(
-                goToPoseCommand(bumpLeftClose, 2, 2),
-                goToPoseCommand(bumpLeftFar, 2, 2));
+    public DeferredCommand bumpLeftOutCommand() {
+        return new DeferredCommand(() -> {
+            return new SequentialCommandGroup(
+                    goToPoseCommand((bumpLeftClose), 2, 2),
+                    goToPoseCommand((bumpLeftFar), 2, 2));
+        }, new HashSet<Subsystem>(Arrays.asList(this)));
     }
 
-    public Command bumpLeftInCommand() {
-        return new SequentialCommandGroup(
-                goToPoseCommand(bumpLeftFar, 2, 2),
-                goToPoseCommand(bumpLeftClose, 2, 2));
+    public DeferredCommand bumpLeftInCommand() {
+        return new DeferredCommand(() -> {
+            return new SequentialCommandGroup(
+                    goToPoseCommand((bumpLeftFar), 2, 2),
+                    goToPoseCommand((bumpLeftClose), 2, 2));
+        }, new HashSet<Subsystem>(Arrays.asList(this)));
     }
 
-    public Command bumpRightOutCommand() {
-        return new SequentialCommandGroup(
-                goToPoseCommand(bumpRightClose, 2, 2),
-                goToPoseCommand(bumpRightFar, 2, 2));
+    public DeferredCommand bumpRightOutCommand() {
+        return new DeferredCommand(() -> {
+            return new SequentialCommandGroup(
+                    goToPoseCommand((bumpRightClose), 2, 2),
+                    goToPoseCommand((bumpRightFar), 2, 2));
+        }, new HashSet<Subsystem>(Arrays.asList(this)));
     }
 
-    public Command bumpRightInCommand() {
-        return new SequentialCommandGroup(
-                goToPoseCommand(bumpRightFar, 2, 2),
-                goToPoseCommand(bumpRightClose, 2, 2));
+    public DeferredCommand bumpRightInCommand() {
+        return new DeferredCommand(() -> {
+            return new SequentialCommandGroup(
+                    goToPoseCommand((bumpRightFar), 2, 2),
+                    goToPoseCommand((bumpRightClose), 2, 2));
+        }, new HashSet<Subsystem>(Arrays.asList(this)));
     }
-
-    // TODO: need to handle blue alliance
-    // public DeferredCommand bumpLeftCommand() {
-    // return new DeferredCommand(() -> {
-    // var pose = this.getState().Pose;
-    // if (pose.getX() > hubMidPoint.getX()) {
-    // return bumpLeftOutCommand();
-    // } else {
-    // return bumpLeftInCommand();
-    // }
-    // }, new HashSet<Subsystem>(Arrays.asList(this)));
-    // }
-
-    // TODO: need to handle blue alliance
-    // public DeferredCommand bumpRightCommand() {
-    // return new DeferredCommand(() -> {
-    // var pose = this.getState().Pose;
-    // if (pose.getX() > hubMidPoint.getX()) {
-    // return bumpRightOutCommand();
-    // } else {
-    // return bumpRightInCommand();
-    // }
-    // }, new HashSet<Subsystem>(Arrays.asList(this)));
-    // }
 
     public DeferredCommand bumpCommand() {
         return new DeferredCommand(() -> {
             var pose = this.getState().Pose;
+            var hubMid = translatePose(hubMidPoint);
+            var alliance = DriverStation.getAlliance().get();
+            var isOut = (alliance == Alliance.Blue) ? pose.getX() < hubMid.getX()
+                    : pose.getX() > hubMid.getX();
             // Determine Left or Right
-            if (pose.getY() > hubMidPoint.getY()) {
+            if ((alliance == Alliance.Red) ? pose.getY() > hubMid.getY() : pose.getY() < hubMid.getY()) {
                 // is Right
                 // Determine In or Out
-                if (pose.getX() > hubMidPoint.getX()) {
+                if (isOut) {
                     // is Out
                     return bumpRightOutCommand();
                 } else {
@@ -349,7 +337,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 }
             } else {
                 // is Left
-                if (pose.getX() > hubMidPoint.getX()) {
+                if (isOut) {
                     // is Out
                     return bumpLeftOutCommand();
                 } else {
@@ -377,7 +365,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         boolean isBlueAlliance = DriverStation.getAlliance().get() == Alliance.Blue;
         Pose2d newPose = new Pose2d(
                 isBlueAlliance ? fieldLength - pose.getX() : pose.getX(),
-                pose.getY(),
+                isBlueAlliance ? 8 - pose.getY() : pose.getY(),
                 new Rotation2d(pose.getRotation().getRadians() + (isBlueAlliance ? Math.PI : 0)));
         return newPose;
     }
