@@ -4,11 +4,30 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.hardware.TalonFX;
+
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeRollers extends SubsystemBase {
   /** Creates a new IntakeRollers. */
-  public IntakeRollers() {}
+  private TalonFX motor;
+
+  public IntakeRollers(TalonFX motor) {
+    this.motor = motor;
+  }
+
+  public void setSpeed(double speed) {
+    if (motor != null) {
+      motor.set(speed);
+    }
+  }
+
+  public Command setSpeedCommand(double speed) {
+    return runOnce(() -> {
+      setSpeed(speed);
+    });
+  }
 
   @Override
   public void periodic() {

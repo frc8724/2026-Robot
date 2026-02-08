@@ -7,6 +7,7 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
@@ -20,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.auto.AutoChooser;
 import frc.robot.controls.JoystickPOVButton;
 import frc.robot.controls.MayhemExtreme3dPro;
+import frc.robot.controls.MayhemLogitechAttack3;
 import frc.robot.controls.MayhemExtreme3dPro.Axis;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.*;
@@ -43,23 +45,21 @@ public class RobotContainer {
 
         private final Telemetry logger = new Telemetry(MaxSpeed);
 
-        // private final CommandXboxController joystick = new CommandXboxController(0);
         private final MayhemExtreme3dPro driverStick = new MayhemExtreme3dPro(1);
+        private final MayhemLogitechAttack3 operatorPad = new MayhemLogitechAttack3(2);
 
         public static final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
         private final AutoChooser m_auto = new AutoChooser();
         private static final Vision vision = new Vision();
+        public static final TalonFX motor20 = new TalonFX(20);
+        private static final IntakeArm intakeArm = new IntakeArm(null);
+        private static final IntakeRollers intakeRollers = new IntakeRollers(null);
+        private static final ClimberElevator climberElevator = new ClimberElevator(motor20);
 
         public RobotContainer() {
 
                 configureBindings();
 
-                m_auto.addAuto("auto drive shoot", new PathPlannerAuto("auto drive shoot"));
-                m_auto.addAuto("Drive Back", new PathPlannerAuto("Drive Back"));
-                m_auto.addAuto("Triangle", new PathPlannerAuto("Triangle"));
-                m_auto.addAuto("Drive Side to Side", new PathPlannerAuto("Drive Side to Side"));
-                m_auto.addAuto("Start Corner Shoot", new PathPlannerAuto("Start Corner Shoot"));
-                m_auto.addAuto("Test X", new PathPlannerAuto("Test X"));
                 m_auto.addAuto("Shoot Center Climb", new PathPlannerAuto("Shoot Center Climb"));
                 m_auto.addAuto("Shoot Depot Shoot Left", new PathPlannerAuto("Shoot Depot Shoot Left"));
                 m_auto.addAuto("Shoot Outpost Shoot Right", new PathPlannerAuto("Shoot Outpost Shoot Right"));
@@ -103,7 +103,17 @@ public class RobotContainer {
                 driverStick.Button(2).onTrue(drivetrain.testTriangle());
                 driverStick.Button(8).onTrue(drivetrain.trenchRightOutCommand());
                 driverStick.Button(10).onTrue(drivetrain.trenchRightInCommand());
-                // driverStick.Button(1).onTrue(drivetrain.lookAtHubCommand());
+
+                operatorPad.Button(8).onTrue(intakeRollers.setSpeedCommand(0.1));
+                operatorPad.Button(8).onFalse(intakeRollers.setSpeedCommand(0.0));
+                // operatorPad.Button(1).onTrue(intakeArm.setPowerCommand(0));
+                // operatorPad.Button(4).onTrue(intakeArm.setPowerCommand(.1));
+
+                operatorPad.Button(1).onTrue(climberElevator.setPositionCommand(3.5));
+                operatorPad.Button(4).onTrue(climberElevator.setPositionCommand(0));
+
+                climberElevator.setDefaultCommand(
+                                climberElevator.controlWithAxis(operatorPad.Axis(MayhemLogitechAttack3.Axis.Y)));
 
                 driverStick.Button(6).whileTrue(drivetrain.lockWheels());
                 driverStick.Button(1)

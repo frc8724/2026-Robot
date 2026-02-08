@@ -508,18 +508,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 m_hasAppliedOperatorPerspective = true;
             });
         }
-        // Get vision pose from Limelight
-        // var botPose = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
-        // double timestamp = LimelightHelpers.getLatency_Capture("limelight");
-
-        // // Add to pose estimator in drive subsystem
-        // // this.addVisionMeasurement(botPose, Timer.getFPGATimestamp() - (timestamp /
-        // // 1000.0));
-
-        // resetPose(botPose.pose);
-
-        // field2d.setRobotPose(botPose.pose);
-        // SmartDashboard.putData(field2d);
 
         SmartDashboard.putNumber("shoot_location:x", AutoBuilder.getCurrentPose().getX());
         SmartDashboard.putNumber("shoot_location:y", AutoBuilder.getCurrentPose().getY());
