@@ -54,7 +54,9 @@ public class RobotContainer {
         public static final TalonFX motor20 = new TalonFX(20);
         private static final IntakeArm intakeArm = new IntakeArm(null);
         private static final IntakeRollers intakeRollers = new IntakeRollers(null);
-        private static final ClimberElevator climberElevator = new ClimberElevator(motor20);
+        public static final ClimberElevator climberElevator = new ClimberElevator(motor20);
+        public static final ClimberElevatorPivot climberElevatorPivot = new ClimberElevatorPivot(null);
+        public static final ClimberShortArmPivot climberShortArmPivot = new ClimberShortArmPivot(null);
 
         public RobotContainer() {
 

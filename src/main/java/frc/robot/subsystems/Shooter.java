@@ -53,6 +53,17 @@ public class Shooter extends SubsystemBase {
     shooterFx.set(currentSpeed);
   }
 
+  public void setControl(double d) {
+    targetSpeed = d;
+    shooterFx.setControl(m_request.withVelocity(targetSpeed));
+  }
+
+  public Command setContrlCommand(double d) {
+    return runOnce(() -> {
+      setControl(d);
+    });
+  }
+
   public Command setShooterSpeedCommand(double d) {
     return runOnce(() -> {
       setShooterSpeed(d);
@@ -73,5 +84,9 @@ public class Shooter extends SubsystemBase {
   void offsetShooterVelocity(double d) {
     targetSpeed += d;
     shooterFx.setControl(m_request.withVelocity(targetSpeed));
+  }
+
+  public boolean isAtTargetSpeed() {
+    return Math.abs(shooterFx.getVelocity().getValueAsDouble() - targetSpeed) < targetSpeed * .1;
   }
 }

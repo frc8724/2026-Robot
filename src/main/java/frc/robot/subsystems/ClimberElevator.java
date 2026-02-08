@@ -5,7 +5,6 @@
 package frc.robot.subsystems;
 
 import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
 
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -18,8 +17,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.controls.MayhemExtreme3dPro;
-import frc.robot.controls.MayhemLogitechAttack3;
 
 public class ClimberElevator extends SubsystemBase {
   /** Creates a new Climber. */
@@ -27,13 +24,14 @@ public class ClimberElevator extends SubsystemBase {
   private final PositionVoltage position = new PositionVoltage(0);
   final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(0);
 
+  final double top = 10;
+  final double middle = 7;
+  final double bottom = 0;
+
   public ClimberElevator(TalonFX motor) {
     this.motor = motor;
     TalonFXConfiguration configs = new TalonFXConfiguration();
     configs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-
-    // configs.Slot0.kP = 4.0;
-    // configs.Slot0.kD = 0.4;
 
     configs.Slot0.kS = 0.1; // Add 0.1 V output to overcome static friction
     configs.Slot0.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
@@ -71,30 +69,46 @@ public class ClimberElevator extends SubsystemBase {
     }
   }
 
-  public void setPosition(double pos) {
+  public Command goToTopCommand() {
+    return setPositionCommand(top);
+  }
+
+  public Command goToMiddleCommand() {
+    return setPositionCommand(middle);
+  }
+
+  public Command goToBottomCommand() {
+    return setPositionCommand(bottom);
+  }
+
+  public void setPositionByMM(double pos) {
     if (motor != null) {
       // motor.setControl(position.withPosition(pos));
       motor.setControl(motionMagicRequest.withPosition(pos));
     }
   }
 
-  Command SetPositiongInstantCommand(double pos) {
+  public void setPositionByPid(double pos) {
+    if (motor != null) {
+      motor.setControl(position.withPosition(pos));
+    }
+  }
+
+  Command SetPositiongByMMCommand(double pos) {
     return run(() -> {
-      setPosition(pos);
+      setPositionByMM(pos);
     });
   }
 
-  Command WaitUntilAtPositionCommand(double pos) {
+  Command SetPositiongByPidCommand(double pos) {
     return run(() -> {
-      if (this.isAtPosition(pos)) {
-
-      }
+      setPositionByPid(pos);
     });
   }
 
   public Command setPositionCommand(double pos) {
     return run(() -> {
-      setPosition(pos);
+      setPositionByMM(pos);
     }).until(() -> {
       return isAtPosition(pos);
     });

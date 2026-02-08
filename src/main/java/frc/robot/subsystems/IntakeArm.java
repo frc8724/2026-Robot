@@ -17,6 +17,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class IntakeArm extends SubsystemBase {
   /** Creates a new IntakeArm. */
   TalonFX motor;
+  private double down = 10;
+  private double up = 0;
   private final PositionVoltage position = new PositionVoltage(0);
 
   public IntakeArm(TalonFX motor) {
@@ -47,6 +49,14 @@ public class IntakeArm extends SubsystemBase {
         System.out.println("Could not apply configs, error code: " + status.toString());
       }
     }
+  }
+
+  public Command goToDownCommand() {
+    return setPositionCommand(down);
+  }
+
+  public Command goToUpCommand() {
+    return setPositionCommand(up);
   }
 
   public void setPosition(double pos) {

@@ -375,6 +375,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         });
     }
 
+    public double distanceToHub() {
+        var hubPose = translatePose(hubMidPoint);
+        var robotPose = this.getState().Pose;
+        var diff = hubPose.minus(robotPose);
+        return Math.sqrt(diff.getX() * diff.getX() + diff.getY() * diff.getY());
+    }
+
     public static final double ROTATE_KP_RAD_PER_SEC_PER_DEG = 0.06 * 180;
     public static final double ROTATE_MAX_OMEGA_RAD_PER_SEC = 4.0;
     public static final double ROTATE_DEADBAND_DEG = Units.degreesToRadians(1.0);

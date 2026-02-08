@@ -18,17 +18,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class ClimberShortArmPivot extends SubsystemBase {
+public class ShooterHood extends SubsystemBase {
   private TalonFX motor;
   private final PositionVoltage position = new PositionVoltage(0);
   final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(0);
 
-  final double stowed = 0;
-  final double ready = .4;
-  final double engaged = .8;
-
-  /** Creates a new ClimberShortArmPivot. */
-  public ClimberShortArmPivot(TalonFX motor) {
+  /** Creates a new ShooterHood. */
+  public ShooterHood(TalonFX motor) {
     this.motor = motor;
     TalonFXConfiguration configs = new TalonFXConfiguration();
     configs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
@@ -67,18 +63,6 @@ public class ClimberShortArmPivot extends SubsystemBase {
         System.out.println("Could not apply configs, error code: " + status.toString());
       }
     }
-  }
-
-  public Command goToStowedCommand() {
-    return setPositionCommand(stowed);
-  }
-
-  public Command goToEngagedCommand() {
-    return setPositionCommand(engaged);
-  }
-
-  public Command goToReadyCommand() {
-    return setPositionCommand(ready);
   }
 
   public void setPositionByMM(double pos) {
