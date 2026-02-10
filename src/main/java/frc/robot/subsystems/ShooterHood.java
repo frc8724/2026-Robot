@@ -122,12 +122,24 @@ public class ShooterHood extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("elevator:position", getPosition());
   }
 
   public Command controlWithAxis(DoubleSupplier axis) {
     return run(() -> {
       setPower(axis.getAsDouble() / 10);
+    });
+  }
+
+  public void zero() {
+    if (motor == null) {
+      return;
+    }
+    motor.setPosition(0);
+  }
+
+  public Command zeroCommand() {
+    return runOnce(() -> {
+      zero();
     });
   }
 }

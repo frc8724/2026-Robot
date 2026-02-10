@@ -19,9 +19,13 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.auto.AutoChooser;
+import frc.robot.commands.ClimbDownFromLowerRung;
+import frc.robot.commands.ClimbToLowerRung;
+import frc.robot.commands.SystemZero;
 import frc.robot.controls.JoystickPOVButton;
 import frc.robot.controls.MayhemExtreme3dPro;
 import frc.robot.controls.MayhemLogitechAttack3;
+import frc.robot.controls.MayhemOperatorPad;
 import frc.robot.controls.MayhemExtreme3dPro.Axis;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.*;
@@ -46,14 +50,14 @@ public class RobotContainer {
         private final Telemetry logger = new Telemetry(MaxSpeed);
 
         private final MayhemExtreme3dPro driverStick = new MayhemExtreme3dPro(1);
-        private final MayhemLogitechAttack3 operatorPad = new MayhemLogitechAttack3(2);
+        private final MayhemOperatorPad operatorPad = new MayhemOperatorPad();
 
         public static final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
         private final AutoChooser m_auto = new AutoChooser();
         private static final Vision vision = new Vision();
         public static final TalonFX motor20 = new TalonFX(20);
-        private static final IntakeArm intakeArm = new IntakeArm(null);
-        private static final IntakeRollers intakeRollers = new IntakeRollers(null);
+        public static final IntakeArm intakeArm = new IntakeArm(null);
+        public static final IntakeRollers intakeRollers = new IntakeRollers(null);
         public static final ClimberElevator climberElevator = new ClimberElevator(motor20);
         public static final ClimberElevatorPivot climberElevatorPivot = new ClimberElevatorPivot(null);
         public static final ClimberShortArmPivot climberShortArmPivot = new ClimberShortArmPivot(null);
@@ -112,16 +116,36 @@ public class RobotContainer {
                 driverStick.Button(8).onTrue(drivetrain.trenchRightOutCommand());
                 driverStick.Button(10).onTrue(drivetrain.trenchRightInCommand());
 
-                operatorPad.Button(8).onTrue(intakeRollers.setSpeedCommand(0.1));
-                operatorPad.Button(8).onFalse(intakeRollers.setSpeedCommand(0.0));
+                // operatorPad.Button(8).onTrue(intakeRollers.setSpeedCommand(0.1));
+                // operatorPad.Button(8).onFalse(intakeRollers.setSpeedCommand(0.0));
                 // operatorPad.Button(1).onTrue(intakeArm.setPowerCommand(0));
                 // operatorPad.Button(4).onTrue(intakeArm.setPowerCommand(.1));
 
-                operatorPad.Button(1).onTrue(climberElevator.setPositionCommand(3.5));
-                operatorPad.Button(4).onTrue(climberElevator.setPositionCommand(0));
+                // operatorPad.Button(1).onTrue(climberElevator.setPositionCommand(3.5));
+                // operatorPad.Button(4).onTrue(climberElevator.setPositionCommand(0));
 
-                climberElevator.setDefaultCommand(
-                                climberElevator.controlWithAxis(operatorPad.Axis(MayhemLogitechAttack3.Axis.Y)));
+                // climberElevator.setDefaultCommand(
+                // climberElevator.controlWithAxis(operatorPad.Axis(MayhemLogitechAttack3.Axis.Y)));
+                // operatorPad.Button(2).onTrue(climberElevator.zeroCommand());
+
+                // zero all
+                operatorPad.Button(10).onTrue(new SystemZero());
+                // intake on and off
+                operatorPad.Button(5).onTrue(intakeRollers.turnOnCommand());
+                operatorPad.Button(5).onFalse(intakeRollers.turnOffCommand());
+                // intake in and out
+                operatorPad.Button(6).onTrue(intakeArm.goToUpCommand());
+                operatorPad.Button(8).onTrue(intakeArm.goToDownCommand());
+                // shoot sequence
+                operatorPad.D_PAD_UP.onTrue(launchingTower.fireFuelCommand());
+                // climb up to L1
+                operatorPad.Button(3).onTrue(new ClimbToLowerRung());
+                // climb down from L1
+                operatorPad.Button(2).onTrue(new ClimbDownFromLowerRung());
+                // future climb to next rung
+                // operatorPad.Button(4).onTrue(command);
+                // climber elevator manual
+                climberElevator.controlWithAxis(operatorPad.Axis(MayhemOperatorPad.Axis.Y));
 
                 driverStick.Button(6).whileTrue(drivetrain.lockWheels());
                 driverStick.Button(1)
@@ -154,19 +178,9 @@ public class RobotContainer {
         }
 
         public Command getAutonomousCommand() {
-                // Simple drive forward auton
-                // final var idle = new SwerveRequest.Idle();
-                // return Commands.sequence(
-                // // Reset our field centric heading to match the robot
-                // // facing away from our alliance station wall (0 deg).
-                // drivetrain.runOnce(() -> drivetrain.seedFieldCentric(Rotation2d.kZero)),
-                // // Then slowly drive forward (away from us) for 5 seconds.
-                // drivetrain.applyRequest(() -> drive.withVelocityX(0.5)
-                // .withVelocityY(0)
-                // .withRotationalRate(0))
-                // .withTimeout(5.0),
-                // // Finally idle for the rest of auton
-                // drivetrain.applyRequest(() -> idle));
-                return m_auto.getAutoCommand();
+                // return m_auto.getAutoCommand();
+                return new SequentialCommandGroup(
+                                new SystemZero(),
+                                m_auto.getAutoCommand());
         }
 }

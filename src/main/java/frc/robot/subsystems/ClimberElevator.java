@@ -146,4 +146,17 @@ public class ClimberElevator extends SubsystemBase {
       setPower(axis.getAsDouble() / 10);
     });
   }
+
+  public void zero() {
+    if (motor == null) {
+      return;
+    }
+    motor.setPosition(0);
+  }
+
+  public Command zeroCommand() {
+    return runOnce(() -> {
+      zero();
+    });
+  }
 }

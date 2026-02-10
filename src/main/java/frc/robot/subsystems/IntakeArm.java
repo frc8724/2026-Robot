@@ -85,4 +85,17 @@ public class IntakeArm extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
   }
+
+  public void zero() {
+    if (motor == null) {
+      return;
+    }
+    motor.setPosition(0);
+  }
+
+  public Command zeroCommand() {
+    return runOnce(() -> {
+      zero();
+    });
+  }
 }
