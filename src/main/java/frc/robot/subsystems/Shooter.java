@@ -17,13 +17,14 @@ import com.ctre.phoenix6.hardware.core.CoreTalonFX;
 // import edu.wpi.first.wpilibj2.*;
 
 public class Shooter extends SubsystemBase {
-  TalonFX shooterFx = new TalonFX(20);
+  TalonFX shooterFx;
   double currentSpeed = 0.0;
   double targetSpeed = 0.0;
   final VelocityVoltage m_request;
 
   /** Creates a new Shooter. */
-  public Shooter() {
+  public Shooter(TalonFX shooterFx) {
+    this.shooterFx = shooterFx;
     // in init function, set slot 0 gains
     var slot0Configs = new Slot0Configs();
     slot0Configs.kS = 0.1; // Add 0.1 V output to overcome static friction
@@ -31,15 +32,19 @@ public class Shooter extends SubsystemBase {
     slot0Configs.kP = 0.11; // An error of 1 rps results in 0.11 V output
     slot0Configs.kI = 0; // no output for integrated error
     slot0Configs.kD = 0; // no output for error derivative
+    if (shooterFx != null) {
 
-    shooterFx.getConfigurator().apply(slot0Configs);
+      shooterFx.getConfigurator().apply(slot0Configs);
+    }
     m_request = new VelocityVoltage(0).withSlot(0);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("shooter velocity", shooterFx.getVelocity().getValueAsDouble());
+    if (shooterFx != null) {
+      SmartDashboard.putNumber("shooter velocity", shooterFx.getVelocity().getValueAsDouble());
+    }
   }
 
   public Command offsetShooterSpeedCommand(double i) {
@@ -49,13 +54,17 @@ public class Shooter extends SubsystemBase {
   }
 
   void offsetShooterSpeed(double i) {
-    currentSpeed += i;
-    shooterFx.set(currentSpeed);
+    if (shooterFx != null) {
+      currentSpeed += i;
+      shooterFx.set(currentSpeed);
+    }
   }
 
   public void setControl(double d) {
-    targetSpeed = d;
-    shooterFx.setControl(m_request.withVelocity(targetSpeed));
+    if (shooterFx != null) {
+      targetSpeed = d;
+      shooterFx.setControl(m_request.withVelocity(targetSpeed));
+    }
   }
 
   public Command setContrlCommand(double d) {
@@ -71,8 +80,10 @@ public class Shooter extends SubsystemBase {
   }
 
   void setShooterSpeed(double d) {
-    currentSpeed = d;
-    shooterFx.set(d);
+    if (shooterFx != null) {
+      currentSpeed = d;
+      shooterFx.set(d);
+    }
   }
 
   public Command offsetShooterVelocityCommand(double d) {
@@ -82,11 +93,17 @@ public class Shooter extends SubsystemBase {
   }
 
   void offsetShooterVelocity(double d) {
-    targetSpeed += d;
-    shooterFx.setControl(m_request.withVelocity(targetSpeed));
+    if (shooterFx != null) {
+      targetSpeed += d;
+      shooterFx.setControl(m_request.withVelocity(targetSpeed));
+    }
   }
 
   public boolean isAtTargetSpeed() {
-    return Math.abs(shooterFx.getVelocity().getValueAsDouble() - targetSpeed) < targetSpeed * .1;
+    if (shooterFx != null) {
+      return Math.abs(shooterFx.getVelocity().getValueAsDouble() - targetSpeed) < targetSpeed * .1;
+    } else {
+      return true;
+    }
   }
 }

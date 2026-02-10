@@ -109,6 +109,9 @@ public class ShooterHood extends SubsystemBase {
   }
 
   public double getPosition() {
+    if (motor == null) {
+      return 0;
+    }
     return motor.getPosition(true).getValueAsDouble();
   }
 

@@ -58,6 +58,12 @@ public class RobotContainer {
         public static final ClimberElevatorPivot climberElevatorPivot = new ClimberElevatorPivot(null);
         public static final ClimberShortArmPivot climberShortArmPivot = new ClimberShortArmPivot(null);
 
+        public static final Shooter shooter = new Shooter(null);
+        public static final Hopper hopper = new Hopper(null);
+        public static final ShooterHood shooterHood = new ShooterHood(null);
+        public static final Loader loader = new Loader(null);
+        public static final LaunchingTower launchingTower = new LaunchingTower(shooter, shooterHood, loader, hopper);
+
         public RobotContainer() {
 
                 configureBindings();

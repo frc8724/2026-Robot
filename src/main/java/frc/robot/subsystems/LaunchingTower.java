@@ -4,9 +4,22 @@
 
 package frc.robot.subsystems;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.function.Supplier;
+
+import com.ctre.phoenix6.controls.FireAnimation;
+
+import edu.wpi.first.util.struct.Struct;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 
 public class LaunchingTower extends SubsystemBase {
   /** Creates a new LaunchingTower. */
@@ -15,6 +28,27 @@ public class LaunchingTower extends SubsystemBase {
   private Loader loader;
   private Hopper hopper;
 
+  class FiringSolution {
+    public double distance;
+    public double shooterSpeed;
+    public double hoodPosition;
+
+    public FiringSolution(double distance, double shooterSpeed, double hoodPosition) {
+      this.distance = distance;
+      this.shooterSpeed = shooterSpeed;
+      this.hoodPosition = hoodPosition;
+    }
+  };
+
+  FiringSolution[] solutions = new FiringSolution[] {
+      new FiringSolution(0, .5, 0),
+      new FiringSolution(1, .5, 1),
+      new FiringSolution(2, 1.5, 2),
+      new FiringSolution(3, 2.5, 3),
+      new FiringSolution(4, 3.5, 4)
+
+  };
+
   public LaunchingTower(Shooter shooter, ShooterHood hood, Loader loader, Hopper hopper) {
     this.shooter = shooter;
     this.hood = hood;
@@ -22,7 +56,7 @@ public class LaunchingTower extends SubsystemBase {
     this.hopper = hopper;
   }
 
-  public Command prepareToFireAtCommand(double distance) {
+  private Command prepareToFireAtCommand(double distance) {
     //
     return new ParallelCommandGroup(
         hood.SetPositiongByMMCommand(convertDistanceToHood(distance)).finallyDo(() -> {
@@ -33,7 +67,7 @@ public class LaunchingTower extends SubsystemBase {
         }));
   }
 
-  public Command fireCommand(double distance) {
+  private Command fireCommand(double distance) {
     return run(() -> {
       if (shooter.isAtTargetSpeed()) {
         loader.setSpeed(.5);
@@ -50,6 +84,15 @@ public class LaunchingTower extends SubsystemBase {
     });
   }
 
+  public Command fireFuelCommand() {
+    return new DeferredCommand(() -> {
+      var distance = RobotContainer.drivetrain.distanceToHub();
+      return new SequentialCommandGroup(
+          prepareToFireAtCommand(distance),
+          fireCommand(distance));
+    }, new HashSet<Subsystem>(Arrays.asList(hood, shooter, loader, hopper)));
+  }
+
   public double convertDistanceToShooterRPM(double distance) {
     return 0;
   }
@@ -58,8 +101,30 @@ public class LaunchingTower extends SubsystemBase {
     return 0;
   }
 
+  public FiringSolution getSolution(double distance) {
+    FiringSolution lower = null;
+    FiringSolution upper = null;
+    for (int i = solutions.length - 2; i >= 0; i--) {
+      var sol = solutions[i];
+      if (sol.distance < distance) {
+        lower = sol;
+        upper = solutions[i + 1];
+        break;
+      }
+    }
+    var upperW = (distance - lower.distance) / (upper.distance - lower.distance);
+    var lowerW = 1 - upperW;
+    return new FiringSolution(distance,
+        (upper.shooterSpeed * upperW + lower.shooterSpeed * lowerW) / (lowerW + upperW),
+        (upper.hoodPosition * upperW + lower.hoodPosition * lowerW) / (lowerW + upperW));
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    var solution = getSolution(RobotContainer.drivetrain.distanceToHub());
+    SmartDashboard.putNumber("firing solution:distance", solution.distance);
+    SmartDashboard.putNumber("firing solution:shooter_speed", solution.shooterSpeed);
+    SmartDashboard.putNumber("firing solution:hood_position", solution.hoodPosition);
   }
 }

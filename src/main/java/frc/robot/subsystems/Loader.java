@@ -23,6 +23,14 @@ public class Loader extends SubsystemBase {
     }
   }
 
+  public Command turnOnCommand() {
+    return setSpeedCommand(.5);
+  }
+
+  public Command turnOffCommand() {
+    return setSpeedCommand(0);
+  }
+
   public Command setSpeedCommand(double speed) {
     return runOnce(() -> {
       setSpeed(speed);
