@@ -15,7 +15,7 @@ import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
-
+import com.ctre.phoenix6.swerve.SwerveRequest.ForwardPerspectiveValue;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
@@ -34,6 +34,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.DistanceUnit;
+import edu.wpi.first.units.Unit;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -79,6 +80,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
     private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
+    private final SwerveRequest.FieldCentricFacingAngle fieldCentric = new SwerveRequest.FieldCentricFacingAngle();
+    // private final SwerveRequest. a = new SwerveRequest.FieldCentric();
 
     private final double fieldLength = 16.48;
 
@@ -386,6 +389,36 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public static final double ROTATE_MAX_OMEGA_RAD_PER_SEC = 4.0;
     public static final double ROTATE_DEADBAND_DEG = Units.degreesToRadians(1.0);
 
+    public double angleToHubRobotReletive() {
+        var currentPose = getState().Pose;
+        var hubPoseX = fieldLength - 4.6;
+        var hubPoseY = 4;
+
+        var relativeX = hubPoseX - currentPose.getX();
+        var relativeY = hubPoseY - currentPose.getY();
+        var angleRad = Math.atan2(relativeY, relativeX) - currentPose.getRotation().getRadians();
+
+        if (angleRad > Math.PI) {
+            angleRad = angleRad - 2 * Math.PI;
+        }
+        return angleRad;
+    }
+
+    public double angleToHubFieldReletive() {
+        var currentPose = getState().Pose;
+        var hubPoseX = fieldLength - 4.6;
+        var hubPoseY = 4;
+
+        var relativeX = hubPoseX - currentPose.getX();
+        var relativeY = hubPoseY - currentPose.getY();
+        var angleRad = Math.atan2(relativeY, relativeX) - Math.PI;
+
+        if (angleRad > Math.PI) {
+            angleRad = angleRad - 2 * Math.PI;
+        }
+        return angleRad;
+    }
+
     public Command pointToHubCommand() {
         return run(() -> {
             SwerveRequest.RobotCentric request = new SwerveRequest.RobotCentric()
@@ -395,17 +428,19 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             // --- Rotation control (tx -> 0), using your proven sign convention ---
             // double txDeg = LimelightHelpers.getTX("limelight");
             // TODO: need to reverse alliances
-            var currentPose = getState().Pose;
-            var hubPoseX = fieldLength - 4.6;
-            var hubPoseY = 4;
+            // var currentPose = getState().Pose;
+            // var hubPoseX = fieldLength - 4.6;
+            // var hubPoseY = 4;
 
-            var relativeX = hubPoseX - currentPose.getX();
-            var relativeY = hubPoseY - currentPose.getY();
-            var angleRad = Math.atan2(relativeY, relativeX) - currentPose.getRotation().getRadians();
+            // var relativeX = hubPoseX - currentPose.getX();
+            // var relativeY = hubPoseY - currentPose.getY();
+            // var angleRad = Math.atan2(relativeY, relativeX) -
+            // currentPose.getRotation().getRadians();
 
-            if (angleRad > Math.PI) {
-                angleRad = angleRad - 2 * Math.PI;
-            }
+            // if (angleRad > Math.PI) {
+            // angleRad = angleRad - 2 * Math.PI;
+            // }
+            var angleRad = angleToHubRobotReletive();
 
             SmartDashboard.putString("debug", "" + angleRad);
             double omegaRadPerSec = 0.0;
@@ -456,6 +491,18 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder",
                     ex.getStackTrace());
         }
+    }
+
+    public Command strafeWhileFiringCommand() {
+        return run(() -> {
+            var angleRad = angleToHubFieldReletive();
+            SmartDashboard.putNumber("angle to hub", Units.radiansToDegrees(angleRad));
+            this.setControl(
+                    fieldCentric.withVelocityX(0)
+                            .withVelocityY(.5)
+                            .withHeadingPID(7, 0, 0)
+                            .withTargetDirection(new Rotation2d(angleRad)));
+        });
     }
 
     /**

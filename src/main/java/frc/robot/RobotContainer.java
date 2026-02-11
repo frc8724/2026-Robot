@@ -115,6 +115,7 @@ public class RobotContainer {
                 driverStick.Button(2).onTrue(drivetrain.testTriangle());
                 driverStick.Button(8).onTrue(drivetrain.trenchRightOutCommand());
                 driverStick.Button(10).onTrue(drivetrain.trenchRightInCommand());
+                driverStick.Button(9).whileTrue(drivetrain.strafeWhileFiringCommand());
 
                 // operatorPad.Button(8).onTrue(intakeRollers.setSpeedCommand(0.1));
                 // operatorPad.Button(8).onFalse(intakeRollers.setSpeedCommand(0.0));
