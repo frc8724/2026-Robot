@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.SignalLogger;
@@ -502,6 +503,31 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                             .withVelocityY(.5)
                             .withHeadingPID(7, 0, 0)
                             .withTargetDirection(new Rotation2d(angleRad)));
+        });
+    }
+
+    public Command fireWhileDriving(DoubleSupplier x, DoubleSupplier y) {
+        return run(() -> {
+            var angleRad = angleToHubFieldReletive();
+            SmartDashboard.putNumber("angle to hub", Units.radiansToDegrees(angleRad));
+            var joystickX = -x.getAsDouble();
+            var joystickY = -y.getAsDouble();
+            var d = Math.sqrt(joystickX * joystickX + joystickY * joystickY);
+            // var vx = Math.cos(joystickX / d);
+            // var vy = Math.sin(joystickY / d);
+            var vx = joystickX / d;
+            var vy = joystickY / d;
+
+            // if we don't have a direction, lock the wheels
+            if (Math.abs(joystickX) < .2 && Math.abs(joystickY) < .2) {
+                this.setControl(swerveBrake);
+            } else {
+                this.setControl(
+                        fieldCentric.withVelocityX(vx)
+                                .withVelocityY(vy)
+                                .withHeadingPID(7, 0, 0)
+                                .withTargetDirection(new Rotation2d(angleRad)));
+            }
         });
     }
 

@@ -112,10 +112,14 @@ public class RobotContainer {
                 // driverStick.Button(6).onTrue(drivetrain.goToPoseCommand(drivetrain.shooterPose2Red));
                 driverStick.Button(4).onTrue(drivetrain.goToPoseCommand(drivetrain.climbRightRed));
                 driverStick.Button(3).onTrue(drivetrain.goToPoseCommand(drivetrain.climbLeftRed));
-                driverStick.Button(2).onTrue(drivetrain.testTriangle());
+                driverStick.Button(2).whileTrue(
+                                drivetrain.fireWhileDriving(driverStick.Axis(Axis.Y), driverStick.Axis(Axis.X)));
                 driverStick.Button(8).onTrue(drivetrain.trenchRightOutCommand());
                 driverStick.Button(10).onTrue(drivetrain.trenchRightInCommand());
                 driverStick.Button(9).whileTrue(drivetrain.strafeWhileFiringCommand());
+                // driverStick.Button(7).whileTrue(
+                // drivetrain.fireWhileDriving(driverStick.Axis(Axis.Y),
+                // driverStick.Axis(Axis.X)));
 
                 // operatorPad.Button(8).onTrue(intakeRollers.setSpeedCommand(0.1));
                 // operatorPad.Button(8).onFalse(intakeRollers.setSpeedCommand(0.0));
