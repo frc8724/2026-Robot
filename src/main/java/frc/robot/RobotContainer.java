@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.auto.AutoChooser;
 import frc.robot.commands.ClimbDownFromLowerRung;
@@ -62,6 +63,7 @@ public class RobotContainer {
         public static final ClimberElevatorPivot climberElevatorPivot = new ClimberElevatorPivot(null);
         public static final ClimberShortArmPivot climberShortArmPivot = new ClimberShortArmPivot(null);
 
+        public static final GameTimer gameTimer = new GameTimer();
         public static final Shooter shooter = new Shooter(null);
         public static final Hopper hopper = new Hopper(null);
         public static final ShooterHood shooterHood = new ShooterHood(null);
@@ -72,6 +74,7 @@ public class RobotContainer {
 
                 configureBindings();
 
+                m_auto.addAuto("Stand Still", new WaitCommand(2));
                 m_auto.addAuto("Shoot Center Climb", new PathPlannerAuto("Shoot Center Climb"));
                 m_auto.addAuto("Shoot Depot Shoot Left", new PathPlannerAuto("Shoot Depot Shoot Left"));
                 m_auto.addAuto("Shoot Outpost Shoot Right", new PathPlannerAuto("Shoot Outpost Shoot Right"));
