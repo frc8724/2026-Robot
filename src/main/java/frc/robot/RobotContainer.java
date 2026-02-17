@@ -56,19 +56,24 @@ public class RobotContainer {
         public static final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
         private final AutoChooser m_auto = new AutoChooser();
         private static final Vision vision = new Vision();
-        public static final TalonFX motor20 = new TalonFX(20);
+        // public static final TalonFX motor20 = new TalonFX(20);
+        public static final TalonFX loaderMotor = new TalonFX(32, "canivore");
+        public static final TalonFX shooter1Motor = new TalonFX(33, "canivore");
+        public static final TalonFX hoodMotor = new TalonFX(31, "canivore");
+
         public static final IntakeArm intakeArm = new IntakeArm(null);
         public static final IntakeRollers intakeRollers = new IntakeRollers(null);
-        public static final ClimberElevator climberElevator = new ClimberElevator(motor20);
+        public static final ClimberElevator climberElevator = new ClimberElevator(null);
         public static final ClimberElevatorPivot climberElevatorPivot = new ClimberElevatorPivot(null);
         public static final ClimberShortArmPivot climberShortArmPivot = new ClimberShortArmPivot(null);
 
         public static final GameTimer gameTimer = new GameTimer();
-        public static final Shooter shooter = new Shooter(null);
+        public static final Shooter shooter = new Shooter(shooter1Motor);
         public static final Hopper hopper = new Hopper(null);
-        public static final ShooterHood shooterHood = new ShooterHood(null);
-        public static final Loader loader = new Loader(null);
-        public static final LaunchingTower launchingTower = new LaunchingTower(shooter, shooterHood, loader, hopper);
+        public static final ShooterHood shooterHood = new ShooterHood(hoodMotor);
+        public static final Loader loader = new Loader(loaderMotor);
+        // public static final LaunchingTower launchingTower = new
+        // LaunchingTower(shooter, shooterHood, loader, hopper);
 
         public RobotContainer() {
 
@@ -145,15 +150,32 @@ public class RobotContainer {
                 operatorPad.Button(6).onTrue(intakeArm.goToUpCommand());
                 operatorPad.Button(8).onTrue(intakeArm.goToDownCommand());
                 // shoot sequence
-                operatorPad.D_PAD_UP.onTrue(launchingTower.fireFuelCommand());
+                // operatorPad.D_PAD_UP.onTrue(launchingTower.fireFuelCommand());
                 // climb up to L1
-                operatorPad.Button(3).onTrue(new ClimbToLowerRung());
+                // operatorPad.Button(3).onTrue(new ClimbToLowerRung());
+                // operatorPad.Button(3).onTrue(shooter.setShooterSpeedCommand(.2));
+                // operatorPad.Button(3).onFalse(shooter.setShooterSpeedCommand(0));
+
+                // operatorPad.Button(3).onTrue(shooter.offsetShooterVelocityCommand(1));
+                // operatorPad.Button(2).onTrue(shooter.offsetShooterVelocityCommand(-1));
+                // operatorPad.Button(3).onTrue(shooter.setControlCommand(20));
+                // operatorPad.Button(3).onFalse(shooter.setControlCommand(0));
+
                 // climb down from L1
-                operatorPad.Button(2).onTrue(new ClimbDownFromLowerRung());
+                // operatorPad.Button(2).onTrue(new ClimbDownFromLowerRung());
                 // future climb to next rung
                 // operatorPad.Button(4).onTrue(command);
+                // operatorPad.Button(4).whileTrue(loader.setSpeedCommand(.2));
+                operatorPad.Button(4).onTrue(loader.setSpeedCommand(.5));
+                operatorPad.Button(4).onFalse(loader.setSpeedCommand(0));
+
+                shooterHood.setDefaultCommand(shooterHood
+                                .controlWithAxis(operatorPad.Axis(frc.robot.controls.MayhemOperatorPad.Axis.LeftY)));
+                operatorPad.Button(2).onTrue(shooterHood.SetPositiongByPidCommand(0));
+                operatorPad.Button(3).onTrue(shooterHood.SetPositiongByPidCommand(15));
+
                 // climber elevator manual
-                climberElevator.controlWithAxis(operatorPad.Axis(MayhemOperatorPad.Axis.Y));
+                // climberElevator.controlWithAxis(operatorPad.Axis(MayhemOperatorPad.Axis.LeftY));
 
                 driverStick.Button(6).whileTrue(drivetrain.lockWheels());
                 driverStick.Button(1)

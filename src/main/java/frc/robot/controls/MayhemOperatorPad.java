@@ -47,7 +47,11 @@ public class MayhemOperatorPad {
     }
 
     public enum Axis {
-        X(0), Y(1), Z(2), Flapper(3);
+        // X(0), Y(1), Z(2), Flapper(3);
+        LeftX(0),
+        LeftY(1),
+        RightX(2),
+        RightY(3);
 
         private final int value;
 

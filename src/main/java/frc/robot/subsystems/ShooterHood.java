@@ -22,6 +22,8 @@ public class ShooterHood extends SubsystemBase {
   private TalonFX motor;
   private final PositionVoltage position = new PositionVoltage(0);
   final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(0);
+  public final double min = 0;
+  public final double max = 30;
 
   /** Creates a new ShooterHood. */
   public ShooterHood(TalonFX motor) {
@@ -29,12 +31,12 @@ public class ShooterHood extends SubsystemBase {
     TalonFXConfiguration configs = new TalonFXConfiguration();
     configs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-    configs.Slot0.kS = 0.1; // Add 0.1 V output to overcome static friction
-    configs.Slot0.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
-    configs.Slot0.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
-    configs.Slot0.kP = 4.8; // A position error of 2.5 rotations results in 12 V output
+    configs.Slot0.kS = 0.0; // Add 0.1 V output to overcome static friction
+    configs.Slot0.kV = 0.0; // A velocity target of 1 rps results in 0.12 V output
+    configs.Slot0.kA = 0.00; // An acceleration of 1 rps/s requires 0.01 V output
+    configs.Slot0.kP = 2.0; // A position error of 2.5 rotations results in 12 V output
     configs.Slot0.kI = 0; // no output for integrated error
-    configs.Slot0.kD = 0.4; // A velocity error of 1 rps results in 0.1 V output
+    configs.Slot0.kD = 0.0; // A velocity error of 1 rps results in 0.1 V output
 
     configs.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.1;
 
@@ -84,7 +86,7 @@ public class ShooterHood extends SubsystemBase {
     });
   }
 
-  Command SetPositiongByPidCommand(double pos) {
+  public Command SetPositiongByPidCommand(double pos) {
     return run(() -> {
       setPositionByPid(pos);
     });
@@ -122,6 +124,7 @@ public class ShooterHood extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("hood position", getPosition());
   }
 
   public Command controlWithAxis(DoubleSupplier axis) {
