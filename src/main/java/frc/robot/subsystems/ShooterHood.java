@@ -49,9 +49,9 @@ public class ShooterHood extends SubsystemBase {
 
     // set Motion Magic settings
     var motionMagicConfigs = configs.MotionMagic;
-    motionMagicConfigs.MotionMagicCruiseVelocity = 4;
-    motionMagicConfigs.MotionMagicAcceleration = 1;
-    motionMagicConfigs.MotionMagicJerk = 100;
+    motionMagicConfigs.MotionMagicCruiseVelocity = 100;
+    motionMagicConfigs.MotionMagicAcceleration = 1000;
+    motionMagicConfigs.MotionMagicJerk = 1000;
 
     if (motor != null) {
       /* Retry config apply up to 5 times, report if failure */
@@ -64,6 +64,7 @@ public class ShooterHood extends SubsystemBase {
       if (!status.isOK()) {
         System.out.println("Could not apply configs, error code: " + status.toString());
       }
+      // motor.setNeutralMode(NeutralModeValue.Brake);
     }
   }
 
@@ -80,15 +81,19 @@ public class ShooterHood extends SubsystemBase {
     }
   }
 
-  Command SetPositiongByMMCommand(double pos) {
+  public Command SetPositiongByMMCommand(double pos) {
     return run(() -> {
       setPositionByMM(pos);
+    }).until(() -> {
+      return isAtPosition(pos);
     });
   }
 
   public Command SetPositiongByPidCommand(double pos) {
     return run(() -> {
       setPositionByPid(pos);
+    }).until(() -> {
+      return isAtPosition(pos);
     });
   }
 

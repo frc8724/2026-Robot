@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.DoubleSupplier;
+
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
@@ -11,22 +13,24 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeArm extends SubsystemBase {
   /** Creates a new IntakeArm. */
   TalonFX motor;
-  private double down = 10;
+  private double down = -7.0;
   private double up = 0;
   private final PositionVoltage position = new PositionVoltage(0);
+  private double lastPosition;
 
   public IntakeArm(TalonFX motor) {
     this.motor = motor;
     TalonFXConfiguration configs = new TalonFXConfiguration();
     configs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    configs.Slot0.kP = 4.0; // An error of 0.5 rotations results in 1.2 volts output
-    configs.Slot0.kD = 0.4; // A change of 1 rotation per second results in 0.1 volts output
+    configs.Slot0.kP = 2.0; // An error of 0.5 rotations results in 1.2 volts output
+    configs.Slot0.kD = 0.0; // A change of 1 rotation per second results in 0.1 volts output
 
     configs.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.1;
 
@@ -34,7 +38,7 @@ public class IntakeArm extends SubsystemBase {
     configs.Voltage.PeakForwardVoltage = 12;
     configs.Voltage.PeakReverseVoltage = -12;
     configs.CurrentLimits.StatorCurrentLimitEnable = true;
-    configs.CurrentLimits.StatorCurrentLimit = 40;
+    configs.CurrentLimits.StatorCurrentLimit = 20;
     configs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
     if (motor != null) {
@@ -49,6 +53,7 @@ public class IntakeArm extends SubsystemBase {
         System.out.println("Could not apply configs, error code: " + status.toString());
       }
     }
+    lastPosition = getPosition();
   }
 
   public Command goToDownCommand() {
@@ -66,9 +71,16 @@ public class IntakeArm extends SubsystemBase {
   }
 
   public Command setPositionCommand(double pos) {
-    return runOnce(() -> {
+    return run(() -> {
       setPosition(pos);
+    }).until(() -> {
+      lastPosition = getPosition();
+      return isAtPosition(pos);
     });
+  }
+
+  public boolean isAtPosition(double targetPos) {
+    return Math.abs(targetPos - getPosition()) < .1;
   }
 
   public void setPower(double d) {
@@ -81,9 +93,18 @@ public class IntakeArm extends SubsystemBase {
     });
   }
 
+  public double getPosition() {
+    if (motor == null) {
+      return 0;
+    }
+    return motor.getPosition(true).getValueAsDouble();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("arm position", getPosition());
+    SmartDashboard.putNumber("arm Last position", lastPosition);
   }
 
   public void zero() {
@@ -96,6 +117,18 @@ public class IntakeArm extends SubsystemBase {
   public Command zeroCommand() {
     return runOnce(() -> {
       zero();
+    });
+  }
+
+  public Command controlWithAxis(DoubleSupplier axis) {
+    return run(() -> {
+      var pow = axis.getAsDouble();
+      if (Math.abs(pow) < .1) {
+        setPosition(lastPosition);
+      } else {
+        lastPosition = getPosition();
+        setPower(axis.getAsDouble() / 10);
+      }
     });
   }
 }

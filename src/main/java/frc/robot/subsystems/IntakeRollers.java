@@ -4,7 +4,9 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -15,6 +17,11 @@ public class IntakeRollers extends SubsystemBase {
 
   public IntakeRollers(TalonFX motor) {
     this.motor = motor;
+
+    TalonFXConfiguration configs = new TalonFXConfiguration();
+
+    configs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    motor.getConfigurator().apply(configs);
   }
 
   public void setSpeed(double speed) {
@@ -29,12 +36,16 @@ public class IntakeRollers extends SubsystemBase {
     });
   }
 
-  public Command turnOnCommand() {
+  public Command intakeCommand() {
     return setSpeedCommand(.5);
   }
 
   public Command turnOffCommand() {
     return setSpeedCommand(0);
+  }
+
+  public Command outtakeCommand() {
+    return setSpeedCommand(-.5);
   }
 
   @Override

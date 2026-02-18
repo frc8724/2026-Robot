@@ -60,16 +60,24 @@ public class RobotContainer {
         public static final TalonFX loaderMotor = new TalonFX(32, "canivore");
         public static final TalonFX shooter1Motor = new TalonFX(33, "canivore");
         public static final TalonFX hoodMotor = new TalonFX(31, "canivore");
+        public static final TalonFX intakeRollerMotor = new TalonFX(27, "canivore");
+        public static final TalonFX intakeArmMotor = new TalonFX(26, "canivore");
+        public static final TalonFX hopperMotor = new TalonFX(28, "canivore");
+        public static final TalonFX climberElevatorPivotMotor = new TalonFX(25, "canivore");
+        public static final TalonFX climberElevatorMotor = new TalonFX(24, "canivore");
+        public static final TalonFX climberLowerClawsMotor = new TalonFX(23, "canivore");
 
-        public static final IntakeArm intakeArm = new IntakeArm(null);
-        public static final IntakeRollers intakeRollers = new IntakeRollers(null);
-        public static final ClimberElevator climberElevator = new ClimberElevator(null);
-        public static final ClimberElevatorPivot climberElevatorPivot = new ClimberElevatorPivot(null);
-        public static final ClimberShortArmPivot climberShortArmPivot = new ClimberShortArmPivot(null);
+        public static final IntakeArm intakeArm = new IntakeArm(intakeArmMotor);
+        public static final IntakeRollers intakeRollers = new IntakeRollers(intakeRollerMotor);
+        public static final ClimberElevator climberElevator = new ClimberElevator(climberElevatorMotor);
+        public static final ClimberElevatorPivot climberElevatorPivot = new ClimberElevatorPivot(
+                        climberElevatorPivotMotor);
+        public static final ClimberShortArmPivot climberShortArmPivot = new ClimberShortArmPivot(
+                        climberLowerClawsMotor);
 
         public static final GameTimer gameTimer = new GameTimer();
         public static final Shooter shooter = new Shooter(shooter1Motor);
-        public static final Hopper hopper = new Hopper(null);
+        public static final Hopper hopper = new Hopper(hopperMotor);
         public static final ShooterHood shooterHood = new ShooterHood(hoodMotor);
         public static final Loader loader = new Loader(loaderMotor);
         // public static final LaunchingTower launchingTower = new
@@ -144,11 +152,18 @@ public class RobotContainer {
                 // zero all
                 operatorPad.Button(10).onTrue(new SystemZero());
                 // intake on and off
-                operatorPad.Button(5).onTrue(intakeRollers.turnOnCommand());
+                operatorPad.Button(5).onTrue(intakeRollers.intakeCommand());
                 operatorPad.Button(5).onFalse(intakeRollers.turnOffCommand());
+                operatorPad.Button(7).onTrue(intakeRollers.outtakeCommand());
+                operatorPad.Button(7).onFalse(intakeRollers.turnOffCommand());
                 // intake in and out
                 operatorPad.Button(6).onTrue(intakeArm.goToUpCommand());
                 operatorPad.Button(8).onTrue(intakeArm.goToDownCommand());
+                // intakeArm.setDefaultCommand(intakeArm.controlWithAxis(operatorPad.Axis(frc.robot.controls.MayhemOperatorPad.Axis.RightY)));
+                climberElevatorPivot.setDefaultCommand(climberElevatorPivot
+                                .controlWithAxis(operatorPad.Axis(frc.robot.controls.MayhemOperatorPad.Axis.RightY)));
+                climberElevator.setDefaultCommand(climberElevator
+                                .controlWithAxis(operatorPad.Axis(frc.robot.controls.MayhemOperatorPad.Axis.LeftY)));
                 // shoot sequence
                 // operatorPad.D_PAD_UP.onTrue(launchingTower.fireFuelCommand());
                 // climb up to L1
@@ -169,10 +184,16 @@ public class RobotContainer {
                 operatorPad.Button(4).onTrue(loader.setSpeedCommand(.5));
                 operatorPad.Button(4).onFalse(loader.setSpeedCommand(0));
 
-                shooterHood.setDefaultCommand(shooterHood
-                                .controlWithAxis(operatorPad.Axis(frc.robot.controls.MayhemOperatorPad.Axis.LeftY)));
-                operatorPad.Button(2).onTrue(shooterHood.SetPositiongByPidCommand(0));
-                operatorPad.Button(3).onTrue(shooterHood.SetPositiongByPidCommand(15));
+                // shooterHood.setDefaultCommand(shooterHood
+                // .controlWithAxis(operatorPad.Axis(frc.robot.controls.MayhemOperatorPad.Axis.LeftY)));
+                // operatorPad.Button(2).onTrue(shooterHood.SetPositiongByPidCommand(0));
+                // operatorPad.Button(3).onTrue(shooterHood.SetPositiongByPidCommand(30));
+                // operatorPad.Button(2).onTrue(hopper.turnOnCommand());
+                // operatorPad.Button(2).onFalse(hopper.turnOffCommand());
+                operatorPad.Button(3).onTrue(climberShortArmPivot.setPowerCommand(.1));
+                operatorPad.Button(3).onFalse(climberShortArmPivot.setPowerCommand(0));
+                operatorPad.Button(2).onTrue(climberShortArmPivot.setPowerCommand(-.1));
+                operatorPad.Button(2).onFalse(climberShortArmPivot.setPowerCommand(0));
 
                 // climber elevator manual
                 // climberElevator.controlWithAxis(operatorPad.Axis(MayhemOperatorPad.Axis.LeftY));
