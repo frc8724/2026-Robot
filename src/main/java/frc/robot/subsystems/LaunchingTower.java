@@ -27,6 +27,7 @@ public class LaunchingTower extends SubsystemBase {
   private ShooterHood hood;
   private Loader loader;
   private Hopper hopper;
+  private IntakeRollers rollers;
 
   class FiringSolution {
     public double distance;
@@ -49,38 +50,42 @@ public class LaunchingTower extends SubsystemBase {
 
   };
 
-  public LaunchingTower(Shooter shooter, ShooterHood hood, Loader loader, Hopper hopper) {
+  public LaunchingTower(Shooter shooter, ShooterHood hood, Loader loader, Hopper hopper, IntakeRollers rollers) {
     this.shooter = shooter;
     this.hood = hood;
     this.loader = loader;
     this.hopper = hopper;
+    this.rollers = rollers;
   }
 
   private Command prepareToFireAtCommand(double distance) {
     //
     return new ParallelCommandGroup(
         hood.SetPositiongByMMCommand(convertDistanceToHood(distance)).finallyDo(() -> {
-          hood.setPositionByMM(0);
+          // hood.setPositionByMM(0);
         }),
-        shooter.setShooterSpeedCommand(convertDistanceToShooterRPM(distance)).finallyDo(() -> {
-          shooter.setShooterSpeed(0);
+        shooter.setVelocityCommand(convertDistanceToShooterRPM(distance)).finallyDo(() -> {
+          // shooter.setShooterSpeed(0);
         }));
   }
 
   private Command fireCommand(double distance) {
     return run(() -> {
       if (shooter.isAtTargetSpeed()) {
-        loader.setSpeed(.5);
-        hopper.setSpeed(.5);
+        loader.setSpeed(.75);
+        hopper.setSpeed(.75);
+        rollers.setSpeed(0.5);
       } else {
         loader.setSpeed(0);
         hopper.setSpeed(0);
+        rollers.setSpeed(0.0);
       }
     }).finallyDo(() -> {
       loader.setSpeed(0);
       shooter.setShooterSpeed(0);
       hood.setPositionByMM(0);
       hopper.setSpeed(0);
+      rollers.setSpeed(0.0);
     });
   }
 
@@ -90,15 +95,15 @@ public class LaunchingTower extends SubsystemBase {
       return new SequentialCommandGroup(
           prepareToFireAtCommand(distance),
           fireCommand(distance));
-    }, new HashSet<Subsystem>(Arrays.asList(hood, shooter, loader, hopper)));
+    }, new HashSet<Subsystem>(Arrays.asList(hood, shooter, loader, hopper, rollers)));
   }
 
   public double convertDistanceToShooterRPM(double distance) {
-    return 0;
+    return 50;
   }
 
   public double convertDistanceToHood(double distance) {
-    return 0;
+    return 15;
   }
 
   public FiringSolution getSolution(double distance) {

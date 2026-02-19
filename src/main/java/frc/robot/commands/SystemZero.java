@@ -22,4 +22,9 @@ public class SystemZero extends SequentialCommandGroup {
         RobotContainer.intakeArm.zeroCommand(),
         RobotContainer.shooterHood.zeroCommand());
   }
+
+  @Override
+  public boolean runsWhenDisabled() {
+    return true;
+  }
 }

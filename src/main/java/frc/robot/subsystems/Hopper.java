@@ -37,6 +37,10 @@ public class Hopper extends SubsystemBase {
     return setSpeedCommand(0);
   }
 
+  public Command reverseCommand() {
+    return setSpeedCommand(-.5);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

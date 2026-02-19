@@ -15,7 +15,7 @@ public class MayhemOperatorPad {
         public static final int OPERATOR_PAD_RIGHT_Y_AXIS = 3;
     }
 
-    public final Joystick OPERATOR_PAD = new Joystick(2);
+    public final Joystick OPERATOR_PAD = new Joystick(1);
     // public final Trigger BUTTON_ONE = new JoystickButton(OPERATOR_PAD, 1);
     // public final Trigger BUTTON_TWO = new JoystickButton(OPERATOR_PAD, 2);
     // public final Trigger BUTTON_THREE = new JoystickButton(OPERATOR_PAD, 3);

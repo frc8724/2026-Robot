@@ -380,10 +380,11 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public double distanceToHub() {
-        var hubPose = translatePose(hubMidPoint);
-        var robotPose = this.getState().Pose;
-        var diff = hubPose.minus(robotPose);
-        return Math.sqrt(diff.getX() * diff.getX() + diff.getY() * diff.getY());
+        return 3;
+        // var hubPose = translatePose(hubMidPoint);
+        // var robotPose = this.getState().Pose;
+        // var diff = hubPose.minus(robotPose);
+        // return Math.sqrt(diff.getX() * diff.getX() + diff.getY() * diff.getY());
     }
 
     public static final double ROTATE_KP_RAD_PER_SEC_PER_DEG = 0.06 * 180;
@@ -494,6 +495,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         }
     }
 
+    /**
+     * @deprecated
+     * @return
+     */
     public Command strafeWhileFiringCommand() {
         return run(() -> {
             var angleRad = angleToHubFieldReletive();
@@ -589,8 +594,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             });
         }
 
-        SmartDashboard.putNumber("shoot_location:x", AutoBuilder.getCurrentPose().getX());
-        SmartDashboard.putNumber("shoot_location:y", AutoBuilder.getCurrentPose().getY());
+        SmartDashboard.putNumber("robot_position:x", this.getState().Pose.getX());
+        SmartDashboard.putNumber("robot_position:y", this.getState().Pose.getY());
+        SmartDashboard.putNumber("robot_position:rotation", this.getState().Pose.getRotation().getDegrees());
 
     }
 

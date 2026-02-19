@@ -29,14 +29,14 @@ public class IntakeArm extends SubsystemBase {
     this.motor = motor;
     TalonFXConfiguration configs = new TalonFXConfiguration();
     configs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    configs.Slot0.kP = 2.0; // An error of 0.5 rotations results in 1.2 volts output
+    configs.Slot0.kP = 0.5; // An error of 0.5 rotations results in 1.2 volts output
     configs.Slot0.kD = 0.0; // A change of 1 rotation per second results in 0.1 volts output
 
     configs.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.1;
 
     // Peak output of 8 volts
-    configs.Voltage.PeakForwardVoltage = 12;
-    configs.Voltage.PeakReverseVoltage = -12;
+    configs.Voltage.PeakForwardVoltage = 6;
+    configs.Voltage.PeakReverseVoltage = -6;
     configs.CurrentLimits.StatorCurrentLimitEnable = true;
     configs.CurrentLimits.StatorCurrentLimit = 20;
     configs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;

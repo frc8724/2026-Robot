@@ -24,6 +24,7 @@ public class ShooterHood extends SubsystemBase {
   final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(0);
   public final double min = 0;
   public final double max = 30;
+  private double target;
 
   /** Creates a new ShooterHood. */
   public ShooterHood(TalonFX motor) {
@@ -102,6 +103,13 @@ public class ShooterHood extends SubsystemBase {
       setPositionByMM(pos);
     }).until(() -> {
       return isAtPosition(pos);
+    });
+  }
+
+  public Command offsetPositionCommand(double offset) {
+    return defer(() -> {
+      this.target += offset;
+      return setPositionCommand(this.target);
     });
   }
 

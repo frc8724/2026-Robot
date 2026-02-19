@@ -77,13 +77,13 @@ public class Shooter extends SubsystemBase {
     }
   }
 
-  public Command setControlCommand(double d) {
+  public Command setVelocityCommand(double d) {
     return runOnce(() -> {
       setControl(d);
     });
   }
 
-  public Command setShooterSpeedCommand(double d) {
+  public Command setShooterVbusCommand(double d) {
     return runOnce(() -> {
       setShooterSpeed(d);
     });
