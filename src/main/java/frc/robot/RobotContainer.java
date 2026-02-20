@@ -214,6 +214,17 @@ public class RobotContainer {
         // operatorPad.Button(4).onFalse(loader.setSpeedCommand(0));
         // intakeArm.setDefaultCommand(intakeArm.controlWithAxis(operatorPad.Axis(frc.robot.controls.MayhemOperatorPad.Axis.RightY)));
 
+        debugStick.Button(3).onTrue(shooter.offsetShooterVelocityCommand(2));
+        debugStick.Button(2).onTrue(shooter.offsetShooterVelocityCommand(-2));
+
+        debugStick.Button(4).onTrue(shooterHood.offsetPositionCommand(1));
+        debugStick.Button(5).onTrue(shooterHood.offsetPositionCommand(-1));
+
+        debugStick.Button(7).onTrue(loader.setSpeedCommand(.75));
+        debugStick.Button(7).onFalse(loader.setSpeedCommand(0));
+
+        debugStick.Button(6).onTrue(shooter.setVelocityCommand(0));
+
     }
 
     public Command getAutonomousCommand() {

@@ -92,11 +92,11 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public final Pose2d climbRightRed = new Pose2d(15.15, 4.7, new Rotation2d(Units.degreesToRadians(180)));
     public final Pose2d climbLeftRed = new Pose2d(15, 4, new Rotation2d(Units.degreesToRadians(180)));
 
-    public final Pose2d trenchRightCloseStartRed = new Pose2d(13.1, 7.6, new Rotation2d(Units.degreesToRadians(180)));
-    public final Pose2d trenchRightFarEndRed = new Pose2d(10.8, 7.7, new Rotation2d(Units.degreesToRadians(180)));
+    public final Pose2d trenchRightCloseStartRed = new Pose2d(13.1, 7.25, new Rotation2d(Units.degreesToRadians(180)));
+    public final Pose2d trenchRightFarEndRed = new Pose2d(10.8, 7.25, new Rotation2d(Units.degreesToRadians(180)));
 
-    public final Pose2d trenchRightCloseEndRed = new Pose2d(13.1, 7.6, new Rotation2d(Units.degreesToRadians(0)));
-    public final Pose2d trenchRightFarStartRed = new Pose2d(10.8, 7.7, new Rotation2d(Units.degreesToRadians(0)));
+    public final Pose2d trenchRightCloseEndRed = new Pose2d(13.1, 7.25, new Rotation2d(Units.degreesToRadians(180)));
+    public final Pose2d trenchRightFarStartRed = new Pose2d(10.8, 7.25, new Rotation2d(Units.degreesToRadians(180)));
 
     public final Pose2d bumpLeftClose = new Pose2d(13.2, 2.5, new Rotation2d(Units.degreesToRadians(135)));
     public final Pose2d bumpLeftFar = new Pose2d(10.4, 2.5, new Rotation2d(Units.degreesToRadians(135)));
@@ -104,7 +104,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public final Pose2d bumpRightClose = new Pose2d(13.2, 5.5, new Rotation2d(Units.degreesToRadians(225)));
     public final Pose2d bumpRightFar = new Pose2d(10.4, 5.5, new Rotation2d(Units.degreesToRadians(225)));
 
-    public final Pose2d hubMidPoint = new Pose2d(11.8, 4.0, new Rotation2d(Units.degreesToRadians(0)));
+    public final Pose2d hubMidPoint = new Pose2d(12.07, 3.93, new Rotation2d(Units.degreesToRadians(0)));
     /*
      * SysId routine for characterizing translation. This is used to find PID gains
      * for the drive motors.
@@ -380,11 +380,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public double distanceToHub() {
-        return 3;
-        // var hubPose = translatePose(hubMidPoint);
-        // var robotPose = this.getState().Pose;
-        // var diff = hubPose.minus(robotPose);
-        // return Math.sqrt(diff.getX() * diff.getX() + diff.getY() * diff.getY());
+        var hubPose = translatePose(hubMidPoint);
+        var robotPose = this.getState().Pose;
+        var diff = hubPose.minus(robotPose);
+        return Math.sqrt(diff.getX() * diff.getX() + diff.getY() * diff.getY());
     }
 
     public static final double ROTATE_KP_RAD_PER_SEC_PER_DEG = 0.06 * 180;
@@ -597,6 +596,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SmartDashboard.putNumber("robot_position:x", this.getState().Pose.getX());
         SmartDashboard.putNumber("robot_position:y", this.getState().Pose.getY());
         SmartDashboard.putNumber("robot_position:rotation", this.getState().Pose.getRotation().getDegrees());
+        var distance = distanceToHub();
+        SmartDashboard.putNumber("distance_to_hub", distance);
 
     }
 

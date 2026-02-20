@@ -42,12 +42,11 @@ public class LaunchingTower extends SubsystemBase {
   };
 
   FiringSolution[] solutions = new FiringSolution[] {
-      new FiringSolution(0, .5, 0),
-      new FiringSolution(1, .5, 1),
-      new FiringSolution(2, 1.5, 2),
-      new FiringSolution(3, 2.5, 3),
-      new FiringSolution(4, 3.5, 4)
-
+      new FiringSolution(0, 46, 7),
+      new FiringSolution(1.00, 46, 7),
+      new FiringSolution(2.00, 52, 13),
+      new FiringSolution(3.14, 60, 16),
+      new FiringSolution(4.14, 66, 23),
   };
 
   public LaunchingTower(Shooter shooter, ShooterHood hood, Loader loader, Hopper hopper, IntakeRollers rollers) {
@@ -99,11 +98,13 @@ public class LaunchingTower extends SubsystemBase {
   }
 
   public double convertDistanceToShooterRPM(double distance) {
-    return 50;
+    // return 50;
+    return getSolution(distance).shooterSpeed;
   }
 
   public double convertDistanceToHood(double distance) {
-    return 15;
+    // return 15;
+    return getSolution(distance).hoodPosition;
   }
 
   public FiringSolution getSolution(double distance) {
