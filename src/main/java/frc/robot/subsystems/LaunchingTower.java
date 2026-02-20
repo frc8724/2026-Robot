@@ -44,9 +44,10 @@ public class LaunchingTower extends SubsystemBase {
   FiringSolution[] solutions = new FiringSolution[] {
       new FiringSolution(0, 46, 7),
       new FiringSolution(1.00, 46, 7),
-      new FiringSolution(2.00, 52, 13),
+      new FiringSolution(2.00, 52, 11.5),
       new FiringSolution(3.14, 60, 16),
       new FiringSolution(4.14, 66, 23),
+      new FiringSolution(5.36, 72, 28),
   };
 
   public LaunchingTower(Shooter shooter, ShooterHood hood, Loader loader, Hopper hopper, IntakeRollers rollers) {

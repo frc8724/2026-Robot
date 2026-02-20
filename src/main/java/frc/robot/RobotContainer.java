@@ -9,10 +9,12 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
@@ -78,11 +80,33 @@ public class RobotContainer {
     public RobotContainer() {
         configureBindings();
         configureDebugBindings();
+        configureNamedCommands();
 
         m_auto.addAuto("Stand Still", new WaitCommand(2));
         m_auto.addAuto("Shoot Center Climb", new PathPlannerAuto("Shoot Center Climb"));
         m_auto.addAuto("Shoot Depot Shoot Left", new PathPlannerAuto("Shoot Depot Shoot Left"));
         m_auto.addAuto("Shoot Outpost Shoot Right", new PathPlannerAuto("Shoot Outpost Shoot Right"));
+    }
+
+    private void configureNamedCommands() {
+        // NamedCommands.registerCommand("Shoot-8s", new SequentialCommandGroup(
+        // new DrivePointToHub(),
+        // launchingTower.fireFuelCommand().withTimeout(8)));
+        NamedCommands.registerCommand("Shoot-8s", new ParallelRaceGroup(
+                new DrivePointToHub().repeatedly(),
+                launchingTower.fireFuelCommand().withTimeout(8)));
+        // NamedCommands.registerCommand("Outtake", endEffector.setSpeedCmd(-.8));
+        // NamedCommands.registerCommand("IntakeStart", endEffector.setSpeedCmd(0.8));
+        // NamedCommands.registerCommand("Algae High", ArmPositionAutoCmd(-750, -929,
+        // -13));
+        // NamedCommands.registerCommand("Algae High Remove",
+        // ArmPositionAutoCmd(-485, -900, -13).withTimeout(2.0));
+
+        // NamedCommands.registerCommand("IntakeStop", endEffector.setSpeedCmd(0.0));
+        // NamedCommands.registerCommand("AutoHP", ArmPositionAutoCmd(-480, -1200, 0));
+        // NamedCommands.registerCommand("TeleHP", ArmPositionCmd(-693, 1103, -219));
+        // NamedCommands.registerCommand("Stow", ArmPositionAutoCmd(0, -1764, 0));
+
     }
 
     private void configureBindings() {

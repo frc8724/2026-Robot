@@ -8,6 +8,8 @@ import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -47,13 +49,14 @@ public class DrivePointToHub extends Command {
     // --- Rotation control (tx -> 0), using your proven sign convention ---
     // double txDeg = LimelightHelpers.getTX("limelight");
     // TODO: need to reverse alliances
-    var currentPose = RobotContainer.drivetrain.getState().Pose;
+    var robotPose = RobotContainer.drivetrain.getState().Pose;
+    var shooterPose = robotPose.plus(new Transform2d(.254, -.254, Rotation2d.fromDegrees(0)));
     var hubPoseX = isBlueAlliance ? 4.6 : Constants.fieldLength - 4.6;
     var hubPoseY = 4;
 
-    var relativeX = hubPoseX - currentPose.getX();
-    var relativeY = hubPoseY - currentPose.getY();
-    angleRad = Math.atan2(relativeY, relativeX) - currentPose.getRotation().getRadians();
+    var relativeX = hubPoseX - shooterPose.getX();
+    var relativeY = hubPoseY - shooterPose.getY();
+    angleRad = Math.atan2(relativeY, relativeX) - shooterPose.getRotation().getRadians();
 
     if (angleRad > Math.PI) {
       angleRad = angleRad - 2 * Math.PI;
@@ -92,13 +95,9 @@ public class DrivePointToHub extends Command {
   public boolean isFinished() {
     if (Math.abs(angleRad) < ROTATE_DEADBAND_DEG) {
       counter += 1;
-      // if (counter > 4) {
-      // return true;
-      // }
     } else {
       counter = 0;
     }
     return (counter > 4);
-    // return false;
   }
 }

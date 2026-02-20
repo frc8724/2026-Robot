@@ -420,51 +420,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return angleRad;
     }
 
-    public Command pointToHubCommand() {
-        return run(() -> {
-            SwerveRequest.RobotCentric request = new SwerveRequest.RobotCentric()
-                    .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage)
-                    .withSteerRequestType(SwerveModule.SteerRequestType.Position);
-
-            // --- Rotation control (tx -> 0), using your proven sign convention ---
-            // double txDeg = LimelightHelpers.getTX("limelight");
-            // TODO: need to reverse alliances
-            // var currentPose = getState().Pose;
-            // var hubPoseX = fieldLength - 4.6;
-            // var hubPoseY = 4;
-
-            // var relativeX = hubPoseX - currentPose.getX();
-            // var relativeY = hubPoseY - currentPose.getY();
-            // var angleRad = Math.atan2(relativeY, relativeX) -
-            // currentPose.getRotation().getRadians();
-
-            // if (angleRad > Math.PI) {
-            // angleRad = angleRad - 2 * Math.PI;
-            // }
-            var angleRad = angleToHubRobotReletive();
-
-            SmartDashboard.putString("debug", "" + angleRad);
-            double omegaRadPerSec = 0.0;
-
-            if (Math.abs(angleRad) > ROTATE_DEADBAND_DEG) {
-                omegaRadPerSec = MathUtil.clamp(
-                        ROTATE_KP_RAD_PER_SEC_PER_DEG * angleRad,
-                        -ROTATE_MAX_OMEGA_RAD_PER_SEC,
-                        ROTATE_MAX_OMEGA_RAD_PER_SEC);
-            }
-
-            // Driver translation (robot-centric)
-            double vx = 0.0;// vxMetersPerSec.getAsDouble();
-            double vy = 0.0;// vyMetersPerSec.getAsDouble();
-
-            this.setControl(
-                    request.withVelocityX(vx)
-                            .withVelocityY(vy)
-                            .withRotationalRate(omegaRadPerSec));
-
-        });
-    }
-
     private void configureAutoBuilder() {
         try {
             var config = RobotConfig.fromGUISettings();
