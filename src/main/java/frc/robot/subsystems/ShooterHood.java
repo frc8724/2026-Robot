@@ -72,13 +72,13 @@ public class ShooterHood extends SubsystemBase {
   public void setPositionByMM(double pos) {
     if (motor != null) {
       // motor.setControl(position.withPosition(pos));
-      motor.setControl(motionMagicRequest.withPosition(pos));
+      motor.setControl(motionMagicRequest.withPosition(clamp(pos)));
     }
   }
 
   public void setPositionByPid(double pos) {
     if (motor != null) {
-      motor.setControl(position.withPosition(pos));
+      motor.setControl(position.withPosition(clamp(pos)));
     }
   }
 
@@ -104,6 +104,10 @@ public class ShooterHood extends SubsystemBase {
     }).until(() -> {
       return isAtPosition(pos);
     });
+  }
+
+  private double clamp(double pos) {
+    return Math.min(max, Math.max(min, pos));
   }
 
   public Command offsetPositionCommand(double offset) {
