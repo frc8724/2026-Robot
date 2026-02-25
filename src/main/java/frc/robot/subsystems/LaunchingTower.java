@@ -45,8 +45,8 @@ public class LaunchingTower extends SubsystemBase {
       new FiringSolution(0, 46, 7),
       new FiringSolution(1.00, 46, 7),
       new FiringSolution(2.00, 52, 11.5),
-      new FiringSolution(3.14, 60, 16),
-      new FiringSolution(4.14, 66, 23),
+      new FiringSolution(3.14, 48, 16),
+      new FiringSolution(4.14, 56, 23),
       new FiringSolution(5.36, 72, 28),
   };
 
@@ -71,6 +71,7 @@ public class LaunchingTower extends SubsystemBase {
 
   private Command fireCommand(double distance) {
     return run(() -> {
+      var currentDistance = RobotContainer.drivetrain.distanceToHub();
       if (shooter.isAtTargetSpeed()) {
         loader.setSpeed(.75);
         hopper.setSpeed(.75);
@@ -80,6 +81,8 @@ public class LaunchingTower extends SubsystemBase {
         hopper.setSpeed(0);
         rollers.setSpeed(0.0);
       }
+      hood.setPositionByMM(convertDistanceToHood(currentDistance));
+      shooter.setVelocity(convertDistanceToShooterRPM(currentDistance));
     }).finallyDo(() -> {
       loader.setSpeed(0);
       shooter.setShooterSpeed(0);

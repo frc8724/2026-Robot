@@ -29,8 +29,8 @@ public class Shooter extends SubsystemBase {
     this.shooterFx = motor;
     // in init function, set slot 0 gains
     var slot0Configs = new Slot0Configs();
-    slot0Configs.kS = 0.2; // Add 0.1 V output to overcome static friction
-    slot0Configs.kV = 0.1; // A velocity target of 20rps results in 0.2 V output
+    slot0Configs.kS = 0.0; // Add 0.1 V output to overcome static friction
+    slot0Configs.kV = 0.12; // A velocity target of 20rps results in 0.2 V output
     slot0Configs.kP = 0.1; // An error of 1 rps results in 0.11 V output
     slot0Configs.kI = 0.0; // no output for integrated error
     slot0Configs.kD = 0; // no output for error derivative
@@ -70,7 +70,7 @@ public class Shooter extends SubsystemBase {
     }
   }
 
-  public void setControl(double d) {
+  public void setVelocity(double d) {
     if (shooterFx != null) {
       targetSpeed = d;
       shooterFx.setControl(m_request.withVelocity(targetSpeed));
@@ -79,7 +79,7 @@ public class Shooter extends SubsystemBase {
 
   public Command setVelocityCommand(double d) {
     return runOnce(() -> {
-      setControl(d);
+      setVelocity(d);
     });
   }
 

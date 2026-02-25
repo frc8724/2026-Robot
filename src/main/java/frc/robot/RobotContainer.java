@@ -45,7 +45,8 @@ public class RobotContainer {
 
         private final Telemetry logger = new Telemetry(MaxSpeed);
 
-        private final MayhemExtreme3dPro driverStick = new MayhemExtreme3dPro(0);
+        // private final MayhemExtreme3dPro driverStick = new MayhemExtreme3dPro(0);
+        private final MayhemExtreme3dPro driverStick = null;
         private final MayhemOperatorPad operatorPad = new MayhemOperatorPad();
         private final MayhemLogitechAttack3 debugStick = new MayhemLogitechAttack3(2);
 
@@ -83,6 +84,9 @@ public class RobotContainer {
                 configureBindings();
                 configureDebugBindings();
                 configureNamedCommands();
+                if (driverStick != null) {
+                        configureDriverstickBindings();
+                }
 
                 m_auto.addAuto("Stand Still", new WaitCommand(2));
                 m_auto.addAuto("Shoot Center Climb", new PathPlannerAuto("Shoot Center Climb"));
@@ -112,20 +116,20 @@ public class RobotContainer {
         }
 
         private void configureBindings() {
-                // Note that X is defined as forward according to WPILib convention,
-                // and Y is defined as to the left according to WPILib convention.
-                drivetrain.setDefaultCommand(
-                                // Drivetrain will execute this command periodically
-                                drivetrain.applyRequest(
-                                                () ->
-                                                // Drive forward with negative Y (forward)
-                                                drive.withVelocityX(-driverStick.getRawAxis(Axis.Y) * MaxSpeed)
-                                                                // Drive left with negative X (left)
-                                                                .withVelocityY(-driverStick.getRawAxis(Axis.X)
-                                                                                * MaxSpeed)
-                                                                // Drive counter-clockwise with negative X (left)
-                                                                .withRotationalRate(-driverStick.getRawAxis(Axis.Z)
-                                                                                * MaxAngularRate)));
+                // // Note that X is defined as forward according to WPILib convention,
+                // // and Y is defined as to the left according to WPILib convention.
+                // drivetrain.setDefaultCommand(
+                // // Drivetrain will execute this command periodically
+                // drivetrain.applyRequest(
+                // () ->
+                // // Drive forward with negative Y (forward)
+                // drive.withVelocityX(-driverStick.getRawAxis(Axis.Y) * MaxSpeed)
+                // // Drive left with negative X (left)
+                // .withVelocityY(-driverStick.getRawAxis(Axis.X)
+                // * MaxSpeed)
+                // // Drive counter-clockwise with negative X (left)
+                // .withRotationalRate(-driverStick.getRawAxis(Axis.Z)
+                // * MaxAngularRate)));
 
                 // driverStick.Button(6).onTrue(drivetrain.goToPoseCommand(drivetrain.shooterPose2Red));
                 // driverStick.Button(4).onTrue(drivetrain.goToPoseCommand(drivetrain.climbRightRed));
@@ -138,16 +142,17 @@ public class RobotContainer {
                 // drivetrain.fireWhileDriving(driverStick.Axis(Axis.Y),
                 // driverStick.Axis(Axis.X)));
 
-                driverStick.Button(1)
-                                .whileTrue(new SequentialCommandGroup(new DrivePointToHub(), drivetrain.lockWheels()));
-                driverStick.Button(5).onTrue(drivetrain.goToPoseCommand(drivetrain.shooterPose1Red));
-                driverStick.Button(6).whileTrue(drivetrain.lockWheels());
-                driverStick.Button(8).onTrue(drivetrain.trenchRightOutCommand());
-                driverStick.Button(10).onTrue(drivetrain.trenchRightInCommand());
-                driverStick.Button(11).onTrue(drivetrain.zeroBotRotationCommand());
-                driverStick.Button(12).onTrue(drivetrain.stopAllCommand());
+                // driverStick.Button(1)
+                // .whileTrue(new SequentialCommandGroup(new DrivePointToHub(),
+                // drivetrain.lockWheels()));
+                // driverStick.Button(5).onTrue(drivetrain.goToPoseCommand(drivetrain.shooterPose1Red));
+                // driverStick.Button(6).whileTrue(drivetrain.lockWheels());
+                // driverStick.Button(8).onTrue(drivetrain.trenchRightOutCommand());
+                // driverStick.Button(10).onTrue(drivetrain.trenchRightInCommand());
+                // driverStick.Button(11).onTrue(drivetrain.zeroBotRotationCommand());
+                // driverStick.Button(12).onTrue(drivetrain.stopAllCommand());
 
-                driverStick.Button(7).onTrue(drivetrain.bumpCommand());
+                // driverStick.Button(7).onTrue(drivetrain.bumpCommand());
 
                 // climb down from L1
                 // operatorPad.Button(2).onTrue(new ClimbDownFromLowerRung());
@@ -191,6 +196,53 @@ public class RobotContainer {
                 climberElevator.setDefaultCommand(
                                 climberElevator.controlWithAxis(
                                                 operatorPad.Axis(frc.robot.controls.MayhemOperatorPad.Axis.LeftY)));
+
+                // // Idle while the robot is disabled. This ensures the configured
+                // // neutral mode is applied to the drive motors while disabled.
+                // final var idle = new SwerveRequest.Idle();
+                // RobotModeTriggers.disabled().whileTrue(drivetrain.applyRequest(() ->
+                // idle).ignoringDisable(true));
+
+                // drivetrain.registerTelemetry(logger::telemeterize);
+        }
+
+        private void configureDriverstickBindings() {
+                // driverStick.Button(6).onTrue(drivetrain.goToPoseCommand(drivetrain.shooterPose2Red));
+                // driverStick.Button(4).onTrue(drivetrain.goToPoseCommand(drivetrain.climbRightRed));
+                // driverStick.Button(3).onTrue(drivetrain.goToPoseCommand(drivetrain.climbLeftRed));
+                // driverStick.Button(2).whileTrue(
+                // drivetrain.fireWhileDriving(driverStick.Axis(Axis.Y),
+                // driverStick.Axis(Axis.X)));
+                // driverStick.Button(9).whileTrue(drivetrain.strafeWhileFiringCommand());
+                // driverStick.Button(7).whileTrue(
+                // drivetrain.fireWhileDriving(driverStick.Axis(Axis.Y),
+                // driverStick.Axis(Axis.X)));
+
+                // Note that X is defined as forward according to WPILib convention,
+                // and Y is defined as to the left according to WPILib convention.
+                drivetrain.setDefaultCommand(
+                                // Drivetrain will execute this command periodically
+                                drivetrain.applyRequest(
+                                                () ->
+                                                // Drive forward with negative Y (forward)
+                                                drive.withVelocityX(-driverStick.getRawAxis(Axis.Y) * MaxSpeed)
+                                                                // Drive left with negative X (left)
+                                                                .withVelocityY(-driverStick.getRawAxis(Axis.X)
+                                                                                * MaxSpeed)
+                                                                // Drive counter-clockwise with negative X (left)
+                                                                .withRotationalRate(-driverStick.getRawAxis(Axis.Z)
+                                                                                * MaxAngularRate)));
+
+                driverStick.Button(1)
+                                .whileTrue(new SequentialCommandGroup(new DrivePointToHub(), drivetrain.lockWheels()));
+                driverStick.Button(5).onTrue(drivetrain.goToPoseCommand(drivetrain.shooterPose1Red));
+                driverStick.Button(6).whileTrue(drivetrain.lockWheels());
+                driverStick.Button(8).onTrue(drivetrain.trenchRightOutCommand());
+                driverStick.Button(10).onTrue(drivetrain.trenchRightInCommand());
+                driverStick.Button(11).onTrue(drivetrain.zeroBotRotationCommand());
+                driverStick.Button(12).onTrue(drivetrain.stopAllCommand());
+
+                driverStick.Button(7).onTrue(drivetrain.bumpCommand());
 
                 // Idle while the robot is disabled. This ensures the configured
                 // neutral mode is applied to the drive motors while disabled.

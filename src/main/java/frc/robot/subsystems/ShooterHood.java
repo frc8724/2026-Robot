@@ -72,12 +72,14 @@ public class ShooterHood extends SubsystemBase {
   public void setPositionByMM(double pos) {
     if (motor != null) {
       // motor.setControl(position.withPosition(pos));
+      target = pos;
       motor.setControl(motionMagicRequest.withPosition(clamp(pos)));
     }
   }
 
   public void setPositionByPid(double pos) {
     if (motor != null) {
+      target = pos;
       motor.setControl(position.withPosition(clamp(pos)));
     }
   }
@@ -142,6 +144,7 @@ public class ShooterHood extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("hood position", getPosition());
+    SmartDashboard.putNumber("hood target", target);
   }
 
   public Command controlWithAxis(DoubleSupplier axis) {
