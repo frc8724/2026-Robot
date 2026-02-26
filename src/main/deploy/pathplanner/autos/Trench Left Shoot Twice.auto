@@ -1,0 +1,85 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Start Left Trench Far Intake Center Left Far Start"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Down"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Intake Center Left Far Start To End"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Up"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Intake Left Center End To Trench Left Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot-4s"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Trench Shoot Left To Intake Center Left Close"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Down"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Intake Center Left Close Start To End"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Up"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Intake Left Center Close End To Trench Shoot Left"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot-4s"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

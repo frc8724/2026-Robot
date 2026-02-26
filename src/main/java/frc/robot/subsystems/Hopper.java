@@ -7,7 +7,9 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class Hopper extends SubsystemBase {
   private TalonFX motor;
@@ -39,6 +41,20 @@ public class Hopper extends SubsystemBase {
 
   public Command reverseCommand() {
     return setSpeedCommand(-.5);
+  }
+
+  public Command jiggleWiggleCommand() {
+    return new SequentialCommandGroup(
+        reverseCommand(),
+        new WaitCommand(0.5),
+        turnOffCommand(),
+        new WaitCommand(0.25),
+        turnOnCommand(),
+        run(() -> {
+        }) // this command never ends interupt to stop
+    ).finallyDo(() -> {
+      setSpeed(0);
+    });
   }
 
   @Override

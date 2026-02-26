@@ -120,6 +120,9 @@ public class ClimberElevatorPivot extends SubsystemBase {
   }
 
   public void setPower(double d) {
+    if (motor == null) {
+      return;
+    }
     motor.set(d);
   }
 

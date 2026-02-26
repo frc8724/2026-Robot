@@ -7,6 +7,7 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -45,24 +46,44 @@ public class RobotContainer {
 
         private final Telemetry logger = new Telemetry(MaxSpeed);
 
-        // private final MayhemExtreme3dPro driverStick = new MayhemExtreme3dPro(0);
-        private final MayhemExtreme3dPro driverStick = null;
+        private final MayhemExtreme3dPro driverStick = new MayhemExtreme3dPro(0);
+        // private final MayhemExtreme3dPro driverStick = null;
         private final MayhemOperatorPad operatorPad = new MayhemOperatorPad();
         private final MayhemLogitechAttack3 debugStick = new MayhemLogitechAttack3(2);
 
         public static final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
         private final AutoChooser m_auto = new AutoChooser();
         private static final Vision vision = new Vision();
+        public static final CANBus canivore = new CANBus("canivore");
 
-        public static final TalonFX loaderMotor = new TalonFX(32, "canivore");
-        public static final TalonFX shooter1Motor = new TalonFX(33, "canivore");
-        public static final TalonFX hoodMotor = new TalonFX(31, "canivore");
-        public static final TalonFX intakeRollerMotor = new TalonFX(27, "canivore");
-        public static final TalonFX intakeArmMotor = new TalonFX(26, "canivore");
-        public static final TalonFX hopperMotor = new TalonFX(28, "canivore");
-        public static final TalonFX climberElevatorPivotMotor = new TalonFX(25, "canivore");
-        public static final TalonFX climberElevatorMotor = new TalonFX(24, "canivore");
-        public static final TalonFX climberLowerClawsMotor = new TalonFX(23, "canivore");
+        // public static final TalonFX loaderMotor = new TalonFX(32, "canivore");
+        // public static final TalonFX shooter1Motor = new TalonFX(33, "canivore");
+        // public static final TalonFX hoodMotor = new TalonFX(31, "canivore");
+        // public static final TalonFX intakeRollerMotor = new TalonFX(27, "canivore");
+        // public static final TalonFX intakeArmMotor = new TalonFX(26, "canivore");
+        // public static final TalonFX hopperMotor = new TalonFX(28, "canivore");
+        // public static final TalonFX climberElevatorPivotMotor = new TalonFX(25,
+        // "canivore");
+        // public static final TalonFX climberElevatorMotor = new TalonFX(24,
+        // "canivore");
+        // public static final TalonFX climberLowerClawsMotor = new TalonFX(23,
+        // "canivore");
+
+        public static final TalonFX loaderMotor = new TalonFX(32, canivore);
+        public static final TalonFX shooter1Motor = new TalonFX(33, canivore);
+        public static final TalonFX hoodMotor = new TalonFX(31, canivore);
+        public static final TalonFX intakeRollerMotor = new TalonFX(27, canivore);
+        public static final TalonFX intakeArmMotor = new TalonFX(26, canivore);
+        public static final TalonFX hopperMotor = new TalonFX(28, canivore);
+
+        // public static final TalonFX climberElevatorPivotMotor = new TalonFX(25,
+        // canivore);
+        // public static final TalonFX climberElevatorMotor = new TalonFX(24, canivore);
+        // public static final TalonFX climberLowerClawsMotor = new TalonFX(23,
+        // canivore);
+        public static final TalonFX climberElevatorPivotMotor = null;
+        public static final TalonFX climberElevatorMotor = null;
+        public static final TalonFX climberLowerClawsMotor = null;
 
         public static final IntakeArm intakeArm = new IntakeArm(intakeArmMotor);
         public static final IntakeRollers intakeRollers = new IntakeRollers(intakeRollerMotor);
@@ -101,6 +122,13 @@ public class RobotContainer {
                 NamedCommands.registerCommand("Shoot-8s", new ParallelRaceGroup(
                                 new DrivePointToHub().repeatedly(),
                                 launchingTower.fireFuelCommand().withTimeout(8)));
+                NamedCommands.registerCommand("Shoot-4s", new ParallelRaceGroup(
+                                new DrivePointToHub().repeatedly(),
+                                launchingTower.fireFuelCommand().withTimeout(4)));
+                NamedCommands.registerCommand("Intake Down",
+                                new ParallelCommandGroup(intakeArm.goToDownCommand(), intakeRollers.intakeCommand()));
+                NamedCommands.registerCommand("Intake Up",
+                                new ParallelCommandGroup(intakeArm.goToUpCommand(), intakeRollers.turnOffCommand()));
                 // NamedCommands.registerCommand("Outtake", endEffector.setSpeedCmd(-.8));
                 // NamedCommands.registerCommand("IntakeStart", endEffector.setSpeedCmd(0.8));
                 // NamedCommands.registerCommand("Algae High", ArmPositionAutoCmd(-750, -929,

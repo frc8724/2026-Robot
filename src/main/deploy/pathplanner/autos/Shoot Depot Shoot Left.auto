@@ -11,9 +11,15 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 3.0
+            "name": "shoot-4s"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Down"
           }
         },
         {
@@ -29,9 +35,21 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Intake Up"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Depot to Shoot Left 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot-8s"
           }
         }
       ]

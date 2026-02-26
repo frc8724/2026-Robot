@@ -44,10 +44,10 @@ public class LaunchingTower extends SubsystemBase {
   FiringSolution[] solutions = new FiringSolution[] {
       new FiringSolution(0, 46, 7),
       new FiringSolution(1.00, 46, 7),
-      new FiringSolution(2.00, 52, 11.5),
+      new FiringSolution(2.00, 46, 11.5),
       new FiringSolution(3.14, 48, 16),
       new FiringSolution(4.14, 56, 23),
-      new FiringSolution(5.36, 72, 28),
+      new FiringSolution(5.36, 62, 30),
   };
 
   public LaunchingTower(Shooter shooter, ShooterHood hood, Loader loader, Hopper hopper, IntakeRollers rollers) {
@@ -70,15 +70,37 @@ public class LaunchingTower extends SubsystemBase {
   }
 
   private Command fireCommand(double distance) {
+    // return run(() -> {
+    // var currentDistance = RobotContainer.drivetrain.distanceToHub();
+    // if (shooter.isAtTargetSpeed()) {
+    // loader.setSpeed(.75);
+    // hopper.setSpeed(.75);
+    // rollers.setSpeed(0.5);
+    // } else {
+    // loader.setSpeed(0);
+    // hopper.setSpeed(0);
+    // rollers.setSpeed(0.0);
+    // }
+    // hood.setPositionByMM(convertDistanceToHood(currentDistance));
+    // shooter.setVelocity(convertDistanceToShooterRPM(currentDistance));
+    // }).finallyDo(() -> {
+    // loader.setSpeed(0);
+    // shooter.setShooterSpeed(0);
+    // hood.setPositionByMM(0);
+    // hopper.setSpeed(0);
+    // rollers.setSpeed(0.0);
+    // });
+    return new ParallelCommandGroup(fireLoaderShooterHooCommand(), hopper.jiggleWiggleCommand());
+  }
+
+  private Command fireLoaderShooterHooCommand() {
     return run(() -> {
       var currentDistance = RobotContainer.drivetrain.distanceToHub();
       if (shooter.isAtTargetSpeed()) {
         loader.setSpeed(.75);
-        hopper.setSpeed(.75);
         rollers.setSpeed(0.5);
       } else {
         loader.setSpeed(0);
-        hopper.setSpeed(0);
         rollers.setSpeed(0.0);
       }
       hood.setPositionByMM(convertDistanceToHood(currentDistance));
@@ -87,7 +109,6 @@ public class LaunchingTower extends SubsystemBase {
       loader.setSpeed(0);
       shooter.setShooterSpeed(0);
       hood.setPositionByMM(0);
-      hopper.setSpeed(0);
       rollers.setSpeed(0.0);
     });
   }

@@ -115,6 +115,9 @@ public class ClimberShortArmPivot extends SubsystemBase {
   }
 
   public void setPower(double d) {
+    if (motor == null) {
+      return;
+    }
     motor.set(d);
   }
 
