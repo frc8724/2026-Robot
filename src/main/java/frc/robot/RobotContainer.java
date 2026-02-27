@@ -113,6 +113,7 @@ public class RobotContainer {
                 m_auto.addAuto("Shoot Center Climb", new PathPlannerAuto("Shoot Center Climb"));
                 m_auto.addAuto("Shoot Depot Shoot Left", new PathPlannerAuto("Shoot Depot Shoot Left"));
                 m_auto.addAuto("Shoot Outpost Shoot Right", new PathPlannerAuto("Shoot Outpost Shoot Right"));
+                m_auto.addAuto("Trench Left Shoot Twice", new PathPlannerAuto("Trench Left Shoot Twice"));
         }
 
         private void configureNamedCommands() {
@@ -238,9 +239,9 @@ public class RobotContainer {
                 // driverStick.Button(6).onTrue(drivetrain.goToPoseCommand(drivetrain.shooterPose2Red));
                 // driverStick.Button(4).onTrue(drivetrain.goToPoseCommand(drivetrain.climbRightRed));
                 // driverStick.Button(3).onTrue(drivetrain.goToPoseCommand(drivetrain.climbLeftRed));
-                // driverStick.Button(2).whileTrue(
-                // drivetrain.fireWhileDriving(driverStick.Axis(Axis.Y),
-                // driverStick.Axis(Axis.X)));
+                driverStick.Button(2).whileTrue(
+                                drivetrain.fireWhileDriving(driverStick.Axis(Axis.Y),
+                                                driverStick.Axis(Axis.X)));
                 // driverStick.Button(9).whileTrue(drivetrain.strafeWhileFiringCommand());
                 // driverStick.Button(7).whileTrue(
                 // drivetrain.fireWhileDriving(driverStick.Axis(Axis.Y),
@@ -329,16 +330,16 @@ public class RobotContainer {
                 // operatorPad.Button(4).onFalse(loader.setSpeedCommand(0));
                 // intakeArm.setDefaultCommand(intakeArm.controlWithAxis(operatorPad.Axis(frc.robot.controls.MayhemOperatorPad.Axis.RightY)));
 
-                // debugStick.Button(3).onTrue(shooter.offsetShooterVelocityCommand(2));
-                // debugStick.Button(2).onTrue(shooter.offsetShooterVelocityCommand(-2));
+                debugStick.Button(3).onTrue(shooter.offsetShooterVelocityCommand(2));
+                debugStick.Button(2).onTrue(shooter.offsetShooterVelocityCommand(-2));
 
-                // debugStick.Button(4).onTrue(shooterHood.offsetPositionCommand(1));
-                // debugStick.Button(5).onTrue(shooterHood.offsetPositionCommand(-1));
+                debugStick.Button(4).onTrue(shooterHood.offsetPositionCommand(1));
+                debugStick.Button(5).onTrue(shooterHood.offsetPositionCommand(-1));
 
-                // debugStick.Button(7).onTrue(loader.setSpeedCommand(.75));
-                // debugStick.Button(7).onFalse(loader.setSpeedCommand(0));
+                debugStick.Button(7).onTrue(loader.setSpeedCommand(.75));
+                debugStick.Button(7).onFalse(loader.setSpeedCommand(0));
 
-                // debugStick.Button(6).onTrue(shooter.setVelocityCommand(0));
+                debugStick.Button(6).onTrue(shooter.setVelocityCommand(0));
 
         }
 

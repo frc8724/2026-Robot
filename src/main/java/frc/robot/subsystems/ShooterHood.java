@@ -50,7 +50,7 @@ public class ShooterHood extends SubsystemBase {
 
     // set Motion Magic settings
     var motionMagicConfigs = configs.MotionMagic;
-    motionMagicConfigs.MotionMagicCruiseVelocity = 100;
+    motionMagicConfigs.MotionMagicCruiseVelocity = 300;
     motionMagicConfigs.MotionMagicAcceleration = 1000;
     motionMagicConfigs.MotionMagicJerk = 1000;
 
@@ -82,6 +82,14 @@ public class ShooterHood extends SubsystemBase {
       target = pos;
       motor.setControl(position.withPosition(clamp(pos)));
     }
+  }
+
+  public Command SetPositiongByMMCommand(DoubleSupplier posSupplier) {
+    return run(() -> {
+      setPositionByMM(posSupplier.getAsDouble());
+    }).until(() -> {
+      return isAtPosition(posSupplier.getAsDouble());
+    });
   }
 
   public Command SetPositiongByMMCommand(double pos) {

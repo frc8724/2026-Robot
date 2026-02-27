@@ -13,7 +13,7 @@
         {
           "type": "named",
           "data": {
-            "name": "shoot-4s"
+            "name": "Shoot-4s"
           }
         },
         {
@@ -32,6 +32,12 @@
           "type": "path",
           "data": {
             "pathName": "Depot 1 to Depot 1 end"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
           }
         },
         {

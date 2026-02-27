@@ -465,9 +465,27 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         });
     }
 
+    public double angleToHubAdjustedForVelocityFieldReletive() {
+        var currentPose = getState().Pose;
+        var speeds = getState().Speeds;
+        var adjustedPose = currentPose
+                .minus(new Pose2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, new Rotation2d()));
+        var hubPoseX = fieldLength - 4.6;
+        var hubPoseY = 4;
+
+        var relativeX = hubPoseX - adjustedPose.getX();
+        var relativeY = hubPoseY - adjustedPose.getY();
+        var angleRad = Math.atan2(relativeY, relativeX) - Math.PI;
+
+        if (angleRad > Math.PI) {
+            angleRad = angleRad - 2 * Math.PI;
+        }
+        return angleRad;
+    }
+
     public Command fireWhileDriving(DoubleSupplier x, DoubleSupplier y) {
         return run(() -> {
-            var angleRad = angleToHubFieldReletive();
+            var angleRad = angleToHubAdjustedForVelocityFieldReletive();
             SmartDashboard.putNumber("angle to hub", Units.radiansToDegrees(angleRad));
             var joystickX = -x.getAsDouble();
             var joystickY = -y.getAsDouble();

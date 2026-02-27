@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.controls.FireAnimation;
@@ -45,7 +46,10 @@ public class LaunchingTower extends SubsystemBase {
       new FiringSolution(0, 46, 7),
       new FiringSolution(1.00, 46, 7),
       new FiringSolution(2.00, 46, 11.5),
-      new FiringSolution(3.14, 48, 16),
+      new FiringSolution(2.7, 50, 14), // 2/26/26
+      new FiringSolution(3.12, 54, 18), // 2/26/26
+      // new FiringSolution(3.14, 51, 16),
+      new FiringSolution(3.34, 52, 18), // 2/26/26
       new FiringSolution(4.14, 56, 23),
       new FiringSolution(5.36, 62, 30),
   };
@@ -58,18 +62,21 @@ public class LaunchingTower extends SubsystemBase {
     this.rollers = rollers;
   }
 
-  private Command prepareToFireAtCommand(double distance) {
-    //
+  private Command prepareToFireAtCommand() {
+    DoubleSupplier dub1 = () -> {
+      var distance = RobotContainer.drivetrain.distanceToHub();
+      return convertDistanceToHood(distance);
+    };
+    DoubleSupplier dub2 = () -> {
+      var distance = RobotContainer.drivetrain.distanceToHub();
+      return convertDistanceToShooterRPM(distance);
+    };
     return new ParallelCommandGroup(
-        hood.SetPositiongByMMCommand(convertDistanceToHood(distance)).finallyDo(() -> {
-          // hood.setPositionByMM(0);
-        }),
-        shooter.setVelocityCommand(convertDistanceToShooterRPM(distance)).finallyDo(() -> {
-          // shooter.setShooterSpeed(0);
-        }));
+        hood.SetPositiongByMMCommand(dub1),
+        shooter.setVelocityCommand(dub2));
   }
 
-  private Command fireCommand(double distance) {
+  private Command fireCommand() {
     // return run(() -> {
     // var currentDistance = RobotContainer.drivetrain.distanceToHub();
     // if (shooter.isAtTargetSpeed()) {
@@ -117,8 +124,8 @@ public class LaunchingTower extends SubsystemBase {
     return new DeferredCommand(() -> {
       var distance = RobotContainer.drivetrain.distanceToHub();
       return new SequentialCommandGroup(
-          prepareToFireAtCommand(distance),
-          fireCommand(distance));
+          prepareToFireAtCommand(),
+          fireCommand());
     }, new HashSet<Subsystem>(Arrays.asList(hood, shooter, loader, hopper, rollers)));
   }
 

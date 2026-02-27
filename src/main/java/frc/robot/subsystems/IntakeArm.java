@@ -57,11 +57,17 @@ public class IntakeArm extends SubsystemBase {
   }
 
   public Command goToDownCommand() {
-    return setPositionCommand(down);
+    // return setPositionCommand(down);
+    return runOnce(() -> {
+      setPosition(down);
+    });
   }
 
   public Command goToUpCommand() {
-    return setPositionCommand(up);
+    // return setPositionCommand(up);
+    return runOnce(() -> {
+      setPosition(up);
+    });
   }
 
   public void setPosition(double pos) {
