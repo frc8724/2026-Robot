@@ -43,7 +43,7 @@ public class Shooter extends SubsystemBase {
       TalonFXConfiguration configs = new TalonFXConfiguration();
       configs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
       configs.Slot0 = slot0Configs;
-      configs.Voltage.PeakReverseVoltage = 0;
+      configs.Voltage.PeakReverseVoltage = 2;
 
       this.shooterFx.getConfigurator().apply(configs);
     }
@@ -71,6 +71,12 @@ public class Shooter extends SubsystemBase {
       currentSpeed += i;
       shooterFx.set(currentSpeed);
     }
+  }
+
+  public Command setSpeedCommand(double d) {
+    return runOnce(() -> {
+      shooterFx.set(d);
+    });
   }
 
   public void setVelocity(double d) {
@@ -130,7 +136,7 @@ public class Shooter extends SubsystemBase {
 
   public boolean isAtTargetSpeed() {
     if (shooterFx != null) {
-      return Math.abs(shooterFx.getVelocity().getValueAsDouble() - targetSpeed) < targetSpeed * .5;
+      return Math.abs(shooterFx.getVelocity().getValueAsDouble() - targetSpeed) < targetSpeed * .1;
     } else {
       return true;
     }

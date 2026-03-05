@@ -20,15 +20,17 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class IntakeArm extends SubsystemBase {
   /** Creates a new IntakeArm. */
   TalonFX motor;
-  private double down = -7.0;
+  // private double down = -18;
+  private double down = -21.5;
   private double up = 0;
+  // private double up = -5;
   private final PositionVoltage position = new PositionVoltage(0);
   private double lastPosition;
 
   public IntakeArm(TalonFX motor) {
     this.motor = motor;
     TalonFXConfiguration configs = new TalonFXConfiguration();
-    configs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    configs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
     configs.Slot0.kP = 0.5; // An error of 0.5 rotations results in 1.2 volts output
     configs.Slot0.kD = 0.0; // A change of 1 rotation per second results in 0.1 volts output
 

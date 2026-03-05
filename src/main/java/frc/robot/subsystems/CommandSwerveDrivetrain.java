@@ -92,11 +92,17 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public final Pose2d climbRightRed = new Pose2d(15.15, 4.7, new Rotation2d(Units.degreesToRadians(180)));
     public final Pose2d climbLeftRed = new Pose2d(15, 4, new Rotation2d(Units.degreesToRadians(180)));
 
-    public final Pose2d trenchRightCloseStartRed = new Pose2d(13.1, 7.25, new Rotation2d(Units.degreesToRadians(180)));
-    public final Pose2d trenchRightFarEndRed = new Pose2d(10.8, 7.25, new Rotation2d(Units.degreesToRadians(180)));
+    public final Pose2d trenchRightCloseStartRed = new Pose2d(13.1, 7.4, new Rotation2d(Units.degreesToRadians(180)));
+    public final Pose2d trenchRightFarEndRed = new Pose2d(10.8, 7.4, new Rotation2d(Units.degreesToRadians(180)));
 
-    public final Pose2d trenchRightCloseEndRed = new Pose2d(13.1, 7.25, new Rotation2d(Units.degreesToRadians(180)));
-    public final Pose2d trenchRightFarStartRed = new Pose2d(10.8, 7.25, new Rotation2d(Units.degreesToRadians(180)));
+    public final Pose2d trenchRightCloseEndRed = new Pose2d(13.1, 7.4, new Rotation2d(Units.degreesToRadians(180)));
+    public final Pose2d trenchRightFarStartRed = new Pose2d(10.8, 7.4, new Rotation2d(Units.degreesToRadians(180)));
+
+    public final Pose2d trenchLeftCloseStartRed = new Pose2d(13.1, .6, new Rotation2d(Units.degreesToRadians(180)));
+    public final Pose2d trenchLeftFarEndRed = new Pose2d(10.8, .6, new Rotation2d(Units.degreesToRadians(180)));
+
+    public final Pose2d trenchLeftCloseEndRed = new Pose2d(13.1, .6, new Rotation2d(Units.degreesToRadians(180)));
+    public final Pose2d trenchLeftFarStartRed = new Pose2d(10.8, .6, new Rotation2d(Units.degreesToRadians(180)));
 
     public final Pose2d bumpLeftClose = new Pose2d(13.2, 2.5, new Rotation2d(Units.degreesToRadians(135)));
     public final Pose2d bumpLeftFar = new Pose2d(10.4, 2.5, new Rotation2d(Units.degreesToRadians(135)));
@@ -289,6 +295,18 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 goToPoseCommand(trenchRightCloseEndRed));
     }
 
+    public Command trenchLeftOutCommand() {
+        return new SequentialCommandGroup(
+                goToPoseCommand(trenchLeftCloseStartRed),
+                goToPoseCommand(trenchLeftFarEndRed));
+    }
+
+    public Command trenchLeftInCommand() {
+        return new SequentialCommandGroup(
+                goToPoseCommand(trenchLeftFarStartRed),
+                goToPoseCommand(trenchLeftCloseEndRed));
+    }
+
     public DeferredCommand bumpLeftOutCommand() {
         return new DeferredCommand(() -> {
             return new SequentialCommandGroup(
@@ -353,8 +371,40 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     }
 
+    public DeferredCommand trenchCommand() {
+        return new DeferredCommand(() -> {
+            var pose = this.getState().Pose;
+            var hubMid = translatePose(hubMidPoint);
+            var alliance = DriverStation.getAlliance().get();
+            var isOut = (alliance == Alliance.Blue) ? pose.getX() < hubMid.getX()
+                    : pose.getX() > hubMid.getX();
+            // Determine Left or Right
+            if ((alliance == Alliance.Red) ? pose.getY() > hubMid.getY() : pose.getY() < hubMid.getY()) {
+                // is Right
+                // Determine In or Out
+                if (isOut) {
+                    // is Out
+                    return trenchRightOutCommand();
+                } else {
+                    // is In
+                    return trenchRightInCommand();
+                }
+            } else {
+                // is Left
+                if (isOut) {
+                    // is Out
+                    return trenchLeftOutCommand();
+                } else {
+                    // is In
+                    return trenchLeftInCommand();
+                }
+            }
+        }, new HashSet<Subsystem>(Arrays.asList(this)));
+
+    }
+
     public Command goToPoseCommand(Pose2d pose) {
-        return goToPoseCommand(pose, 1, 1);
+        return goToPoseCommand(pose, 2, 1);
     }
 
     public Command goToPoseCommand(Pose2d pose, double maxVel, double maxAcc) {

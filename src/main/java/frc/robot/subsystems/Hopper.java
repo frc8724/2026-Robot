@@ -4,7 +4,9 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -17,6 +19,11 @@ public class Hopper extends SubsystemBase {
   /** Creates a new Hopper. */
   public Hopper(TalonFX motor) {
     this.motor = motor;
+
+    TalonFXConfiguration configs = new TalonFXConfiguration();
+
+    configs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    this.motor.getConfigurator().apply(configs);
   }
 
   public void setSpeed(double speed) {
