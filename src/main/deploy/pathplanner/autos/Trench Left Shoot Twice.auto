@@ -5,12 +5,6 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "Start Left Trench Far Intake Center Left Far Start"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Intake Down"
@@ -19,13 +13,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Intake Center Left Far Start To End"
+            "pathName": "Start Left Trench Far Intake Center Left Far Start"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Intake Up"
+            "pathName": "Intake Center Left Far Start To End"
           }
         },
         {
@@ -47,21 +41,9 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Intake Down"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Intake Center Left Close Start To End"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Up"
           }
         },
         {
@@ -74,6 +56,12 @@
           "type": "named",
           "data": {
             "name": "Shoot-4s"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Up"
           }
         }
       ]

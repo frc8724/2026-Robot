@@ -12,23 +12,27 @@ import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.core.CoreTalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 
 // import edu.wpi.first.wpilibj2.*;
 
 public class Shooter extends SubsystemBase {
   TalonFX shooterFx;
+  TalonFX secondaryFx;
   double currentSpeed = 0.0;
   double targetSpeed = 0.0;
   final VelocityVoltage m_request;
 
   /** Creates a new Shooter. */
-  public Shooter(TalonFX motor) {
+  public Shooter(TalonFX motor, TalonFX secondary) {
     this.shooterFx = motor;
+    this.secondaryFx = secondary;
     // in init function, set slot 0 gains
     var slot0Configs = new Slot0Configs();
     slot0Configs.kS = 0.0; // Add 0.1 V output to overcome static friction
@@ -46,6 +50,9 @@ public class Shooter extends SubsystemBase {
       configs.Voltage.PeakReverseVoltage = 2;
 
       this.shooterFx.getConfigurator().apply(configs);
+      if (this.secondaryFx != null) {
+        this.secondaryFx.setControl(new Follower(this.shooterFx.getDeviceID(), MotorAlignmentValue.Opposed));
+      }
     }
     m_request = new VelocityVoltage(0).withSlot(0);
   }
