@@ -103,7 +103,7 @@ public class LaunchingTower extends SubsystemBase {
     // hopper.jiggleWiggleCommand()
     );
   }
-
+/*
   private Command fireLoaderShooterHoodCommand() {
     return run(() -> {
       var currentDistance = RobotContainer.ratatouille.distanceToHub();
@@ -128,7 +128,25 @@ public class LaunchingTower extends SubsystemBase {
       hopper.setSpeed(0);
     });
   }
-
+*/
+private Command fireLoaderShooterHoodCommand() {
+    return run(() -> {
+      var currentDistance = RobotContainer.ratatouille.distanceToHub();
+      // Temporarily always feed (test mode)
+      loader.setSpeed(1);
+      hopper.setSpeed(1);
+      
+      hood.setPositionByMM(convertDistanceToHood(currentDistance));
+      shooter.setVelocity(convertDistanceToShooterRPM(currentDistance));
+    }).finallyDo(() -> {
+      loader.setSpeed(0);
+      shooter.setVelocity(0);
+      hood.setPositionByMM(0);
+      rollers.setSpeed(0.0);
+      hopper.setSpeed(0);
+    });
+  }
+  
   public Command fireFuelCommand() {
     return new DeferredCommand(() -> {
       var distance = RobotContainer.ratatouille.distanceToHub();
