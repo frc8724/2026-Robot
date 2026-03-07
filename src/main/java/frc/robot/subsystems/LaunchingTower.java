@@ -51,8 +51,12 @@ public class LaunchingTower extends SubsystemBase {
       // new FiringSolution(3.34, 57, 17), // 2/26/26
       // new FiringSolution(4.14, 56, 23),
       // new FiringSolution(5.36, 62, 30),
-      new FiringSolution(0, 57, 17),
-      new FiringSolution(5, 57, 17)
+      new FiringSolution(0, 42, 4),
+      new FiringSolution(0.8, 42, 4),
+      new FiringSolution(1.23, 42, 8),
+      new FiringSolution(2.6, 46, 20), // good
+      new FiringSolution(3.45, 56, 18),
+      new FiringSolution(5, 53, 17),
   };
 
   public LaunchingTower(Shooter shooter, ShooterHood hood, Loader loader, Hopper hopper, IntakeRollers rollers) {
@@ -65,11 +69,11 @@ public class LaunchingTower extends SubsystemBase {
 
   private Command prepareToFireAtCommand() {
     DoubleSupplier dub1 = () -> {
-      var distance = RobotContainer.ratatouille.distanceToHub();
+      var distance = RobotContainer.drivetrain.distanceToHub();
       return convertDistanceToHood(distance);
     };
     DoubleSupplier dub2 = () -> {
-      var distance = RobotContainer.ratatouille.distanceToHub();
+      var distance = RobotContainer.drivetrain.distanceToHub();
       return convertDistanceToShooterRPM(distance);
     };
     return new ParallelCommandGroup(
@@ -78,60 +82,60 @@ public class LaunchingTower extends SubsystemBase {
   }
 
   private Command fireCommand() {
-    // return run(() -> {
-    // var currentDistance = RobotContainer.drivetrain.distanceToHub();
-    // if (shooter.isAtTargetSpeed()) {
-    // loader.setSpeed(.75);
-    // hopper.setSpeed(.75);
-    // rollers.setSpeed(0.5);
-    // } else {
-    // loader.setSpeed(0);
-    // hopper.setSpeed(0);
-    // rollers.setSpeed(0.0);
-    // }
-    // hood.setPositionByMM(convertDistanceToHood(currentDistance));
-    // shooter.setVelocity(convertDistanceToShooterRPM(currentDistance));
-    // }).finallyDo(() -> {
-    // loader.setSpeed(0);
-    // shooter.setShooterSpeed(0);
-    // hood.setPositionByMM(0);
-    // hopper.setSpeed(0);
-    // rollers.setSpeed(0.0);
-    // });
-    return new ParallelCommandGroup(fireLoaderShooterHoodCommand()
-    // ,
-    // hopper.jiggleWiggleCommand()
-    );
+    return new ParallelCommandGroup(fireLoaderShooterHoodCommand());
   }
+
+  /*
+   * 
+   * private Command fireLoaderShooterHoodCommand() {
+   * return run(() -> {
+   * var currentDistance = RobotContainer.ratatouille.distanceToHub();
+   * if (shooter.isAtTargetSpeed()) {
+   * loader.setSpeed(1);
+   * // rollers.setSpeed(0.5);
+   * hopper.setSpeed(1);
+   * } else {
+   * loader.setSpeed(0);
+   * rollers.setSpeed(0.0);
+   * hopper.setSpeed(0);
+   * }
+   * hood.setPositionByMM(convertDistanceToHood(currentDistance));
+   * shooter.setVelocity(convertDistanceToShooterRPM(currentDistance));
+   * }).finallyDo(() -> {
+   * loader.setSpeed(0);
+   * // shooter.setShooterSpeed(0);
+   * shooter.setVelocity(0);
+   * 
+   * hood.setPositionByMM(0);
+   * rollers.setSpeed(0.0);
+   * hopper.setSpeed(0);
+   * });
+   * }
+   * 
+   */
 
   private Command fireLoaderShooterHoodCommand() {
     return run(() -> {
-      var currentDistance = RobotContainer.ratatouille.distanceToHub();
-      if (shooter.isAtTargetSpeed()) {
-        loader.setSpeed(1);
-        // rollers.setSpeed(0.5);
-        hopper.setSpeed(1);
-      } else {
-        loader.setSpeed(0);
-        rollers.setSpeed(0.0);
-        hopper.setSpeed(0);
-      }
+      var currentDistance = RobotContainer.drivetrain.distanceToHub();
+      // Temporarily always feed (test mode)
+      loader.setSpeed(1);
+      hopper.setSpeed(1);
+
       hood.setPositionByMM(convertDistanceToHood(currentDistance));
       shooter.setVelocity(convertDistanceToShooterRPM(currentDistance));
     }).finallyDo(() -> {
       loader.setSpeed(0);
-      // shooter.setShooterSpeed(0);
-      shooter.setVelocity(0);
-
+      // shooter.setVelocity(0);
+      shooter.setSpeed(0);
       hood.setPositionByMM(0);
       rollers.setSpeed(0.0);
       hopper.setSpeed(0);
     });
   }
+  // TODO: add shooter motor 2 id
 
   public Command fireFuelCommand() {
     return new DeferredCommand(() -> {
-      var distance = RobotContainer.ratatouille.distanceToHub();
       return new SequentialCommandGroup(
           prepareToFireAtCommand(),
           fireCommand());
@@ -169,7 +173,7 @@ public class LaunchingTower extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    var solution = getSolution(RobotContainer.ratatouille.distanceToHub());
+    var solution = getSolution(RobotContainer.drivetrain.distanceToHub());
     SmartDashboard.putNumber("firing solution:distance", solution.distance);
     SmartDashboard.putNumber("firing solution:shooter_speed", solution.shooterSpeed);
     SmartDashboard.putNumber("firing solution:hood_position", solution.hoodPosition);

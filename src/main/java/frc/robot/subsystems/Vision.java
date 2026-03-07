@@ -33,7 +33,7 @@ public class Vision extends SubsystemBase {
       SmartDashboard.putNumber("vision:botpose:blue:y", botpose.getY());
       SmartDashboard.putNumber("vision:botpose:blue:rot", botpose.getRotation().getDegrees());
 
-      RobotContainer.ratatouille.addVisionMeasurement(botpose,
+      RobotContainer.drivetrain.addVisionMeasurement(botpose,
           Timer.getFPGATimestamp());
     }
   }

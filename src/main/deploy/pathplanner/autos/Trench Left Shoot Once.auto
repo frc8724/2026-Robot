@@ -37,43 +37,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Intake Left Center End To Trench Left Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot-4s"
+            "pathName": "Intake Center Left Deep to Left Bump Far"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Trench Shoot Left To Intake Center Left Close"
+            "pathName": "Bump Left 1"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Intake Down"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Intake Center Left Close Start To End"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Intake Left Center Close End To Trench Shoot Left"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot-4s"
+            "name": "Shoot-8s"
           }
         },
         {

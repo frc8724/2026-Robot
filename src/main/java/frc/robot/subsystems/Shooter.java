@@ -28,18 +28,20 @@ public class Shooter extends SubsystemBase {
   double currentSpeed = 0.0;
   double targetSpeed = 0.0;
   final VelocityVoltage m_request;
+  double p = 1.0;
 
   /** Creates a new Shooter. */
   public Shooter(TalonFX motor, TalonFX secondary) {
+    SmartDashboard.putNumber("shooter:P", p);
     this.shooterFx = motor;
     this.secondaryFx = secondary;
     // in init function, set slot 0 gains
     var slot0Configs = new Slot0Configs();
     slot0Configs.kS = 0.0; // Add 0.1 V output to overcome static friction
     slot0Configs.kV = 0.12; // A velocity target of 20rps results in 0.2 V output
-    slot0Configs.kP = 0.1; // An error of 1 rps results in 0.11 V output
+    slot0Configs.kP = 0.1;// 1.0; // An error of 1 rps results in 0.11 V output
     slot0Configs.kI = 0.0; // no output for integrated error
-    slot0Configs.kD = 0; // no output for error derivative
+    slot0Configs.kD = 0.00; // no output for error derivative
     if (this.shooterFx != null) {
 
       // shooterFx.getConfigurator().apply(slot0Configs);
@@ -47,7 +49,7 @@ public class Shooter extends SubsystemBase {
       TalonFXConfiguration configs = new TalonFXConfiguration();
       configs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
       configs.Slot0 = slot0Configs;
-      configs.Voltage.PeakReverseVoltage = 2;
+      configs.Voltage.PeakReverseVoltage = 1;
 
       this.shooterFx.getConfigurator().apply(configs);
       if (this.secondaryFx != null) {
@@ -63,6 +65,7 @@ public class Shooter extends SubsystemBase {
     if (shooterFx != null) {
       SmartDashboard.putNumber("shooter velocity", shooterFx.getVelocity().getValueAsDouble());
       SmartDashboard.putNumber("shooter target", this.targetSpeed);
+      SmartDashboard.putBoolean("shooter isAtTargetSpeed", isAtTargetSpeed());
     }
     SmartDashboard.putBoolean("shooter motor valid", shooterFx != null);
   }
@@ -84,6 +87,10 @@ public class Shooter extends SubsystemBase {
     return runOnce(() -> {
       shooterFx.set(d);
     });
+  }
+
+  public void setSpeed(double d) {
+    shooterFx.set(d);
   }
 
   public void setVelocity(double d) {
@@ -143,7 +150,7 @@ public class Shooter extends SubsystemBase {
 
   public boolean isAtTargetSpeed() {
     if (shooterFx != null) {
-      return Math.abs(shooterFx.getVelocity().getValueAsDouble() - targetSpeed) < targetSpeed * .1;
+      return Math.abs(shooterFx.getVelocity().getValueAsDouble() - targetSpeed) < .9;
     } else {
       return true;
     }

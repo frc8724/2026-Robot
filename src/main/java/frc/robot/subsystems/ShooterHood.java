@@ -26,6 +26,10 @@ public class ShooterHood extends SubsystemBase {
   public final double max = 30;
   private double target;
 
+  private double counter = 0;
+  private final double tolerance = .1;
+  private final double toloeranceCounter = 50;
+
   /** Creates a new ShooterHood. */
   public ShooterHood(TalonFX motor) {
     this.motor = motor;
@@ -35,8 +39,8 @@ public class ShooterHood extends SubsystemBase {
     configs.Slot0.kS = 0.0; // Add 0.1 V output to overcome static friction
     configs.Slot0.kV = 0.0; // A velocity target of 1 rps results in 0.12 V output
     configs.Slot0.kA = 0.00; // An acceleration of 1 rps/s requires 0.01 V output
-    configs.Slot0.kP = 2.0; // A position error of 2.5 rotations results in 12 V output
-    configs.Slot0.kI = 0; // no output for integrated error
+    configs.Slot0.kP = 3.0; // A position error of 2.5 rotations results in 12 V output
+    configs.Slot0.kI = .0; // no output for integrated error
     configs.Slot0.kD = 0.0; // A velocity error of 1 rps results in 0.1 V output
 
     configs.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.1;
@@ -50,9 +54,9 @@ public class ShooterHood extends SubsystemBase {
 
     // set Motion Magic settings
     var motionMagicConfigs = configs.MotionMagic;
-    motionMagicConfigs.MotionMagicCruiseVelocity = 300;
-    motionMagicConfigs.MotionMagicAcceleration = 1000;
-    motionMagicConfigs.MotionMagicJerk = 1000;
+    motionMagicConfigs.MotionMagicCruiseVelocity = 5000;
+    motionMagicConfigs.MotionMagicAcceleration = 5000;
+    motionMagicConfigs.MotionMagicJerk = 10000;
 
     if (motor != null) {
       /* Retry config apply up to 5 times, report if failure */
@@ -127,6 +131,12 @@ public class ShooterHood extends SubsystemBase {
     });
   }
 
+  // public Command offsetPositionInstantCommand(double offset) {
+  // return runOnce(() -> {
+  // offsetPositionCommand(offset);
+  // });
+  // }
+
   public void setPower(double d) {
     motor.set(d);
   }
@@ -145,7 +155,8 @@ public class ShooterHood extends SubsystemBase {
   }
 
   public boolean isAtPosition(double targetPos) {
-    return Math.abs(targetPos - getPosition()) < .2;
+    // return Math.abs(targetPos - getPosition()) < .02;
+    return (Math.abs(getPosition() - targetPos) < tolerance) && counter >= toloeranceCounter;
   }
 
   @Override
@@ -153,6 +164,14 @@ public class ShooterHood extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("hood position", getPosition());
     SmartDashboard.putNumber("hood target", target);
+    if (Math.abs(getPosition() - target) < tolerance) {
+      counter++;
+    } else {
+      counter = 0;
+    }
+    SmartDashboard.putNumber("hood counter", counter);
+    SmartDashboard.putBoolean("hood at position", isAtPosition(target));
+    SmartDashboard.putNumber("hood x", motor.getClosedLoopError(true).getValueAsDouble());
   }
 
   public Command controlWithAxis(DoubleSupplier axis) {

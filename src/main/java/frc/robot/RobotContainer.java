@@ -51,7 +51,7 @@ public class RobotContainer {
         private final MayhemOperatorPad operatorPad = new MayhemOperatorPad();
         private final MayhemLogitechAttack3 debugStick = new MayhemLogitechAttack3(2);
 
-        public static final CommandSwerveDrivetrain ratatouille = TunerConstants.createDrivetrain();
+        public static final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
         private final AutoChooser m_auto = new AutoChooser();
         private static final Vision vision = new Vision();
         public static final CANBus canivore = new CANBus("canivore");
@@ -114,23 +114,46 @@ public class RobotContainer {
                 m_auto.addAuto("Shoot Center Climb", new PathPlannerAuto("Shoot Center Climb"));
                 m_auto.addAuto("Shoot Depot Shoot Left", new PathPlannerAuto("Shoot Depot Shoot Left"));
                 m_auto.addAuto("Shoot Outpost Shoot Right", new PathPlannerAuto("Shoot Outpost Shoot Right"));
-                m_auto.addAuto("Trench Left Shoot Twice", new PathPlannerAuto("Trench Left Shoot Twice"));
+                // m_auto.addAuto("Trench Left Shoot Twice", new PathPlannerAuto("Trench Left
+                // Shoot Twice"));
+                // m_auto.addAuto("Trench Left Shoot Once", new PathPlannerAuto("Trench Left
+                // Shoot Once"));
+                // m_auto.addAuto("Trench Left Shoot Once Trench", new PathPlannerAuto("Trench
+                // Left Shoot Once Trench"));
+                m_auto.addAuto("Copy of Trench Left Shoot Once Trench",
+                                new PathPlannerAuto("Copy of Trench Left Shoot Once Trench"));
+                m_auto.addAuto("Trench Right Shoot Once Trench", new PathPlannerAuto("Trench Right Shoot Once Trench"));
+        }
+
+        Command shootForTimeCommand(double time) {
+                return new ParallelRaceGroup(new DrivePointToHub().repeatedly(),
+                                launchingTower.fireFuelCommand().withTimeout(time));
         }
 
         private void configureNamedCommands() {
                 // NamedCommands.registerCommand("Shoot-8s", new SequentialCommandGroup(
                 // new DrivePointToHub(),
                 // launchingTower.fireFuelCommand().withTimeout(8)));
-                NamedCommands.registerCommand("Shoot-8s", new ParallelRaceGroup(
-                                new DrivePointToHub().repeatedly(),
-                                launchingTower.fireFuelCommand().withTimeout(8)));
-                NamedCommands.registerCommand("Shoot-4s", new ParallelRaceGroup(
-                                new DrivePointToHub().repeatedly(),
-                                launchingTower.fireFuelCommand().withTimeout(4)));
+                NamedCommands.registerCommand("Shoot-8s", shootForTimeCommand(8));
+                NamedCommands.registerCommand("Shoot-4s", shootForTimeCommand(4));
                 NamedCommands.registerCommand("Intake Down",
                                 new ParallelCommandGroup(intakeArm.goToDownCommand(), intakeRollers.intakeCommand()));
                 NamedCommands.registerCommand("Intake Up",
                                 new ParallelCommandGroup(intakeArm.goToUpCommand(), intakeRollers.turnOffCommand()));
+                NamedCommands.registerCommand("Shoot 4s Intake Jiggle",
+                                // new ParallelCommandGroup(shootForTimeCommand(4), intakeArm.jiggleCommand())
+                                new ParallelRaceGroup(new WaitCommand(4),
+                                                new DrivePointToHub().repeatedly(),
+                                                launchingTower.fireFuelCommand(),
+                                                intakeArm.jiggleCommand().repeatedly()));
+                NamedCommands.registerCommand("Shoot 8s Intake Jiggle",
+                                // new ParallelCommandGroup(shootForTimeCommand(8), intakeArm.jiggleCommand())
+                                new ParallelRaceGroup(new WaitCommand(8),
+                                                new DrivePointToHub().repeatedly(),
+                                                launchingTower.fireFuelCommand(),
+                                                intakeArm.jiggleCommand().repeatedly()));
+                NamedCommands.registerCommand("Intake Down No Rollers", intakeArm.goToDownCommand());
+
                 // NamedCommands.registerCommand("Outtake", endEffector.setSpeedCmd(-.8));
                 // NamedCommands.registerCommand("IntakeStart", endEffector.setSpeedCmd(0.8));
                 // NamedCommands.registerCommand("Algae High", ArmPositionAutoCmd(-750, -929,
@@ -245,7 +268,7 @@ public class RobotContainer {
                 // driverStick.Button(4).onTrue(drivetrain.goToPoseCommand(drivetrain.climbRightRed));
                 // driverStick.Button(3).onTrue(drivetrain.goToPoseCommand(drivetrain.climbLeftRed));
                 driverStick.Button(2).whileTrue(
-                                ratatouille.fireWhileDriving(driverStick.Axis(Axis.Y),
+                                drivetrain.fireWhileDriving(driverStick.Axis(Axis.Y),
                                                 driverStick.Axis(Axis.X)));
                 // driverStick.Button(9).whileTrue(drivetrain.strafeWhileFiringCommand());
                 // driverStick.Button(7).whileTrue(
@@ -254,9 +277,9 @@ public class RobotContainer {
 
                 // Note that X is defined as forward according to WPILib convention,
                 // and Y is defined as to the left according to WPILib convention.
-                ratatouille.setDefaultCommand(
+                drivetrain.setDefaultCommand(
                                 // Drivetrain will execute this command periodically
-                                ratatouille.applyRequest(
+                                drivetrain.applyRequest(
                                                 () -> {
                                                         var multiplier = driverStick
                                                                         .Axis(MayhemExtreme3dPro.Axis.Flapper)
@@ -278,23 +301,23 @@ public class RobotContainer {
                                                 }));
 
                 driverStick.Button(1)
-                                .whileTrue(new SequentialCommandGroup(new DrivePointToHub(), ratatouille.lockWheels()));
-                driverStick.Button(5).onTrue(ratatouille.goToPoseCommand(ratatouille.shooterPose1Red));
-                driverStick.Button(6).whileTrue(ratatouille.lockWheels());
-                driverStick.Button(8).onTrue(ratatouille.trenchRightOutCommand());
-                driverStick.Button(10).onTrue(ratatouille.trenchRightInCommand());
-                driverStick.Button(11).onTrue(ratatouille.zeroBotRotationCommand());
-                driverStick.Button(12).onTrue(ratatouille.stopAllCommand());
+                                .whileTrue(new SequentialCommandGroup(new DrivePointToHub(), drivetrain.lockWheels()));
+                driverStick.Button(5).onTrue(drivetrain.goToPoseCommand(drivetrain.shooterPose1Red));
+                driverStick.Button(6).whileTrue(drivetrain.lockWheels());
+                driverStick.Button(8).onTrue(drivetrain.trenchRightOutCommand());
+                driverStick.Button(10).onTrue(drivetrain.trenchRightInCommand());
+                driverStick.Button(11).onTrue(drivetrain.zeroBotRotationCommand());
+                driverStick.Button(12).onTrue(drivetrain.stopAllCommand());
 
-                driverStick.Button(7).onTrue(ratatouille.bumpCommand());
-                driverStick.Button(9).onTrue(ratatouille.trenchCommand());
+                driverStick.Button(7).onTrue(drivetrain.bumpCommand());
+                driverStick.Button(9).onTrue(drivetrain.trenchCommand());
 
                 // Idle while the robot is disabled. This ensures the configured
                 // neutral mode is applied to the drive motors while disabled.
                 final var idle = new SwerveRequest.Idle();
-                RobotModeTriggers.disabled().whileTrue(ratatouille.applyRequest(() -> idle).ignoringDisable(true));
+                RobotModeTriggers.disabled().whileTrue(drivetrain.applyRequest(() -> idle).ignoringDisable(true));
 
-                ratatouille.registerTelemetry(logger::telemeterize);
+                drivetrain.registerTelemetry(logger::telemeterize);
         }
 
         private void configureDebugBindings() {
@@ -352,10 +375,30 @@ public class RobotContainer {
                 // debugStick.Button(4).onTrue(shooterHood.offsetPositionCommand(1));
                 // debugStick.Button(5).onTrue(shooterHood.offsetPositionCommand(-1));
 
-                // debugStick.Button(7).onTrue(loader.setSpeedCommand(.75));
+                // debugStick.Button(7).onTrue(loader.setSpeedCommand(1));
                 // debugStick.Button(7).onFalse(loader.setSpeedCommand(0));
 
-                // debugStick.Button(6).onTrue(shooter.setVelocityCommand(0));
+                // debugStick.Button(7).onTrue(hopper.setSpeedCommand(1));
+                // debugStick.Button(7).onFalse(hopper.setSpeedCommand(0));
+
+                // debugStick.Button(6).onTrue(shooter.setSpeedCommand(0));
+
+                // debugStick.Button(3).onTrue(shooterHood.SetPositiongByPidCommand(15));
+                // debugStick.Button(3).onFalse(shooterHood.SetPositiongByMMCommand(0));
+
+                // debugStick.Button(2).onTrue(shooterHood.SetPositiongByPidCommand(0));
+                // debugStick.Button(4).onTrue(shooterHood.SetPositiongByPidCommand(25));
+
+                debugStick.Button(3).onTrue(
+                                hopper.setSpeedCommand(.5)
+                // new ParallelRaceGroup(new WaitCommand(8),
+                // new DrivePointToHub().repeatedly(),
+                // launchingTower.fireFuelCommand()
+                // intakeArm.jiggleCommand().repeatedly()
+                );
+                debugStick.Button(3).onFalse(hopper.setSpeedCommand(0));
+
+                // debugStick.Button(2).onFalse(shooterHood.setPowerCommand(0));
 
                 // debugStick.Button(6).onTrue(intakeArm.setPowerCommand(.2));
                 // debugStick.Button(6).onFalse(intakeArm.setPowerCommand(0));
@@ -366,8 +409,8 @@ public class RobotContainer {
                 // debugStick.Button(11).onTrue(intakeArm.goToUpCommand());
                 // debugStick.Button(10).onTrue(intakeArm.goToDownCommand());
 
-                debugStick.Button(3).onTrue(shooter.setVelocityCommand(10));
-                debugStick.Button(3).onFalse(shooter.setSpeedCommand(0));
+                // debugStick.Button(3).onTrue(shooter.setVelocityCommand(10));
+                // debugStick.Button(3).onFalse(shooter.setSpeedCommand(0));
 
                 // debugStick.Button(6).onTrue(new ParallelCommandGroup(
                 // shooter.setVelocityCommand(80),

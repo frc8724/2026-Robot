@@ -29,7 +29,7 @@ public class DrivePointToHub extends Command {
   /** Creates a new DrivePointToHub. */
   public DrivePointToHub() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.ratatouille);
+    addRequirements(RobotContainer.drivetrain);
   }
 
   // Called when the command is initially scheduled.
@@ -49,7 +49,7 @@ public class DrivePointToHub extends Command {
     // --- Rotation control (tx -> 0), using your proven sign convention ---
     // double txDeg = LimelightHelpers.getTX("limelight");
     // TODO: need to reverse alliances
-    var robotPose = RobotContainer.ratatouille.getState().Pose;
+    var robotPose = RobotContainer.drivetrain.getState().Pose;
     var shooterPose = robotPose.plus(new Transform2d(.254, -.254, Rotation2d.fromDegrees(0)));
     var hubPoseX = isBlueAlliance ? 4.6 : Constants.fieldLength - 4.6;
     var hubPoseY = 4;
@@ -79,7 +79,7 @@ public class DrivePointToHub extends Command {
     double vx = 0.0;// vxMetersPerSec.getAsDouble();
     double vy = 0.0;// vyMetersPerSec.getAsDouble();
 
-    RobotContainer.ratatouille.setControl(
+    RobotContainer.drivetrain.setControl(
         request.withVelocityX(vx)
             .withVelocityY(vy)
             .withRotationalRate(omegaRadPerSec));

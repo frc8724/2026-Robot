@@ -12,16 +12,16 @@
         "y": 1.7262727272719598
       },
       "isLocked": false,
-      "linkedName": "shoot right 1"
+      "linkedName": "Outpost align 1"
     },
     {
       "anchor": {
-        "x": 0.39559090909098915,
-        "y": 0.6337499999992326
+        "x": 0.6,
+        "y": 0.65
       },
       "prevControl": {
-        "x": 0.9521590909091711,
-        "y": 1.0872499999992329
+        "x": 1.156568181818181,
+        "y": 1.1035000000000004
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 90.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 34.624155079948956
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }

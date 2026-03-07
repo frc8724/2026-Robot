@@ -47,33 +47,9 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Trench Shoot Left To Intake Center Left Close"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "Intake Down"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Intake Center Left Close Start To End"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Intake Left Center Close End To Trench Shoot Left"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot-4s"
+            "name": "Shoot 8s Intake Jiggle"
           }
         },
         {

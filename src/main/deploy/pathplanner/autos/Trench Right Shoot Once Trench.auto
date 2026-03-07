@@ -5,33 +5,27 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "Start Right 1 to Shoot Right 1"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "Intake Down No Rollers"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Shoot Right 1 to Outpost"
+            "name": "Intake Down"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 3.0
+            "waitTime": 1.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Outpost to Shoot Right 1"
+            "pathName": "Trench Right To Intake Center"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Intake Center Right To Shoot Right"
           }
         },
         {
@@ -44,6 +38,12 @@
           "type": "named",
           "data": {
             "name": "Shoot 8s Intake Jiggle"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Up"
           }
         }
       ]
