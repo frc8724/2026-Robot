@@ -82,37 +82,31 @@ public class LaunchingTower extends SubsystemBase {
   }
 
   private Command fireCommand() {
-    return new ParallelCommandGroup(fireLoaderShooterHoodCommand());
+    // return run(() -> {
+    // var currentDistance = RobotContainer.drivetrain.distanceToHub();
+    // if (shooter.isAtTargetSpeed()) {
+    // loader.setSpeed(.75);
+    // hopper.setSpeed(.75);
+    // rollers.setSpeed(0.5);
+    // } else {
+    // loader.setSpeed(0);
+    // hopper.setSpeed(0);
+    // rollers.setSpeed(0.0);
+    // }
+    // hood.setPositionByMM(convertDistanceToHood(currentDistance));
+    // shooter.setVelocity(convertDistanceToShooterRPM(currentDistance));
+    // }).finallyDo(() -> {
+    // loader.setSpeed(0);
+    // shooter.setShooterSpeed(0);
+    // hood.setPositionByMM(0);
+    // hopper.setSpeed(0);
+    // rollers.setSpeed(0.0);
+    // });
+    return new ParallelCommandGroup(fireLoaderShooterHoodCommand()
+    // ,
+    // hopper.jiggleWiggleCommand()
+    );
   }
-
-  /*
-   * 
-   * private Command fireLoaderShooterHoodCommand() {
-   * return run(() -> {
-   * var currentDistance = RobotContainer.ratatouille.distanceToHub();
-   * if (shooter.isAtTargetSpeed()) {
-   * loader.setSpeed(1);
-   * // rollers.setSpeed(0.5);
-   * hopper.setSpeed(1);
-   * } else {
-   * loader.setSpeed(0);
-   * rollers.setSpeed(0.0);
-   * hopper.setSpeed(0);
-   * }
-   * hood.setPositionByMM(convertDistanceToHood(currentDistance));
-   * shooter.setVelocity(convertDistanceToShooterRPM(currentDistance));
-   * }).finallyDo(() -> {
-   * loader.setSpeed(0);
-   * // shooter.setShooterSpeed(0);
-   * shooter.setVelocity(0);
-   * 
-   * hood.setPositionByMM(0);
-   * rollers.setSpeed(0.0);
-   * hopper.setSpeed(0);
-   * });
-   * }
-   * 
-   */
 
   private Command fireLoaderShooterHoodCommand() {
     return run(() -> {
@@ -132,7 +126,6 @@ public class LaunchingTower extends SubsystemBase {
       hopper.setSpeed(0);
     });
   }
-  // TODO: add shooter motor 2 id
 
   public Command fireFuelCommand() {
     return new DeferredCommand(() -> {
