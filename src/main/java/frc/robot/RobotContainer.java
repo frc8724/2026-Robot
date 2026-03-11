@@ -28,14 +28,28 @@ import frc.robot.controls.MayhemLogitechAttack3;
 import frc.robot.controls.MayhemOperatorPad;
 import frc.robot.controls.MayhemExtreme3dPro.Axis;
 import frc.robot.generated.TunerConstants;
+
+import edu.wpi.first.math.filter.SlewRateLimiter;
+
 import frc.robot.subsystems.*;
 
 public class RobotContainer {
-        private double MaxSpeed = 0.5 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired
-                                                                                            // top
-                                                                                            // speed
-        private double MaxAngularRate = RotationsPerSecond.of(0.5).in(RadiansPerSecond); // 3/4 of a rotation per
-                                                                                         // second max angular velocity
+        // private double MaxSpeed = 0.5 *
+        // TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts
+        // desired
+        // top
+        // speed
+        // private double MaxAngularRate =
+        // RotationsPerSecond.of(0.5).in(RadiansPerSecond); // 3/4 of a rotation per
+        // second max angular velocity
+
+        // mar11-brownoutfixes
+        private double MaxSpeed = 0.75 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
+        private double MaxAngularRate = RotationsPerSecond.of(0.5).in(RadiansPerSecond);
+
+        private final SlewRateLimiter xLimiter = new SlewRateLimiter(10.0);
+        private final SlewRateLimiter yLimiter = new SlewRateLimiter(10.0);
+        private final SlewRateLimiter rotLimiter = new SlewRateLimiter(12.0);
 
         /* Setting up bindings for necessary control of the swerve drive platform */
         private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -147,6 +161,12 @@ public class RobotContainer {
                 NamedCommands.registerCommand("Shoot 8s Intake Jiggle",
                                 // new ParallelCommandGroup(shootForTimeCommand(8), intakeArm.jiggleCommand())
                                 new ParallelRaceGroup(new WaitCommand(8),
+                                                new DrivePointToHub().repeatedly(),
+                                                launchingTower.fireFuelCommand(),
+                                                intakeArm.jiggleCommand().repeatedly()));
+                NamedCommands.registerCommand("Shoot 16s Intake Jiggle",
+                                // new ParallelCommandGroup(shootForTimeCommand(8), intakeArm.jiggleCommand())
+                                new ParallelRaceGroup(new WaitCommand(16),
                                                 new DrivePointToHub().repeatedly(),
                                                 launchingTower.fireFuelCommand(),
                                                 intakeArm.jiggleCommand().repeatedly()));
@@ -285,26 +305,30 @@ public class RobotContainer {
                 // Note that X is defined as forward according to WPILib convention,
                 // and Y is defined as to the left according to WPILib convention.
                 drivetrain.setDefaultCommand(
-                                // Drivetrain will execute this command periodically
                                 drivetrain.applyRequest(
                                                 () -> {
                                                         var multiplier = driverStick
                                                                         .Axis(MayhemExtreme3dPro.Axis.Flapper)
                                                                         .getAsDouble();
                                                         multiplier = ((multiplier * -1) + 1.0) / 2; // rescale from
-                                                        // [-1,1] to [0,1]
-                                                        multiplier = multiplier + .25;
-                                                        // Drive forward with negative Y (forward)
-                                                        return drive.withVelocityX(-driverStick.getRawAxis(Axis.Y)
-                                                                        * MaxSpeed * multiplier)
-                                                                        // Drive left with negative X (left)
-                                                                        .withVelocityY(-driverStick.getRawAxis(Axis.X)
-                                                                                        * MaxSpeed * multiplier)
-                                                                        // Drive counter-clockwise with negative X
-                                                                        // (left)
-                                                                        .withRotationalRate(-driverStick
-                                                                                        .getRawAxis(Axis.Z)
-                                                                                        * MaxAngularRate * multiplier);
+                                                                                                    // [-1,1] to [0,1]
+                                                        multiplier = 0.25 + 0.75 * multiplier; // final range [0.25,
+                                                                                               // 1.0]
+
+                                                        double xCmd = -driverStick.getRawAxis(Axis.Y) * MaxSpeed
+                                                                        * multiplier;
+                                                        double yCmd = -driverStick.getRawAxis(Axis.X) * MaxSpeed
+                                                                        * multiplier;
+                                                        double rotCmd = -driverStick.getRawAxis(Axis.Z) * MaxAngularRate
+                                                                        * multiplier;
+
+                                                        double xLimited = xLimiter.calculate(xCmd);
+                                                        double yLimited = yLimiter.calculate(yCmd);
+                                                        double rotLimited = rotLimiter.calculate(rotCmd);
+
+                                                        return drive.withVelocityX(xLimited)
+                                                                        .withVelocityY(yLimited)
+                                                                        .withRotationalRate(rotLimited);
                                                 }));
 
                 driverStick.Button(1)
