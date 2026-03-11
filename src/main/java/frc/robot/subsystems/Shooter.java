@@ -29,6 +29,7 @@ public class Shooter extends SubsystemBase {
   double targetSpeed = 0.0;
   final VelocityVoltage m_request;
   double p = 1.0;
+  double offset = 0.0;
 
   /** Creates a new Shooter. */
   public Shooter(TalonFX motor, TalonFX secondary) {
@@ -70,6 +71,26 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putBoolean("shooter motor valid", shooterFx != null);
   }
 
+  public void addOffset(double o) {
+    offset += o;
+  }
+
+  public Command addOffsetCommand(double o) {
+    return runOnce(() -> {
+      addOffset(o);
+    });
+  }
+
+  public void setOffset(double o) {
+    offset = o;
+  }
+
+  public Command setOffsetCommand(double o) {
+    return runOnce(() -> {
+      setOffset(o);
+    });
+  }
+
   public Command offsetShooterSpeedCommand(double i) {
     return runOnce(() -> {
       offsetShooterSpeed(i);
@@ -95,7 +116,7 @@ public class Shooter extends SubsystemBase {
 
   public void setVelocity(double d) {
     if (shooterFx != null) {
-      targetSpeed = d;
+      targetSpeed = d + offset;
       shooterFx.setControl(m_request.withVelocity(targetSpeed));
     }
   }

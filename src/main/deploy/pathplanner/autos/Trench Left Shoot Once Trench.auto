@@ -19,19 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Start Left Trench Far Intake Center Left Far Start"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Down"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Intake Center Left Far Start To End"
+            "pathName": "New Path"
           }
         },
         {
@@ -43,7 +31,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot-4s"
+            "name": "Shoot 8s Intake Jiggle"
           }
         },
         {

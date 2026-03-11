@@ -37,19 +37,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Intake Center Left Deep to Left Bump Far"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Bump Left 1"
+            "pathName": "Intake Left Center End To Trench Left Shoot"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot-8s"
+            "name": "Shoot-4s"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot 8s Intake Jiggle"
           }
         },
         {

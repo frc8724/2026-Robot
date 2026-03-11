@@ -5,27 +5,21 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Intake Down"
+            "pathName": "Start Right 1 To Outpost"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 3.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "New Path"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Intake Left Center End To Trench Left Shoot"
+            "pathName": "Outpost to Shoot Right 1"
           }
         },
         {
@@ -38,12 +32,6 @@
           "type": "named",
           "data": {
             "name": "Shoot 8s Intake Jiggle"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Up"
           }
         }
       ]

@@ -104,7 +104,15 @@ public class ShooterHood extends SubsystemBase {
     });
   }
 
-  public Command SetPositiongByPidCommand(double pos) {
+  public Command SetPositionByPidCommand(DoubleSupplier posSupplier) {
+    return run(() -> {
+      setPositionByPid(posSupplier.getAsDouble());
+    }).until(() -> {
+      return isAtPosition(posSupplier.getAsDouble());
+    });
+  }
+
+  public Command SetPositionByPidCommand(double pos) {
     return run(() -> {
       setPositionByPid(pos);
     }).until(() -> {

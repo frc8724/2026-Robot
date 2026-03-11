@@ -77,7 +77,8 @@ public class LaunchingTower extends SubsystemBase {
       return convertDistanceToShooterRPM(distance);
     };
     return new ParallelCommandGroup(
-        hood.SetPositiongByMMCommand(dub1),
+        // hood.SetPositiongByMMCommand(dub1),
+        hood.SetPositionByPidCommand(dub1),
         shooter.setVelocityCommand(dub2));
   }
 
@@ -115,13 +116,13 @@ public class LaunchingTower extends SubsystemBase {
       loader.setSpeed(1);
       hopper.setSpeed(1);
 
-      hood.setPositionByMM(convertDistanceToHood(currentDistance));
+      hood.setPositionByPid(convertDistanceToHood(currentDistance));
       shooter.setVelocity(convertDistanceToShooterRPM(currentDistance));
     }).finallyDo(() -> {
       loader.setSpeed(0);
       // shooter.setVelocity(0);
       shooter.setSpeed(0);
-      hood.setPositionByMM(0);
+      hood.setPositionByPid(0);
       rollers.setSpeed(0.0);
       hopper.setSpeed(0);
     });

@@ -1,0 +1,85 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.621625,
+        "y": 3.0764659090909094
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.1168295454545456,
+        "y": 2.1076250000000005
+      },
+      "isLocked": false,
+      "linkedName": "Start Right Corner To Hub"
+    },
+    {
+      "anchor": {
+        "x": 0.6,
+        "y": 0.65
+      },
+      "prevControl": {
+        "x": 2.3641931818181816,
+        "y": 0.5925227272727271
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "outpost"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.7940251572327091,
+      "rotationDegrees": 90.0
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.5906642728904844,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 1.5,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intake Down No Rollers",
+      "waypointRelativePos": 0.42010771992818685,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Intake Down No Rollers"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 90.0
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}

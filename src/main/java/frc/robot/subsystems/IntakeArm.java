@@ -24,6 +24,7 @@ public class IntakeArm extends SubsystemBase {
   TalonFX motor;
   // private double down = -18;
   private double down = -21.5;
+  private double half = -21.5 / 2;
   private double up = 0;
   // private double up = -5;
   private final PositionVoltage position = new PositionVoltage(0);
@@ -67,6 +68,13 @@ public class IntakeArm extends SubsystemBase {
     });
   }
 
+  public Command goToHalfCommand() {
+    // return setPositionCommand(down);
+    return runOnce(() -> {
+      setPosition(half);
+    });
+  }
+
   public Command goToUpCommand() {
     // return setPositionCommand(up);
     return runOnce(() -> {
@@ -82,13 +90,13 @@ public class IntakeArm extends SubsystemBase {
 
   public Command jiggleCommand() {
     return new SequentialCommandGroup(
-        goToUpCommand(),
+        goToDownCommand(),
+        new WaitCommand(.5),
+        goToHalfCommand(),
         new WaitCommand(.5),
         goToDownCommand(),
         new WaitCommand(.5),
-        goToUpCommand(),
-        new WaitCommand(.5),
-        goToDownCommand());
+        goToHalfCommand());
   }
 
   public Command setPositionCommand(double pos) {

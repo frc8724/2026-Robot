@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class Hopper extends SubsystemBase {
+  final double minSpeed = -.5;
+  final double maxSpeed = .5;
   private TalonFX motor;
 
   /** Creates a new Hopper. */
@@ -26,9 +28,13 @@ public class Hopper extends SubsystemBase {
     this.motor.getConfigurator().apply(configs);
   }
 
+  private double clamp(double speed) {
+    return Math.min(maxSpeed, Math.max(minSpeed, speed));
+  }
+
   public void setSpeed(double speed) {
     if (motor != null) {
-      motor.set(speed);
+      motor.set(clamp(speed));
     }
   }
 

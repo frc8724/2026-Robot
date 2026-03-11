@@ -20,6 +20,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.auto.AutoChooser;
+import frc.robot.commands.ShooterAddOffset;
+import frc.robot.commands.ShooterSetOffset;
 import frc.robot.commands.SystemZero;
 import frc.robot.controls.MayhemExtreme3dPro;
 import frc.robot.controls.MayhemLogitechAttack3;
@@ -101,6 +103,7 @@ public class RobotContainer {
         public static final Loader loader = new Loader(loaderMotor);
         public static final LaunchingTower launchingTower = new LaunchingTower(shooter, shooterHood, loader, hopper,
                         intakeRollers);
+        public static final LEDLights lights = new LEDLights(0);
 
         public RobotContainer() {
                 configureBindings();
@@ -112,16 +115,11 @@ public class RobotContainer {
 
                 m_auto.addAuto("Stand Still", new WaitCommand(2));
                 m_auto.addAuto("Shoot Center Climb", new PathPlannerAuto("Shoot Center Climb"));
-                m_auto.addAuto("Shoot Depot Shoot Left", new PathPlannerAuto("Shoot Depot Shoot Left"));
-                m_auto.addAuto("Shoot Outpost Shoot Right", new PathPlannerAuto("Shoot Outpost Shoot Right"));
-                // m_auto.addAuto("Trench Left Shoot Twice", new PathPlannerAuto("Trench Left
-                // Shoot Twice"));
-                // m_auto.addAuto("Trench Left Shoot Once", new PathPlannerAuto("Trench Left
-                // Shoot Once"));
-                // m_auto.addAuto("Trench Left Shoot Once Trench", new PathPlannerAuto("Trench
-                // Left Shoot Once Trench"));
-                m_auto.addAuto("Copy of Trench Left Shoot Once Trench",
-                                new PathPlannerAuto("Copy of Trench Left Shoot Once Trench"));
+                // m_auto.addAuto("Shoot Depot Shoot Left", new PathPlannerAuto("Shoot Depot
+                // Shoot Left"));
+                m_auto.addAuto("Outpost Shoot Right", new PathPlannerAuto("Outpost Shoot Right"));
+                m_auto.addAuto("Trench Left Shoot Once Trench",
+                                new PathPlannerAuto("Trench Left Shoot Once Trench"));
                 m_auto.addAuto("Trench Right Shoot Once Trench", new PathPlannerAuto("Trench Right Shoot Once Trench"));
         }
 
@@ -153,6 +151,7 @@ public class RobotContainer {
                                                 launchingTower.fireFuelCommand(),
                                                 intakeArm.jiggleCommand().repeatedly()));
                 NamedCommands.registerCommand("Intake Down No Rollers", intakeArm.goToDownCommand());
+                // NamedCommands.registerCommand("IntakeDownWithWait", new ());
 
                 // NamedCommands.registerCommand("Outtake", endEffector.setSpeedCmd(-.8));
                 // NamedCommands.registerCommand("IntakeStart", endEffector.setSpeedCmd(0.8));
@@ -213,6 +212,11 @@ public class RobotContainer {
                 // operatorPad.Button(3).onTrue(new ClimbToLowerRung());
                 // future climb to next rung
                 // operatorPad.Button(4).onTrue(command);
+
+                // intake jiggle manual
+                operatorPad.Button(2).onTrue(intakeArm.goToHalfCommand());
+                operatorPad.Button(2).onFalse(intakeArm.goToDownCommand());
+
                 // intake on and off
                 operatorPad.Button(5).onTrue(
                                 new ParallelCommandGroup(intakeRollers.intakeCommand()
@@ -244,6 +248,9 @@ public class RobotContainer {
                                 // shooter.setVelocityCommand(0),
                                 shooter.setSpeedCommand(0),
                                 shooterHood.SetPositiongByMMCommand(0)));
+                operatorPad.Button(4).onTrue(new ShooterAddOffset(1));
+                operatorPad.Button(3).onTrue(new ShooterAddOffset(-1));
+                operatorPad.Button(1).onTrue(new ShooterSetOffset(0));
 
                 // climber manual
                 climberElevatorPivot.setDefaultCommand(
@@ -302,15 +309,15 @@ public class RobotContainer {
 
                 driverStick.Button(1)
                                 .whileTrue(new SequentialCommandGroup(new DrivePointToHub(), drivetrain.lockWheels()));
-                driverStick.Button(5).onTrue(drivetrain.goToPoseCommand(drivetrain.shooterPose1Red));
+                // driverStick.Button(5).onTrue(drivetrain.goToPoseCommand(drivetrain.shooterPose1Red));
                 driverStick.Button(6).whileTrue(drivetrain.lockWheels());
-                driverStick.Button(8).onTrue(drivetrain.trenchRightOutCommand());
-                driverStick.Button(10).onTrue(drivetrain.trenchRightInCommand());
+                // driverStick.Button(8).onTrue(drivetrain.trenchRightOutCommand());
+                // driverStick.Button(10).onTrue(drivetrain.trenchRightInCommand());
                 driverStick.Button(11).onTrue(drivetrain.zeroBotRotationCommand());
                 driverStick.Button(12).onTrue(drivetrain.stopAllCommand());
 
-                driverStick.Button(7).onTrue(drivetrain.bumpCommand());
-                driverStick.Button(9).onTrue(drivetrain.trenchCommand());
+                // driverStick.Button(7).onTrue(drivetrain.bumpCommand());
+                // driverStick.Button(9).onTrue(drivetrain.trenchCommand());
 
                 // Idle while the robot is disabled. This ensures the configured
                 // neutral mode is applied to the drive motors while disabled.
