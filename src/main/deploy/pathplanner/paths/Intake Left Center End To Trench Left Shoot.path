@@ -20,12 +20,12 @@
         "y": 7.354
       },
       "prevControl": {
-        "x": 7.224653625746174,
-        "y": 7.25125473605401
+        "x": 7.229037822412087,
+        "y": 7.3349398374777905
       },
       "nextControl": {
-        "x": 4.786295454540855,
-        "y": 7.467170454548877
+        "x": 4.817215909090908,
+        "y": 7.374409090909092
       },
       "isLocked": false,
       "linkedName": null
@@ -36,37 +36,46 @@
         "y": 7.250727272727273
       },
       "prevControl": {
-        "x": 3.621625,
-        "y": 7.549624999999999
+        "x": 3.6937727272727274,
+        "y": 7.508397727272728
       },
       "nextControl": {
-        "x": 2.981942878012182,
-        "y": 7.019602670352953
+        "x": 2.6769066690132775,
+        "y": 6.903120311642103
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.0,
-        "y": 6.0
+        "x": 3.3699284436493735,
+        "y": 4.8706082289803225
       },
       "prevControl": {
-        "x": 2.6630909090863106,
-        "y": 6.879681818185242
+        "x": 3.033019352735684,
+        "y": 5.7502900471655645
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "trench left shoot"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.0896226415094339,
+      "rotationDegrees": -90.0
+    },
+    {
+      "waypointRelativePos": 1.8537735849056607,
+      "rotationDegrees": -90.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.5,
-    "maxAcceleration": 2.5,
+    "maxVelocity": 5.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -74,7 +83,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -50.41799245103876
+    "rotation": -33.1113419603721
   },
   "reversed": false,
   "folder": null,

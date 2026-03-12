@@ -24,7 +24,7 @@ public class IntakeArm extends SubsystemBase {
   TalonFX motor;
   // private double down = -18;
   private double down = -21.5;
-  private double half = -21.5 / 2;
+  private double half = -5;
   private double up = 0;
   // private double up = -5;
   private final PositionVoltage position = new PositionVoltage(0);

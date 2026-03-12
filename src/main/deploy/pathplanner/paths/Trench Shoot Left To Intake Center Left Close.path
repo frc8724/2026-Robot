@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.0,
-        "y": 6.0
+        "x": 3.3699284436493735,
+        "y": 4.8706082289803225
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.535715909090909,
-        "y": 6.05153409090909
+        "x": 4.905644352740282,
+        "y": 4.922142319889413
       },
       "isLocked": false,
       "linkedName": "trench left shoot"
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -50.41799245103876
+    "rotation": -33.1113419603721
   },
   "useDefaultConstraints": false
 }

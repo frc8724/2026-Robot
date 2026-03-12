@@ -6,6 +6,8 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.jar.Attributes.Name;
+
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -20,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.auto.AutoChooser;
+import frc.robot.commands.JiggleWiggle;
 import frc.robot.commands.ShooterAddOffset;
 import frc.robot.commands.ShooterSetOffset;
 import frc.robot.commands.SystemZero;
@@ -115,8 +118,7 @@ public class RobotContainer {
         public static final Hopper hopper = new Hopper(hopperMotor);
         public static final ShooterHood shooterHood = new ShooterHood(hoodMotor);
         public static final Loader loader = new Loader(loaderMotor);
-        public static final LaunchingTower launchingTower = new LaunchingTower(shooter, shooterHood, loader, hopper,
-                        intakeRollers);
+        public static final LaunchingTower launchingTower = new LaunchingTower(shooter, shooterHood, loader, hopper);
         public static final LEDLights lights = new LEDLights(0);
 
         public RobotContainer() {
@@ -135,6 +137,14 @@ public class RobotContainer {
                 m_auto.addAuto("Trench Left Shoot Once Trench",
                                 new PathPlannerAuto("Trench Left Shoot Once Trench"));
                 m_auto.addAuto("Trench Right Shoot Once Trench", new PathPlannerAuto("Trench Right Shoot Once Trench"));
+                m_auto.addAuto("Center Depo Outpost Shoot Center",
+                                new PathPlannerAuto("Center Depo Outpost Shoot Center"));
+                m_auto.addAuto("Center To Depo Test",
+                                new PathPlannerAuto("Center To Depo Test"));
+                m_auto.addAuto("Center Depo Shoot Center",
+                                new PathPlannerAuto("Center Depo Shoot Center"));
+                m_auto.addAuto("Wrecker", new PathPlannerAuto(getAutonomousCommand()));
+
         }
 
         Command shootForTimeCommand(double time) {
@@ -157,20 +167,27 @@ public class RobotContainer {
                                 new ParallelRaceGroup(new WaitCommand(4),
                                                 new DrivePointToHub().repeatedly(),
                                                 launchingTower.fireFuelCommand(),
-                                                intakeArm.jiggleCommand().repeatedly()));
+                                                // intakeArm.jiggleCommand().repeatedly()
+                                                new JiggleWiggle(intakeArm, intakeRollers).repeatedly()));
                 NamedCommands.registerCommand("Shoot 8s Intake Jiggle",
                                 // new ParallelCommandGroup(shootForTimeCommand(8), intakeArm.jiggleCommand())
                                 new ParallelRaceGroup(new WaitCommand(8),
                                                 new DrivePointToHub().repeatedly(),
                                                 launchingTower.fireFuelCommand(),
-                                                intakeArm.jiggleCommand().repeatedly()));
+                                                // intakeArm.jiggleCommand().repeatedly()
+                                                new JiggleWiggle(intakeArm, intakeRollers).repeatedly()));
                 NamedCommands.registerCommand("Shoot 16s Intake Jiggle",
                                 // new ParallelCommandGroup(shootForTimeCommand(8), intakeArm.jiggleCommand())
                                 new ParallelRaceGroup(new WaitCommand(16),
                                                 new DrivePointToHub().repeatedly(),
                                                 launchingTower.fireFuelCommand(),
-                                                intakeArm.jiggleCommand().repeatedly()));
+                                                // intakeArm.jiggleCommand().repeatedly()
+                                                new JiggleWiggle(intakeArm, intakeRollers).repeatedly()));
                 NamedCommands.registerCommand("Intake Down No Rollers", intakeArm.goToDownCommand());
+                NamedCommands.registerCommand("Turn Off Rollers", intakeRollers.turnOffCommand());
+                NamedCommands.registerCommand("Warmup Shooter", shooter.setVelocityCommand(42));
+                NamedCommands.registerCommand("Spit",
+                                new ParallelCommandGroup(intakeArm.goToDownCommand(), intakeRollers.outtakeCommand()));
                 // NamedCommands.registerCommand("IntakeDownWithWait", new ());
 
                 // NamedCommands.registerCommand("Outtake", endEffector.setSpeedCmd(-.8));

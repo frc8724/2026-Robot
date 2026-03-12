@@ -13,13 +13,19 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.5
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "New Path"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Warmup Shooter"
           }
         },
         {
@@ -31,13 +37,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot 8s Intake Jiggle"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot 8s Intake Jiggle"
+            "name": "Shoot 16s Intake Jiggle"
           }
         },
         {

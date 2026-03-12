@@ -28,7 +28,7 @@ public class ShooterHood extends SubsystemBase {
 
   private double counter = 0;
   private final double tolerance = .1;
-  private final double toloeranceCounter = 50;
+  private final double toloeranceCounter = 5;
 
   /** Creates a new ShooterHood. */
   public ShooterHood(TalonFX motor) {

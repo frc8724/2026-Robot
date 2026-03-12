@@ -3,38 +3,43 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.827,
-        "y": 4.436965909090909
+        "x": 0.47804545454545433,
+        "y": 6.1
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.764965909090909,
-        "y": 7.2610340909090905
+        "x": 1.4780454545454544,
+        "y": 6.1
       },
       "isLocked": false,
-      "linkedName": "Intake Center Left Close End"
+      "linkedName": "Depo Collected"
     },
     {
       "anchor": {
-        "x": 3.3699284436493735,
-        "y": 4.8706082289803225
+        "x": 3.1475113636363634,
+        "y": 5.014147727272728
       },
       "prevControl": {
-        "x": 6.255837534558465,
-        "y": 4.983983228980322
+        "x": 2.673397727272727,
+        "y": 6.323113636363637
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "trench left shoot"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.30817610062893086,
+      "rotationDegrees": 90.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.5,
-    "maxAcceleration": 2.5,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -42,13 +47,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -33.1113419603721
+    "rotation": -27.897271030947646
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 90.0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

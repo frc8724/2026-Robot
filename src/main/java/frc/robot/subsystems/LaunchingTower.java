@@ -28,7 +28,6 @@ public class LaunchingTower extends SubsystemBase {
   private ShooterHood hood;
   private Loader loader;
   private Hopper hopper;
-  private IntakeRollers rollers;
 
   class FiringSolution {
     public double distance;
@@ -59,12 +58,11 @@ public class LaunchingTower extends SubsystemBase {
       new FiringSolution(5, 53, 17),
   };
 
-  public LaunchingTower(Shooter shooter, ShooterHood hood, Loader loader, Hopper hopper, IntakeRollers rollers) {
+  public LaunchingTower(Shooter shooter, ShooterHood hood, Loader loader, Hopper hopper) {
     this.shooter = shooter;
     this.hood = hood;
     this.loader = loader;
     this.hopper = hopper;
-    this.rollers = rollers;
   }
 
   private Command prepareToFireAtCommand() {
@@ -83,30 +81,7 @@ public class LaunchingTower extends SubsystemBase {
   }
 
   private Command fireCommand() {
-    // return run(() -> {
-    // var currentDistance = RobotContainer.drivetrain.distanceToHub();
-    // if (shooter.isAtTargetSpeed()) {
-    // loader.setSpeed(.75);
-    // hopper.setSpeed(.75);
-    // rollers.setSpeed(0.5);
-    // } else {
-    // loader.setSpeed(0);
-    // hopper.setSpeed(0);
-    // rollers.setSpeed(0.0);
-    // }
-    // hood.setPositionByMM(convertDistanceToHood(currentDistance));
-    // shooter.setVelocity(convertDistanceToShooterRPM(currentDistance));
-    // }).finallyDo(() -> {
-    // loader.setSpeed(0);
-    // shooter.setShooterSpeed(0);
-    // hood.setPositionByMM(0);
-    // hopper.setSpeed(0);
-    // rollers.setSpeed(0.0);
-    // });
-    return new ParallelCommandGroup(fireLoaderShooterHoodCommand()
-    // ,
-    // hopper.jiggleWiggleCommand()
-    );
+    return new ParallelCommandGroup(fireLoaderShooterHoodCommand());
   }
 
   private Command fireLoaderShooterHoodCommand() {
@@ -123,7 +98,6 @@ public class LaunchingTower extends SubsystemBase {
       // shooter.setVelocity(0);
       shooter.setSpeed(0);
       hood.setPositionByPid(0);
-      rollers.setSpeed(0.0);
       hopper.setSpeed(0);
     });
   }
@@ -133,7 +107,7 @@ public class LaunchingTower extends SubsystemBase {
       return new SequentialCommandGroup(
           prepareToFireAtCommand(),
           fireCommand());
-    }, new HashSet<Subsystem>(Arrays.asList(hood, shooter, loader, hopper, rollers)));
+    }, new HashSet<Subsystem>(Arrays.asList(hood, shooter, loader, hopper)));
   }
 
   public double convertDistanceToShooterRPM(double distance) {

@@ -5,33 +5,45 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Intake Down"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "Trench Right To Intake Center"
+            "pathName": "Wrecker Start"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Intake Center Right To Shoot Right"
+            "pathName": "Wrecker Spit"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot 8s Intake Jiggle"
+            "name": "Intake Down"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Shoot 8s Intake Jiggle"
+            "pathName": "Wrecker Out Again"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Intake Up"
+            "pathName": "Wrecker Spit Again"
           }
         }
       ]

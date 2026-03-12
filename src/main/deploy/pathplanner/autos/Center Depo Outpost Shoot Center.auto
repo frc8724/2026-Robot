@@ -7,31 +7,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Trench Right To Intake Center"
+            "pathName": "Center to Depo"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Down"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Intake Center Right To Shoot Right"
+            "pathName": "Depo Collect"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot 8s Intake Jiggle"
+            "name": "Turn Off Rollers"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Shoot 8s Intake Jiggle"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Up"
+            "pathName": "Depo to Outpost"
           }
         }
       ]
