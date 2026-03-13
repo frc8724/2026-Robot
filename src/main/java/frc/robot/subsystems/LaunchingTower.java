@@ -53,8 +53,9 @@ public class LaunchingTower extends SubsystemBase {
       new FiringSolution(0, 42, 4),
       new FiringSolution(0.8, 42, 4),
       new FiringSolution(1.23, 42, 8),
-      new FiringSolution(2.6, 46, 20), // good
-      new FiringSolution(3.45, 56, 18),
+      new FiringSolution(2.6, 48, 20), // good
+      new FiringSolution(3.45, 58, 18),
+      new FiringSolution(3.65, 64, 19),
       new FiringSolution(5, 53, 17),
   };
 

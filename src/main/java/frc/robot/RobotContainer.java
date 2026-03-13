@@ -134,16 +134,23 @@ public class RobotContainer {
                 // m_auto.addAuto("Shoot Depot Shoot Left", new PathPlannerAuto("Shoot Depot
                 // Shoot Left"));
                 m_auto.addAuto("Outpost Shoot Right", new PathPlannerAuto("Outpost Shoot Right"));
-                m_auto.addAuto("Trench Left Shoot Once Trench",
-                                new PathPlannerAuto("Trench Left Shoot Once Trench"));
-                m_auto.addAuto("Trench Right Shoot Once Trench", new PathPlannerAuto("Trench Right Shoot Once Trench"));
+                m_auto.addAuto("Trench Left Shoot Once From Center",
+                                new PathPlannerAuto("Trench Left Shoot Once From Center"));
+                m_auto.addAuto("Trench Right Shoot Once From Center",
+                                new PathPlannerAuto("Trench Right Shoot Once From Center"));
                 m_auto.addAuto("Center Depo Outpost Shoot Center",
                                 new PathPlannerAuto("Center Depo Outpost Shoot Center"));
                 m_auto.addAuto("Center To Depo Test",
                                 new PathPlannerAuto("Center To Depo Test"));
                 m_auto.addAuto("Center Depo Shoot Center",
                                 new PathPlannerAuto("Center Depo Shoot Center"));
-                m_auto.addAuto("Wrecker", new PathPlannerAuto(getAutonomousCommand()));
+                m_auto.addAuto("Trench Left Shoot Once FROM TRENCH!!!!!!",
+                                new PathPlannerAuto("Trench Left Shoot Once From Trench"));
+                m_auto.addAuto("Trench Right Shoot Once FROM TRENCH!!!!!!",
+                                new PathPlannerAuto("Trench Right Shoot Once From Trench"));
+                m_auto.addAuto("Center Depo Shoot Depo",
+                                new PathPlannerAuto("Center Depo Shoot Depo"));
+                m_auto.addAuto("Wrecker", new PathPlannerAuto("Wrecker"));
 
         }
 
@@ -331,13 +338,14 @@ public class RobotContainer {
                                                                                                     // [-1,1] to [0,1]
                                                         multiplier = 0.25 + 0.75 * multiplier; // final range [0.25,
                                                                                                // 1.0]
+                                                        var rotMultiplier = multiplier * 1.75;
 
                                                         double xCmd = -driverStick.getRawAxis(Axis.Y) * MaxSpeed
                                                                         * multiplier;
                                                         double yCmd = -driverStick.getRawAxis(Axis.X) * MaxSpeed
                                                                         * multiplier;
                                                         double rotCmd = -driverStick.getRawAxis(Axis.Z) * MaxAngularRate
-                                                                        * multiplier;
+                                                                        * rotMultiplier;
 
                                                         double xLimited = xLimiter.calculate(xCmd);
                                                         double yLimited = yLimiter.calculate(yCmd);
@@ -417,19 +425,19 @@ public class RobotContainer {
                 // operatorPad.Button(4).onFalse(loader.setSpeedCommand(0));
                 // intakeArm.setDefaultCommand(intakeArm.controlWithAxis(operatorPad.Axis(frc.robot.controls.MayhemOperatorPad.Axis.RightY)));
 
-                // debugStick.Button(3).onTrue(shooter.offsetShooterVelocityCommand(2));
-                // debugStick.Button(2).onTrue(shooter.offsetShooterVelocityCommand(-2));
+                debugStick.Button(3).onTrue(shooter.offsetShooterVelocityCommand(2));
+                debugStick.Button(2).onTrue(shooter.offsetShooterVelocityCommand(-2));
 
-                // debugStick.Button(4).onTrue(shooterHood.offsetPositionCommand(1));
-                // debugStick.Button(5).onTrue(shooterHood.offsetPositionCommand(-1));
+                debugStick.Button(4).onTrue(shooterHood.offsetPositionCommand(1));
+                debugStick.Button(5).onTrue(shooterHood.offsetPositionCommand(-1));
 
-                // debugStick.Button(7).onTrue(loader.setSpeedCommand(1));
-                // debugStick.Button(7).onFalse(loader.setSpeedCommand(0));
+                debugStick.Button(7).onTrue(loader.setSpeedCommand(1));
+                debugStick.Button(7).onFalse(loader.setSpeedCommand(0));
 
-                // debugStick.Button(7).onTrue(hopper.setSpeedCommand(1));
-                // debugStick.Button(7).onFalse(hopper.setSpeedCommand(0));
+                debugStick.Button(7).onTrue(hopper.setSpeedCommand(1));
+                debugStick.Button(7).onFalse(hopper.setSpeedCommand(0));
 
-                // debugStick.Button(6).onTrue(shooter.setSpeedCommand(0));
+                debugStick.Button(6).onTrue(shooter.setSpeedCommand(0));
 
                 // debugStick.Button(3).onTrue(shooterHood.SetPositiongByPidCommand(15));
                 // debugStick.Button(3).onFalse(shooterHood.SetPositiongByMMCommand(0));

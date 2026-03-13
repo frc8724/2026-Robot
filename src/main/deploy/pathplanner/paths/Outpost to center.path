@@ -3,38 +3,43 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.35,
-        "y": 6.0
+        "x": 0.6429545454522871,
+        "y": 0.6440568181813204
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.4935412388017366,
-        "y": 6.0
+        "x": 2.3951136363636367,
+        "y": 2.406522727272727
       },
       "isLocked": false,
-      "linkedName": "Depo Collect"
+      "linkedName": "outpost collect"
     },
     {
       "anchor": {
-        "x": 0.47804545454545433,
-        "y": 6.0
+        "x": 3.003215909090909,
+        "y": 3.6536477272727277
       },
       "prevControl": {
-        "x": 1.4780454545454544,
-        "y": 6.0
+        "x": 2.663090909090909,
+        "y": 3.138306818181819
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Depo Collected"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.12106918238993714,
+      "rotationDegrees": 90.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 1.0,
+    "maxVelocity": 5.0,
+    "maxAcceleration": 5.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -42,7 +47,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 15.255118703057747
   },
   "reversed": false,
   "folder": null,

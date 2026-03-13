@@ -39,6 +39,30 @@
           "data": {
             "pathName": "Depo to Outpost"
           }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Warmup Shooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Outpost to center"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot 16s Intake Jiggle"
+          }
         }
       ]
     }

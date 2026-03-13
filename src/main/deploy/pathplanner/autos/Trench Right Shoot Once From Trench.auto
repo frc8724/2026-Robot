@@ -5,45 +5,27 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "Intake Down"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "Start Left Trench Far Intake Center Left Far Start"
+            "pathName": "Trench Right To Intake Center"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Intake Down"
+            "name": "Warmup Shooter"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Intake Center Left Far Start To End"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Intake Left Center End To Left Center Shoot"
+            "pathName": "Intake Center Right To Right Trench"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot-4s"
+            "name": "Shoot 8s Intake Jiggle"
           }
         },
         {

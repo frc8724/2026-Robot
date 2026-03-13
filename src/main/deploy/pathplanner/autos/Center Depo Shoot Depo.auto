@@ -5,21 +5,27 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "Center to Depo"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Intake Down"
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 0.5
+            "pathName": "Depo Collect"
           }
         },
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "New Path"
+            "waitTime": 1.0
           }
         },
         {
@@ -29,21 +35,21 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Turn Off Rollers"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "Intake Left Center End To Trench Left Shoot"
+            "pathName": "Depot Collected To Shoot From Depot"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Shoot 16s Intake Jiggle"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Up"
           }
         }
       ]
