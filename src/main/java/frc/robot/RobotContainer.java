@@ -291,7 +291,16 @@ public class RobotContainer {
                                 hopper.turnOffCommand(),
                                 // shooter.setVelocityCommand(0),
                                 shooter.setSpeedCommand(0),
-                                shooterHood.SetPositiongByMMCommand(0)));
+                                shooterHood.SetPositionByPidCommand(0)));
+
+                // operatorPad.D_PAD_DOWN.onTrue(launchingTower.shootCloseCommand());
+                // operatorPad.D_PAD_DOWN.onFalse(new SequentialCommandGroup(
+                // loader.turnOffCommand(),
+                // hopper.turnOffCommand(),
+                // // shooter.setVelocityCommand(0),
+                // shooter.setSpeedCommand(0),
+                // shooterHood.SetPositionByPidCommand(0)));
+                operatorPad.D_PAD_DOWN.whileTrue(launchingTower.shootCloseCommand());
                 operatorPad.Button(4).onTrue(new ShooterAddOffset(1));
                 operatorPad.Button(3).onTrue(new ShooterAddOffset(-1));
                 operatorPad.Button(1).onTrue(new ShooterSetOffset(0));
@@ -338,7 +347,7 @@ public class RobotContainer {
                                                                                                     // [-1,1] to [0,1]
                                                         multiplier = 0.25 + 0.75 * multiplier; // final range [0.25,
                                                                                                // 1.0]
-                                                        var rotMultiplier = multiplier * 1.75;
+                                                        var rotMultiplier = multiplier * 1.375;
 
                                                         double xCmd = -driverStick.getRawAxis(Axis.Y) * MaxSpeed
                                                                         * multiplier;

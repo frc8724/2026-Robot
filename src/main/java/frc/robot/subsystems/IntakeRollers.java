@@ -37,7 +37,7 @@ public class IntakeRollers extends SubsystemBase {
   }
 
   public Command intakeCommand() {
-    return setSpeedCommand(.4);
+    return setSpeedCommand(.8);
   }
 
   public Command turnOffCommand() {

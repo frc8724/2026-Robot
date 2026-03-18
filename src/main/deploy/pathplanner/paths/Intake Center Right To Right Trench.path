@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 7.744352272727273,
-        "y": 3.2929090909090917
+        "y": 3.45
       },
       "prevControl": null,
       "nextControl": {
         "x": 7.249624999999999,
-        "y": 2.0663977272727285
+        "y": 2.223488636363637
       },
       "isLocked": false,
       "linkedName": "Intake Center Right"

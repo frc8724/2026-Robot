@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import java.lang.annotation.Retention;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -33,11 +34,13 @@ public class LaunchingTower extends SubsystemBase {
     public double distance;
     public double shooterSpeed;
     public double hoodPosition;
+    public double airTime;
 
-    public FiringSolution(double distance, double shooterSpeed, double hoodPosition) {
+    public FiringSolution(double distance, double shooterSpeed, double hoodPosition, double airTime) {
       this.distance = distance;
       this.shooterSpeed = shooterSpeed;
       this.hoodPosition = hoodPosition;
+      this.airTime = airTime;
     }
   };
 
@@ -50,13 +53,13 @@ public class LaunchingTower extends SubsystemBase {
       // new FiringSolution(3.34, 57, 17), // 2/26/26
       // new FiringSolution(4.14, 56, 23),
       // new FiringSolution(5.36, 62, 30),
-      new FiringSolution(0, 42, 4),
-      new FiringSolution(0.8, 42, 4),
-      new FiringSolution(1.23, 42, 8),
-      new FiringSolution(2.6, 48, 20), // good
-      new FiringSolution(3.45, 58, 18),
-      new FiringSolution(3.65, 64, 19),
-      new FiringSolution(5, 53, 17),
+      new FiringSolution(0, 42, 3, 1),
+      new FiringSolution(0.8, 42, 4, 1),
+      new FiringSolution(1.23, 42, 8, 1),
+      new FiringSolution(2.6, 48, 20, 1), // good
+      new FiringSolution(3.45, 58, 18, 1),
+      new FiringSolution(3.65, 64, 19, 1),
+      new FiringSolution(5, 53, 17, 1),
   };
 
   public LaunchingTower(Shooter shooter, ShooterHood hood, Loader loader, Hopper hopper) {
@@ -136,7 +139,31 @@ public class LaunchingTower extends SubsystemBase {
     var lowerW = 1 - upperW;
     return new FiringSolution(distance,
         (upper.shooterSpeed * upperW + lower.shooterSpeed * lowerW) / (lowerW + upperW),
-        (upper.hoodPosition * upperW + lower.hoodPosition * lowerW) / (lowerW + upperW));
+        (upper.hoodPosition * upperW + lower.hoodPosition * lowerW) / (lowerW + upperW),
+        (upper.airTime * upperW + lower.airTime * lowerW) / (lowerW + upperW));
+  }
+
+  public Command shootCloseCommand() {
+    return run(() -> {
+      shootClose();
+    }).finallyDo(() -> {
+      shooter.setSpeed(0);
+      hood.setPositionByPid(0);
+      hopper.setSpeed(0);
+      loader.setSpeed(0);
+    });
+  }
+
+  public void shootClose() {
+    shooter.setVelocity(10);
+    hood.setPositionByPid(4);
+    if (shooter.isAtTargetSpeed()) {
+      loader.setSpeed(1);
+      hopper.setSpeed(1);
+    } else {
+      loader.setSpeed(0);
+      hopper.setSpeed(0);
+    }
   }
 
   @Override
