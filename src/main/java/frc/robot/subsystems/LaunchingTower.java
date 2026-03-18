@@ -13,7 +13,10 @@ import java.util.function.Supplier;
 
 import com.ctre.phoenix6.controls.FireAnimation;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.util.struct.Struct;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
@@ -43,6 +46,39 @@ public class LaunchingTower extends SubsystemBase {
       this.airTime = airTime;
     }
   };
+
+  class Vector2D {
+    public double x;
+    public double y;
+
+    public Vector2D(double x, double y) {
+      this.x = x;
+      this.y = y;
+    }
+
+    public Vector2D multiplyByDouble(double a) {
+      this.x *= a;
+      this.y *= a;
+      return this;
+    }
+
+    public Vector2D clone() {
+      return new Vector2D(x, y);
+    }
+
+    public Vector2D fromPose2D(Pose2d pose) {
+      // return new Vector2D(pose.getX(), pose.getY());
+      x = pose.getX();
+      y = pose.getY();
+      return this;
+    }
+
+    public Vector2D addVector(Vector2D v) {
+      x += v.x;
+      y += v.y;
+      return this;
+    }
+  }
 
   FiringSolution[] solutions = new FiringSolution[] {
       // new FiringSolution(0, 46, 7),
@@ -164,6 +200,38 @@ public class LaunchingTower extends SubsystemBase {
       loader.setSpeed(0);
       hopper.setSpeed(0);
     }
+  }
+
+  /**
+   * returns the position that the robot should point towards
+   * 
+   * @return
+   */
+  public Vector2D getActualTarget() {
+    var loops = 5;
+    var velocity = new Vector2D(RobotContainer.drivetrain.getState().Speeds.vxMetersPerSecond,
+        RobotContainer.drivetrain.getState().Speeds.vxMetersPerSecond);
+    var solution = getSolution(RobotContainer.drivetrain.distanceToHub());
+    var offset = velocity.clone().multiplyByDouble(-solution.airTime);
+    var target = new Vector2D(0, 0).fromPose2D(RobotContainer.drivetrain.hubMidPoint).addVector(offset);
+
+    for (int i = 0; i < loops; i++) {
+      solution = getSolution(distanceToVector(target));
+      offset = velocity.clone().multiplyByDouble(-solution.airTime);
+      target = new Vector2D(0, 0).fromPose2D(RobotContainer.drivetrain.hubMidPoint).addVector(offset);
+    }
+    return target;
+  }
+
+  private double distanceToVector(Vector2D v) {
+    var robotPose = RobotContainer.drivetrain.getState().Pose;
+    return Math.sqrt(Math.pow(v.x - robotPose.getX(), 2) + Math.pow(v.y - robotPose.getY(), 2));
+  }
+
+  public Vector2D getVectorToHub() {
+    var robotPose = RobotContainer.drivetrain.getState().Pose;
+    var hubPose = RobotContainer.drivetrain.hubMidPoint;
+    return new Vector2D(hubPose.getX() - robotPose.getX(), hubPose.getY() - robotPose.getY());
   }
 
   @Override

@@ -53,6 +53,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.LimelightHelpers;
+import frc.robot.RobotContainer;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 
 /**
@@ -531,6 +532,36 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             angleRad = angleRad - 2 * Math.PI;
         }
         return angleRad;
+    }
+
+    public Command fireWhileDriving2(DoubleSupplier x, DoubleSupplier y) {
+        return run(() -> {
+            var targetPose = RobotContainer.launchingTower.getActualTarget();
+            var robotPose = RobotContainer.drivetrain.getState().Pose;
+
+            // var angleRad = angleToHubAdjustedForVelocityFieldReletive();
+            var angleRad = Math.atan2(targetPose.y - robotPose.getY(), targetPose.x - robotPose.getX());
+
+            SmartDashboard.putNumber("angle to hub", Units.radiansToDegrees(angleRad));
+            var joystickX = -x.getAsDouble();
+            var joystickY = -y.getAsDouble();
+            var d = Math.sqrt(joystickX * joystickX + joystickY * joystickY);
+            // var vx = Math.cos(joystickX / d);
+            // var vy = Math.sin(joystickY / d);
+            var vx = joystickX / d;
+            var vy = joystickY / d;
+
+            // if we don't have a direction, lock the wheels
+            if (Math.abs(joystickX) < .2 && Math.abs(joystickY) < .2) {
+                this.setControl(swerveBrake);
+            } else {
+                this.setControl(
+                        fieldCentric.withVelocityX(vx)
+                                .withVelocityY(vy)
+                                .withHeadingPID(7, 0, 0)
+                                .withTargetDirection(new Rotation2d(angleRad)));
+            }
+        });
     }
 
     public Command fireWhileDriving(DoubleSupplier x, DoubleSupplier y) {
