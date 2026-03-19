@@ -14,6 +14,7 @@ import java.util.function.Supplier;
 import com.ctre.phoenix6.controls.FireAnimation;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.util.struct.Struct;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -47,7 +48,7 @@ public class LaunchingTower extends SubsystemBase {
     }
   };
 
-  class Vector2D {
+  static class Vector2D {
     public double x;
     public double y;
 
@@ -71,6 +72,10 @@ public class LaunchingTower extends SubsystemBase {
       x = pose.getX();
       y = pose.getY();
       return this;
+    }
+
+    public Pose2d toPose2D() {
+      return new Pose2d(x, y, new Rotation2d(0.0));
     }
 
     public Vector2D addVector(Vector2D v) {

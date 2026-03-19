@@ -72,7 +72,12 @@ public class RobotContainer {
 
         public static final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
         private final AutoChooser m_auto = new AutoChooser();
+        private static final Vision vision2 = new Vision("limelight-left");
         private static final Vision vision = new Vision();
+        public static final Vision[] visions = new Vision[] {
+                        vision,
+                        vision2
+        };
         public static final CANBus canivore = new CANBus("canivore");
 
         // public static final TalonFX loaderMotor = new TalonFX(32, "canivore");
@@ -347,6 +352,7 @@ public class RobotContainer {
                                                                                                     // [-1,1] to [0,1]
                                                         multiplier = 0.25 + 0.75 * multiplier; // final range [0.25,
                                                                                                // 1.0]
+                                                        multiplier *= drivetrain.getRegionSpeedMultiplier();
                                                         var rotMultiplier = multiplier * 1.375;
 
                                                         double xCmd = -driverStick.getRawAxis(Axis.Y) * MaxSpeed

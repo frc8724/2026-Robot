@@ -55,6 +55,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.LimelightHelpers;
 import frc.robot.RobotContainer;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
+import frc.robot.subsystems.LaunchingTower.Vector2D;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -173,6 +174,155 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     /* The SysId routine to test */
     private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineTranslation;
 
+    class Region {
+        double x1;
+        double y1;
+        double x2;
+        double y2;
+
+        public Region(double x1, double y1, double x2, double y2) {
+            this.x1 = x1;
+            this.y1 = x1;
+            this.x2 = x1;
+            this.y2 = x1;
+        }
+
+        public boolean isInRegion(Pose2d pose) {
+            var x = pose.getX();
+            var y = pose.getY();
+
+            var minX = Math.min(x1, x2);
+            var minY = Math.min(y1, y2);
+
+            var maxX = Math.max(x1, x2);
+            var maxY = Math.max(y1, y2);
+
+            return x < maxX && x > minX &&
+                    y < maxY && x > minY;
+        }
+
+        public boolean isInRegion() {
+            return isInRegion(getState().Pose);
+        }
+    }
+
+    class SpeedRegion {
+        double x1;
+        double y1;
+        double x2;
+        double y2;
+        double speed;
+
+        public SpeedRegion(double x1, double y1, double x2, double y2, double speed) {
+            this.x1 = x1;
+            this.y1 = x1;
+            this.x2 = x1;
+            this.y2 = x1;
+            this.speed = speed;
+        }
+
+        public boolean isInRegion(Pose2d pose) {
+            var x = pose.getX();
+            var y = pose.getY();
+
+            var minX = Math.min(x1, x2);
+            var minY = Math.min(y1, y2);
+
+            var maxX = Math.max(x1, x2);
+            var maxY = Math.max(y1, y2);
+
+            return x < maxX && x > minX &&
+                    y < maxY && x > minY;
+        }
+
+        public boolean isInRegion() {
+            return isInRegion(getState().Pose);
+        }
+
+        public double getSpeed(Pose2d pose) {
+            return isInRegion(pose) ? speed : 1;
+        }
+
+        public double getSpeed() {
+            return isInRegion() ? speed : 1;
+        }
+    }
+
+    class TargetRegion {
+        double x1;
+        double y1;
+        double x2;
+        double y2;
+        LaunchingTower.Vector2D target;
+
+        public TargetRegion(double x1, double y1, double x2, double y2, LaunchingTower.Vector2D target) {
+            this.x1 = x1;
+            this.y1 = x1;
+            this.x2 = x1;
+            this.y2 = x1;
+            this.target = target;
+        }
+
+        public TargetRegion(double x1, double y1, double x2, double y2, Pose2d target) {
+            this.x1 = x1;
+            this.y1 = x1;
+            this.x2 = x1;
+            this.y2 = x1;
+            this.target = new LaunchingTower.Vector2D(0, 0).fromPose2D(target);
+        }
+
+        public TargetRegion(Vector2D v1, Vector2D v2, LaunchingTower.Vector2D target) {
+            this.x1 = v1.x;
+            this.y1 = v1.y;
+            this.x2 = v2.x;
+            this.y2 = v2.y;
+            this.target = target;
+        }
+
+        public TargetRegion(Vector2D v1, Vector2D v2, Pose2d target) {
+            this.x1 = v1.x;
+            this.y1 = v1.y;
+            this.x2 = v2.x;
+            this.y2 = v2.y;
+            this.target = new LaunchingTower.Vector2D(0, 0).fromPose2D(target);
+        }
+
+        public boolean isInRegion(Pose2d pose) {
+            var x = pose.getX();
+            var y = pose.getY();
+
+            var minX = Math.min(x1, x2);
+            var minY = Math.min(y1, y2);
+
+            var maxX = Math.max(x1, x2);
+            var maxY = Math.max(y1, y2);
+
+            return x < maxX && x > minX &&
+                    y < maxY && x > minY;
+        }
+
+        public boolean isInRegion() {
+            return isInRegion(getState().Pose);
+        }
+
+        public Vector2D getTarget(Pose2d pose) {
+            return isInRegion(pose) ? target : new LaunchingTower.Vector2D(0, 0).fromPose2D(hubMidPoint);
+        }
+
+        public Vector2D getTarget() {
+            return isInRegion() ? target : new LaunchingTower.Vector2D(0, 0).fromPose2D(hubMidPoint);
+        }
+    }
+
+    // public Region bumpBlueRegion = new Region(0, 0, 10, 10, .5);
+    // public Region bumpRedRegion = new Region(0, 0, 10, 10, .5);
+    public SpeedRegion[] speedRegions = new SpeedRegion[] {
+            new SpeedRegion(0, 0, 10, 10, .5)
+    };
+    public TargetRegion[] targetRegions = new TargetRegion[] {
+            new TargetRegion(0, 0, 4, 4, hubMidPoint)
+    };
+
     /**
      * Constructs a CTRE SwerveDrivetrain using the specified constants.
      * <p>
@@ -260,6 +410,36 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             startSimThread();
         }
         configureAutoBuilder();
+    }
+
+    public double getRegionSpeedMultiplier() {
+        double speed = 1;
+        for (int i = 0; i < speedRegions.length; i++) {
+            speed = Math.min(speedRegions[i].getSpeed(), speed);
+        }
+        return speed;
+    }
+
+    public Vector2D getRegionTargetVector2D() {
+        Vector2D t = new Vector2D(0, 0).fromPose2D(hubMidPoint);
+        for (int i = 0; i < targetRegions.length; i++) {
+            var reg = targetRegions[i];
+            if (reg.isInRegion()) {
+                t = reg.target;
+            }
+        }
+        return t;
+    }
+
+    public Pose2d getRegionTargetPose2D() {
+        Vector2D t = new Vector2D(0, 0).fromPose2D(hubMidPoint);
+        for (int i = 0; i < targetRegions.length; i++) {
+            var reg = targetRegions[i];
+            if (reg.isInRegion()) {
+                t = reg.target;
+            }
+        }
+        return t.toPose2D();
     }
 
     public Command zeroBotRotationCommand() {
@@ -537,7 +717,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public Command fireWhileDriving2(DoubleSupplier x, DoubleSupplier y) {
         return run(() -> {
             var targetPose = RobotContainer.launchingTower.getActualTarget();
-            var robotPose = RobotContainer.drivetrain.getState().Pose;
+            var robotPose = getState().Pose;
 
             // var angleRad = angleToHubAdjustedForVelocityFieldReletive();
             var angleRad = Math.atan2(targetPose.y - robotPose.getY(), targetPose.x - robotPose.getX());
@@ -645,6 +825,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                                 : kBlueAlliancePerspectiveRotation);
                 m_hasAppliedOperatorPerspective = true;
             });
+        }
+        // add vision estimate
+        var estimate = Vision.combineVisionEstemates(RobotContainer.visions, 1);
+        if (estimate != null) {
+            RobotContainer.drivetrain.addVisionMeasurement(estimate,
+                    Timer.getFPGATimestamp());
         }
 
         SmartDashboard.putNumber("robot_position:x", this.getState().Pose.getX());
