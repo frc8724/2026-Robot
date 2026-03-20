@@ -317,7 +317,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     // public Region bumpBlueRegion = new Region(0, 0, 10, 10, .5);
     // public Region bumpRedRegion = new Region(0, 0, 10, 10, .5);
     public SpeedRegion[] speedRegions = new SpeedRegion[] {
-            new SpeedRegion(0, 0, 10, 10, .5)
+            new SpeedRegion(0, 0, 3, 3, .1)
     };
     public TargetRegion[] targetRegions = new TargetRegion[] {
             new TargetRegion(0, 0, 4, 4, hubMidPoint)

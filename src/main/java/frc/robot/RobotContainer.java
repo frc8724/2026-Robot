@@ -96,6 +96,9 @@ public class RobotContainer {
         public static final TalonFX loaderMotor = new TalonFX(32, canivore);
         public static final TalonFX shooterMotor1 = new TalonFX(33, canivore);
         public static final TalonFX shooterMotor2 = new TalonFX(34, canivore);
+        // TODO: set shoot motors 3 and 4 ids
+        public static final TalonFX shooterMotor3 = new TalonFX(60, canivore);
+        public static final TalonFX shooterMotor4 = new TalonFX(61, canivore);
         public static final TalonFX hoodMotor = new TalonFX(31, canivore);
         public static final TalonFX intakeRollerMotor = new TalonFX(27, canivore);
         public static final TalonFX intakeArmMotor = new TalonFX(26, canivore);
@@ -120,6 +123,8 @@ public class RobotContainer {
 
         public static final GameTimer gameTimer = new GameTimer();
         public static final Shooter shooter = new Shooter(shooterMotor1, shooterMotor2);
+        public static final Shooter2 shooter2 = new Shooter2(shooterMotor1, shooterMotor2, shooterMotor3,
+                        shooterMotor4);
         public static final Hopper hopper = new Hopper(hopperMotor);
         public static final ShooterHood shooterHood = new ShooterHood(hoodMotor);
         public static final Loader loader = new Loader(loaderMotor);
