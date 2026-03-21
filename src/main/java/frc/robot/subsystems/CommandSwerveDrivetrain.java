@@ -215,9 +215,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         public SpeedRegion(double x1, double y1, double x2, double y2, double speed) {
             this.x1 = x1;
-            this.y1 = x1;
-            this.x2 = x1;
-            this.y2 = x1;
+            this.y1 = y1;
+            this.x2 = x2;
+            this.y2 = y2;
             this.speed = speed;
         }
 
@@ -232,7 +232,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             var maxY = Math.max(y1, y2);
 
             return x < maxX && x > minX &&
-                    y < maxY && x > minY;
+                    y < maxY && y > minY;
         }
 
         public boolean isInRegion() {
@@ -257,17 +257,17 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         public TargetRegion(double x1, double y1, double x2, double y2, LaunchingTower.Vector2D target) {
             this.x1 = x1;
-            this.y1 = x1;
-            this.x2 = x1;
-            this.y2 = x1;
+            this.y1 = y1;
+            this.x2 = x2;
+            this.y2 = y2;
             this.target = target;
         }
 
         public TargetRegion(double x1, double y1, double x2, double y2, Pose2d target) {
             this.x1 = x1;
-            this.y1 = x1;
-            this.x2 = x1;
-            this.y2 = x1;
+            this.y1 = y1;
+            this.x2 = x2;
+            this.y2 = y2;
             this.target = new LaunchingTower.Vector2D(0, 0).fromPose2D(target);
         }
 
@@ -298,7 +298,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             var maxY = Math.max(y1, y2);
 
             return x < maxX && x > minX &&
-                    y < maxY && x > minY;
+                    y < maxY && y > minY;
         }
 
         public boolean isInRegion() {
@@ -317,7 +317,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     // public Region bumpBlueRegion = new Region(0, 0, 10, 10, .5);
     // public Region bumpRedRegion = new Region(0, 0, 10, 10, .5);
     public SpeedRegion[] speedRegions = new SpeedRegion[] {
-            new SpeedRegion(0, 0, 3, 3, .1)
+            new SpeedRegion(14.5, 4, 20, 8, .1)
     };
     public TargetRegion[] targetRegions = new TargetRegion[] {
             new TargetRegion(0, 0, 4, 4, hubMidPoint)

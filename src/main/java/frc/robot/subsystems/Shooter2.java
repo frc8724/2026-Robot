@@ -28,6 +28,7 @@ public class Shooter2 extends SubsystemBase {
   final VelocityVoltage m_request;
   double p = 1.0;
   double offset = 0.0;
+  double idleSpeed = 0.0;
 
   /** Creates a new Shooter. */
   public Shooter2(TalonFX motor1, TalonFX motor2, TalonFX motor3, TalonFX motor4) {
@@ -65,6 +66,20 @@ public class Shooter2 extends SubsystemBase {
       }
     }
     m_request = new VelocityVoltage(0).withSlot(0);
+    setDefaultCommand(run(() -> {
+      if (idleSpeed < 5) {
+        setSpeed(0);
+        idleSpeed = 0;
+      } else {
+        setVelocity(idleSpeed);
+      }
+    }));
+  }
+
+  public Command setIdleSpeedCommand(double idle) {
+    return runOnce(() -> {
+      idleSpeed = idle;
+    });
   }
 
   @Override

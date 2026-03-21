@@ -33,7 +33,7 @@ import frc.robot.controls.MayhemExtreme3dPro.Axis;
 import frc.robot.generated.TunerConstants;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.*;
 
 public class RobotContainer {
@@ -303,6 +303,10 @@ public class RobotContainer {
                                 shooter.setSpeedCommand(0),
                                 shooterHood.SetPositionByPidCommand(0)));
 
+                operatorPad.D_PAD_UP.onFalse(shooter2.setIdleSpeedCommand(0));
+                operatorPad.D_PAD_LEFT.onTrue(shooter2.setIdleSpeedCommand(40));
+                operatorPad.D_PAD_RIGHT.onTrue(shooter2.setIdleSpeedCommand(0));
+
                 // operatorPad.D_PAD_DOWN.onTrue(launchingTower.shootCloseCommand());
                 // operatorPad.D_PAD_DOWN.onFalse(new SequentialCommandGroup(
                 // loader.turnOffCommand(),
@@ -350,6 +354,8 @@ public class RobotContainer {
                 drivetrain.setDefaultCommand(
                                 drivetrain.applyRequest(
                                                 () -> {
+                                                        double regionMultiplier = drivetrain.getRegionSpeedMultiplier();
+                                                        SmartDashboard.putNumber("region multiplier", regionMultiplier);
                                                         var multiplier = driverStick
                                                                         .Axis(MayhemExtreme3dPro.Axis.Flapper)
                                                                         .getAsDouble();
@@ -357,7 +363,7 @@ public class RobotContainer {
                                                                                                     // [-1,1] to [0,1]
                                                         multiplier = 0.25 + 0.75 * multiplier; // final range [0.25,
                                                                                                // 1.0]
-                                                        multiplier *= drivetrain.getRegionSpeedMultiplier();
+                                                        multiplier *= regionMultiplier;
                                                         var rotMultiplier = multiplier * 1.375;
 
                                                         double xCmd = -driverStick.getRawAxis(Axis.Y) * MaxSpeed
