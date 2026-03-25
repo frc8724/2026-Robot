@@ -29,7 +29,7 @@ import frc.robot.RobotContainer;
 
 public class LaunchingTower extends SubsystemBase {
   /** Creates a new LaunchingTower. */
-  private Shooter shooter;
+  private Shooter2 shooter;
   private ShooterHood hood;
   private Loader loader;
   private Hopper hopper;
@@ -103,7 +103,7 @@ public class LaunchingTower extends SubsystemBase {
       new FiringSolution(5, 53, 17, 1),
   };
 
-  public LaunchingTower(Shooter shooter, ShooterHood hood, Loader loader, Hopper hopper) {
+  public LaunchingTower(Shooter2 shooter, ShooterHood hood, Loader loader, Hopper hopper) {
     this.shooter = shooter;
     this.hood = hood;
     this.loader = loader;

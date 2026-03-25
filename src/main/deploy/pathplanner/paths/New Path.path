@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 6.600295454545455,
-        "y": 7.137352272727274
+        "x": 6.610602272727273,
+        "y": 7.250727272727273
       },
       "prevControl": {
-        "x": 5.590227272727272,
-        "y": 7.281647727272728
+        "x": 5.600534090909091,
+        "y": 7.395022727272727
       },
       "nextControl": {
-        "x": 7.667789287324686,
-        "y": 6.984853153758812
+        "x": 7.678096105506504,
+        "y": 7.098228153758812
       },
       "isLocked": false,
       "linkedName": null
@@ -44,7 +44,16 @@
       "linkedName": "Intake Center Left Deep End"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5880503144654088,
+      "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 1.5597484276729607,
+      "rotationDegrees": -90.0
+    }
+  ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
@@ -72,13 +81,13 @@
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": 180.0
+    "rotation": -90.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": false
 }

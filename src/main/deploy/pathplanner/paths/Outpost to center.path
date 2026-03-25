@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 2.3951136363636367,
-        "y": 2.406522727272727
+        "y": 2.4065227272727268
       },
       "isLocked": false,
       "linkedName": "outpost collect"
@@ -31,7 +31,7 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.12106918238993714,
-      "rotationDegrees": 90.0
+      "rotationDegrees": 180.0
     }
   ],
   "constraintZones": [],
@@ -47,13 +47,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 15.255118703057747
+    "rotation": -172.84218698638418
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": false
 }

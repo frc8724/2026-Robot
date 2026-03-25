@@ -54,26 +54,28 @@ public class Shooter2 extends SubsystemBase {
       configs.Voltage.PeakReverseVoltage = 1;
 
       this.motor1.getConfigurator().apply(configs);
-      // TODO: set alignments!!!
       if (this.motor2 != null) {
-        this.motor2.setControl(new Follower(this.motor1.getDeviceID(), MotorAlignmentValue.Aligned));
+        this.motor2.setControl(new Follower(this.motor1.getDeviceID(),
+            MotorAlignmentValue.Aligned));
       }
       if (this.motor3 != null) {
-        this.motor3.setControl(new Follower(this.motor1.getDeviceID(), MotorAlignmentValue.Opposed));
+        this.motor3.setControl(new Follower(this.motor1.getDeviceID(),
+            MotorAlignmentValue.Opposed));
       }
       if (this.motor4 != null) {
-        this.motor4.setControl(new Follower(this.motor1.getDeviceID(), MotorAlignmentValue.Opposed));
+        this.motor4.setControl(new Follower(this.motor1.getDeviceID(),
+            MotorAlignmentValue.Opposed));
       }
     }
     m_request = new VelocityVoltage(0).withSlot(0);
-    setDefaultCommand(run(() -> {
-      if (idleSpeed < 5) {
-        setSpeed(0);
-        idleSpeed = 0;
-      } else {
-        setVelocity(idleSpeed);
-      }
-    }));
+    // setDefaultCommand(run(() -> {
+    // if (idleSpeed < 5) {
+    // setSpeed(0);
+    // idleSpeed = 0;
+    // } else {
+    // setVelocity(idleSpeed);
+    // }
+    // }));
   }
 
   public Command setIdleSpeedCommand(double idle) {

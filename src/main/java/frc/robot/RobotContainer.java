@@ -94,11 +94,12 @@ public class RobotContainer {
         // "canivore");
 
         public static final TalonFX loaderMotor = new TalonFX(32, canivore);
+
         public static final TalonFX shooterMotor1 = new TalonFX(33, canivore);
         public static final TalonFX shooterMotor2 = new TalonFX(34, canivore);
-        // TODO: set shoot motors 3 and 4 ids
-        public static final TalonFX shooterMotor3 = new TalonFX(60, canivore);
-        public static final TalonFX shooterMotor4 = new TalonFX(61, canivore);
+        public static final TalonFX shooterMotor3 = new TalonFX(35, canivore);
+        public static final TalonFX shooterMotor4 = new TalonFX(36, canivore);
+
         public static final TalonFX hoodMotor = new TalonFX(31, canivore);
         public static final TalonFX intakeRollerMotor = new TalonFX(27, canivore);
         public static final TalonFX intakeArmMotor = new TalonFX(26, canivore);
@@ -122,8 +123,9 @@ public class RobotContainer {
                         climberLowerClawsMotor);
 
         public static final GameTimer gameTimer = new GameTimer();
-        public static final Shooter shooter = new Shooter(shooterMotor1, shooterMotor2);
-        public static final Shooter2 shooter2 = new Shooter2(shooterMotor1, shooterMotor2, shooterMotor3,
+        // public static final Shooter shooter = new Shooter(shooterMotor1,
+        // shooterMotor2);
+        public static final Shooter2 shooter = new Shooter2(shooterMotor1, shooterMotor2, shooterMotor3,
                         shooterMotor4);
         public static final Hopper hopper = new Hopper(hopperMotor);
         public static final ShooterHood shooterHood = new ShooterHood(hoodMotor);
@@ -303,9 +305,9 @@ public class RobotContainer {
                                 shooter.setSpeedCommand(0),
                                 shooterHood.SetPositionByPidCommand(0)));
 
-                operatorPad.D_PAD_UP.onFalse(shooter2.setIdleSpeedCommand(0));
-                operatorPad.D_PAD_LEFT.onTrue(shooter2.setIdleSpeedCommand(40));
-                operatorPad.D_PAD_RIGHT.onTrue(shooter2.setIdleSpeedCommand(0));
+                operatorPad.D_PAD_UP.onFalse(shooter.setIdleSpeedCommand(0));
+                operatorPad.D_PAD_LEFT.onTrue(shooter.setIdleSpeedCommand(40));
+                operatorPad.D_PAD_RIGHT.onTrue(shooter.setIdleSpeedCommand(0));
 
                 // operatorPad.D_PAD_DOWN.onTrue(launchingTower.shootCloseCommand());
                 // operatorPad.D_PAD_DOWN.onFalse(new SequentialCommandGroup(
@@ -471,14 +473,14 @@ public class RobotContainer {
                 // debugStick.Button(2).onTrue(shooterHood.SetPositiongByPidCommand(0));
                 // debugStick.Button(4).onTrue(shooterHood.SetPositiongByPidCommand(25));
 
-                debugStick.Button(3).onTrue(
-                                hopper.setSpeedCommand(.5)
+                // debugStick.Button(3).onTrue(
+                // hopper.setSpeedCommand(.5)
                 // new ParallelRaceGroup(new WaitCommand(8),
                 // new DrivePointToHub().repeatedly(),
                 // launchingTower.fireFuelCommand()
                 // intakeArm.jiggleCommand().repeatedly()
-                );
-                debugStick.Button(3).onFalse(hopper.setSpeedCommand(0));
+                // );
+                // debugStick.Button(3).onFalse(hopper.setSpeedCommand(0));
 
                 // debugStick.Button(2).onFalse(shooterHood.setPowerCommand(0));
 
