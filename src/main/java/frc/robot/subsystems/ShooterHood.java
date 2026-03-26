@@ -23,7 +23,7 @@ public class ShooterHood extends SubsystemBase {
   private final PositionVoltage position = new PositionVoltage(0);
   final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(0);
   public final double min = 0;
-  public final double max = 30;
+  public final double max = 23;
   private double target;
 
   private double counter = 0;
@@ -50,7 +50,7 @@ public class ShooterHood extends SubsystemBase {
     configs.Voltage.PeakReverseVoltage = -12;
     configs.CurrentLimits.StatorCurrentLimitEnable = true;
     configs.CurrentLimits.StatorCurrentLimit = 40;
-    configs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    configs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
     // set Motion Magic settings
     var motionMagicConfigs = configs.MotionMagic;

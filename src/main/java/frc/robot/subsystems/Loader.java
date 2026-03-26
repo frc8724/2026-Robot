@@ -20,7 +20,7 @@ public class Loader extends SubsystemBase {
 
     TalonFXConfiguration configs = new TalonFXConfiguration();
 
-    configs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    configs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     this.motor.getConfigurator().apply(configs);
   }
 

@@ -453,13 +453,26 @@ public class RobotContainer {
                 // operatorPad.Button(4).onFalse(loader.setSpeedCommand(0));
                 // intakeArm.setDefaultCommand(intakeArm.controlWithAxis(operatorPad.Axis(frc.robot.controls.MayhemOperatorPad.Axis.RightY)));
 
-                debugStick.Button(3).onTrue(shooter.offsetShooterVelocityCommand(2));
-                debugStick.Button(2).onTrue(shooter.offsetShooterVelocityCommand(-2));
+                debugStick.Button(3).onTrue(shooter.setSpeedCommand(.2));
+                debugStick.Button(3).onFalse(shooter.setSpeedCommand(0));
 
-                debugStick.Button(4).onTrue(shooterHood.offsetPositionCommand(1));
-                debugStick.Button(5).onTrue(shooterHood.offsetPositionCommand(-1));
+                debugStick.Button(2).onTrue(shooter.setVelocityCommand(50));
+                debugStick.Button(2).onFalse(shooter.setSpeedCommand(0));
 
-                debugStick.Button(7).onTrue(loader.setSpeedCommand(1));
+                // debugStick.Button(3).onTrue(shooter.offsetShooterVelocityCommand(2));
+                // debugStick.Button(2).onTrue(shooter.offsetShooterVelocityCommand(-2));
+
+                // debugStick.Button(4).onTrue(shooterHood.offsetPositionCommand(1));
+                // debugStick.Button(5).onTrue(shooterHood.offsetPositionCommand(-1));
+
+                // debugStick.Button(4).onTrue(shooterHood.setPowerCommand(.1));
+                // debugStick.Button(4).onFalse(shooterHood.setPowerCommand(0));
+                // debugStick.Button(5).onTrue(shooterHood.setPowerCommand(-.1));
+                // debugStick.Button(5).onFalse(shooterHood.setPowerCommand(0));
+                debugStick.Button(4).onTrue(shooterHood.setPositionCommand(5));
+                debugStick.Button(5).onTrue(shooterHood.setPositionCommand(23));
+
+                debugStick.Button(7).onTrue(loader.setSpeedCommand(.5));
                 debugStick.Button(7).onFalse(loader.setSpeedCommand(0));
 
                 debugStick.Button(7).onTrue(hopper.setSpeedCommand(1));
