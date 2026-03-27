@@ -50,7 +50,7 @@ public class DrivePointToHub extends Command {
     // double txDeg = LimelightHelpers.getTX("limelight");
     // TODO: need to reverse alliances
     var robotPose = RobotContainer.drivetrain.getState().Pose;
-    var shooterPose = robotPose.plus(new Transform2d(.254, -.254, Rotation2d.fromDegrees(0)));
+    var shooterPose = robotPose.plus(new Transform2d(.254, -.254, Rotation2d.fromDegrees(180)));
     var hubPoseX = isBlueAlliance ? 4.6 : Constants.fieldLength - 4.6;
     var hubPoseY = 4;
 

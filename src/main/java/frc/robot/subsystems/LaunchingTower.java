@@ -94,13 +94,19 @@ public class LaunchingTower extends SubsystemBase {
       // new FiringSolution(3.34, 57, 17), // 2/26/26
       // new FiringSolution(4.14, 56, 23),
       // new FiringSolution(5.36, 62, 30),
-      new FiringSolution(0, 42, 3, 1),
-      new FiringSolution(0.8, 42, 4, 1),
-      new FiringSolution(1.23, 42, 8, 1),
-      new FiringSolution(2.6, 48, 20, 1), // good
-      new FiringSolution(3.45, 58, 18, 1),
-      new FiringSolution(3.65, 64, 19, 1),
-      new FiringSolution(5, 53, 17, 1),
+
+      // new FiringSolution(0, 42, 3, 1),
+      // new FiringSolution(0.8, 42, 4, 1),
+      // new FiringSolution(1.23, 42, 8, 1),
+      // new FiringSolution(2.6, 48, 20, 1), // good
+      // new FiringSolution(3.45, 58, 18, 1),
+      // new FiringSolution(3.65, 64, 19, 1),
+      // new FiringSolution(5, 53, 17, 1),
+
+      new FiringSolution(0.0, 34, 10, 1),
+      new FiringSolution(1.36, 34, 10, 1), // 3/26/26
+      new FiringSolution(10, 42, 18, 1),
+
   };
 
   public LaunchingTower(Shooter2 shooter, ShooterHood hood, Loader loader, Hopper hopper) {
