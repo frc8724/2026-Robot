@@ -19,9 +19,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class DrivePointToHub extends Command {
 
-  public static final double ROTATE_KP_RAD_PER_SEC_PER_DEG = 0.06 * 180;
+  public static final double ROTATE_KP_RAD_PER_SEC_PER_DEG = 0.1 * 180;
   public static final double ROTATE_MAX_OMEGA_RAD_PER_SEC = 4.0;
-  public static final double ROTATE_DEADBAND_DEG = Units.degreesToRadians(3.0);
+  public static final double ROTATE_DEADBAND_RAD = Units.degreesToRadians(1);
   private int counter = 0;
 
   double angleRad;
@@ -50,7 +50,7 @@ public class DrivePointToHub extends Command {
     // double txDeg = LimelightHelpers.getTX("limelight");
     // TODO: need to reverse alliances
     var robotPose = RobotContainer.drivetrain.getState().Pose;
-    var shooterPose = robotPose.plus(new Transform2d(.254, -.254, Rotation2d.fromDegrees(180)));
+    var shooterPose = robotPose.plus(new Transform2d(-.0, .254, Rotation2d.fromDegrees(180)));
     var hubPoseX = isBlueAlliance ? 4.6 : Constants.fieldLength - 4.6;
     var hubPoseY = 4;
 
@@ -93,7 +93,7 @@ public class DrivePointToHub extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Math.abs(angleRad) < ROTATE_DEADBAND_DEG) {
+    if (Math.abs(angleRad) < ROTATE_DEADBAND_RAD) {
       counter += 1;
     } else {
       counter = 0;

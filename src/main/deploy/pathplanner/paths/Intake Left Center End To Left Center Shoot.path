@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.826806818181819,
-        "y": 5.0
+        "x": 8.084477272727272,
+        "y": 4.581261363636363
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.795886363636363,
-        "y": 6.978909090909091
+        "x": 8.053556818181816,
+        "y": 6.560170454545454
       },
       "isLocked": false,
       "linkedName": "Intake Center Left Deep End"

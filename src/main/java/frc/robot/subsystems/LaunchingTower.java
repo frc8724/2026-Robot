@@ -33,6 +33,7 @@ public class LaunchingTower extends SubsystemBase {
   private ShooterHood hood;
   private Loader loader;
   private Hopper hopper;
+  private final double loaderSpeed = 0.8;
 
   class FiringSolution {
     public double distance;
@@ -105,7 +106,13 @@ public class LaunchingTower extends SubsystemBase {
 
       new FiringSolution(0.0, 34, 10, 1),
       new FiringSolution(1.36, 34, 10, 1), // 3/26/26
-      new FiringSolution(10, 42, 18, 1),
+      new FiringSolution(1.85, 36, 12, 1.05), // 3/27/26
+      new FiringSolution(2.35, 37, 14, 1.07), // 3/27/26
+      new FiringSolution(2.86, 39, 17, 1.25), // 3/27/26
+      new FiringSolution(3.37, 41, 20, 1.18), // 3/27/26
+      new FiringSolution(3.90, 41.5, 23, 1.18), // 3/27/26
+      new FiringSolution(4.75, 45, 23, 1.20), // 3/27/26
+      new FiringSolution(10, 45, 23, 4),
 
   };
 
@@ -139,7 +146,7 @@ public class LaunchingTower extends SubsystemBase {
     return run(() -> {
       var currentDistance = RobotContainer.drivetrain.distanceToHub();
       // Temporarily always feed (test mode)
-      loader.setSpeed(1);
+      loader.setSpeed(loaderSpeed);
       hopper.setSpeed(1);
 
       hood.setPositionByPid(convertDistanceToHood(currentDistance));
@@ -205,7 +212,7 @@ public class LaunchingTower extends SubsystemBase {
     shooter.setVelocity(10);
     hood.setPositionByPid(4);
     if (shooter.isAtTargetSpeed()) {
-      loader.setSpeed(1);
+      loader.setSpeed(loaderSpeed);
       hopper.setSpeed(1);
     } else {
       loader.setSpeed(0);

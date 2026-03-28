@@ -142,27 +142,37 @@ public class RobotContainer {
                 }
 
                 m_auto.addAuto("Stand Still", new WaitCommand(2));
-                m_auto.addAuto("Shoot Center Climb", new PathPlannerAuto("Shoot Center Climb"));
-                // m_auto.addAuto("Shoot Depot Shoot Left", new PathPlannerAuto("Shoot Depot
-                // Shoot Left"));
-                m_auto.addAuto("Outpost Shoot Right", new PathPlannerAuto("Outpost Shoot Right"));
-                m_auto.addAuto("Trench Left Shoot Once From Center",
-                                new PathPlannerAuto("Trench Left Shoot Once From Center"));
-                m_auto.addAuto("Trench Right Shoot Once From Center",
-                                new PathPlannerAuto("Trench Right Shoot Once From Center"));
-                m_auto.addAuto("Center Depo Outpost Shoot Center",
-                                new PathPlannerAuto("Center Depo Outpost Shoot Center"));
-                m_auto.addAuto("Center To Depo Test",
-                                new PathPlannerAuto("Center To Depo Test"));
-                m_auto.addAuto("Center Depo Shoot Center",
-                                new PathPlannerAuto("Center Depo Shoot Center"));
-                m_auto.addAuto("Trench Left Shoot Once FROM TRENCH!!!!!!",
-                                new PathPlannerAuto("Trench Left Shoot Once From Trench"));
-                m_auto.addAuto("Trench Right Shoot Once FROM TRENCH!!!!!!",
-                                new PathPlannerAuto("Trench Right Shoot Once From Trench"));
-                m_auto.addAuto("Center Depo Shoot Depo",
-                                new PathPlannerAuto("Center Depo Shoot Depo"));
-                m_auto.addAuto("Wrecker", new PathPlannerAuto("Wrecker"));
+                // m_auto.addAuto("Shoot Center Climb", new PathPlannerAuto("Shoot Center
+                // Climb"));
+                // // m_auto.addAuto("Shoot Depot Shoot Left", new PathPlannerAuto("Shoot Depot
+                // // Shoot Left"));
+                // m_auto.addAuto("Outpost Shoot Right", new PathPlannerAuto("Outpost Shoot
+                // Right"));
+                // m_auto.addAuto("Trench Left Shoot Once From Center",
+                // new PathPlannerAuto("Trench Left Shoot Once From Center"));
+                // m_auto.addAuto("Trench Right Shoot Once From Center",
+                // new PathPlannerAuto("Trench Right Shoot Once From Center"));
+                // m_auto.addAuto("Center Depo Outpost Shoot Center",
+                // new PathPlannerAuto("Center Depo Outpost Shoot Center"));
+                // m_auto.addAuto("Center To Depo Test",
+                // new PathPlannerAuto("Center To Depo Test"));
+                // m_auto.addAuto("Center Depo Shoot Center",
+                // new PathPlannerAuto("Center Depo Shoot Center"));
+                // m_auto.addAuto("Trench Left Shoot Once FROM TRENCH!!!!!!",
+                // new PathPlannerAuto("Trench Left Shoot Once From Trench"));
+                // m_auto.addAuto("Trench Right Shoot Once FROM TRENCH!!!!!!",
+                // new PathPlannerAuto("Trench Right Shoot Once From Trench"));
+                // m_auto.addAuto("Center Depo Shoot Depo",
+                // new PathPlannerAuto("Center Depo Shoot Depo"));
+                // m_auto.addAuto("Wrecker", new PathPlannerAuto("Wrecker"));
+                m_auto.addAuto("Start Left Trench Center Scoop Over Bump Shoot 1",
+                                new PathPlannerAuto("Start Left Trench Center Scoop Over Bump Shoot 1"));
+                m_auto.addAuto("Slow Test Left Trench Center Scoop Over Bump Shoot 1",
+                                new PathPlannerAuto("Slow Test Left Trench Center Scoop Over Bump Shoot 1"));
+                m_auto.addAuto("Test Center Creep Forward",
+                                new PathPlannerAuto("Test Center Creep Forward"));
+                m_auto.addAuto("Test Center Creep Backward",
+                                new PathPlannerAuto("Test Center Creep Backward"));
                 m_auto.addAuto("test", new PathPlannerAuto("test"));
 
         }
@@ -299,7 +309,7 @@ public class RobotContainer {
 
                 // shoot sequence
                 operatorPad.D_PAD_UP.onTrue(launchingTower.fireFuelCommand());
-                operatorPad.D_PAD_UP.onFalse(new SequentialCommandGroup(
+                operatorPad.D_PAD_UP.onFalse(new ParallelCommandGroup(
                                 loader.turnOffCommand(),
                                 hopper.turnOffCommand(),
                                 // shooter.setVelocityCommand(0),
@@ -307,7 +317,7 @@ public class RobotContainer {
                                 shooterHood.SetPositionByPidCommand(0)));
 
                 operatorPad.D_PAD_UP.onFalse(shooter.setIdleSpeedCommand(0));
-                operatorPad.D_PAD_LEFT.onTrue(shooter.setIdleSpeedCommand(40));
+                operatorPad.D_PAD_LEFT.onTrue(shooter.setIdleSpeedCommand(20));
                 operatorPad.D_PAD_RIGHT.onTrue(shooter.setIdleSpeedCommand(0));
 
                 // operatorPad.D_PAD_DOWN.onTrue(launchingTower.shootCloseCommand());
@@ -463,7 +473,7 @@ public class RobotContainer {
                 // debugStick.Button(2).onFalse(shooter.setSpeedCommand(0));
 
                 debugStick.Button(3).onTrue(shooter.offsetShooterVelocityCommand(2));
-                debugStick.Button(2).onTrue(shooter.offsetShooterVelocityCommand(-2));
+                debugStick.Button(2).onTrue(shooter.offsetShooterVelocityCommand(-1));
 
                 debugStick.Button(4).onTrue(shooterHood.offsetPositionCommand(1));
                 debugStick.Button(5).onTrue(shooterHood.offsetPositionCommand(-1));

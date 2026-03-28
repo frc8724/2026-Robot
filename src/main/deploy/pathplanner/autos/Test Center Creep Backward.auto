@@ -1,0 +1,25 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Creep sideways"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Creep sideways 2"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Drum",
+  "choreoAuto": false
+}

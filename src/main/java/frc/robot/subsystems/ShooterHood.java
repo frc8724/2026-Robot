@@ -122,7 +122,7 @@ public class ShooterHood extends SubsystemBase {
 
   public Command setPositionCommand(double pos) {
     return run(() -> {
-      setPositionByMM(pos);
+      setPositionByPid(pos);
     }).until(() -> {
       return isAtPosition(pos);
     });

@@ -4,15 +4,15 @@
     {
       "anchor": {
         "x": 3.6525454545454545,
-        "y": 7.487784090909091
+        "y": 7.364102272727273
       },
       "prevControl": null,
       "nextControl": {
         "x": 4.765681818181817,
-        "y": 7.456863636363637
+        "y": 7.333181818181818
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Start left trench"
     },
     {
       "anchor": {

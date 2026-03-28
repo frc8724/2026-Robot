@@ -827,7 +827,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             });
         }
         // add vision estimate
-        var estimate = Vision.combineVisionEstemates(RobotContainer.visions, 1);
+        var estimate = Vision.combineVisionEstemates(RobotContainer.visions, 2);
         if (estimate != null) {
             RobotContainer.drivetrain.addVisionMeasurement(estimate,
                     Timer.getFPGATimestamp());

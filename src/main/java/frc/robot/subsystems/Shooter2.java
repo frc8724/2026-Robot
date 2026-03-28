@@ -68,18 +68,26 @@ public class Shooter2 extends SubsystemBase {
       }
     }
     m_request = new VelocityVoltage(0).withSlot(0);
-    // setDefaultCommand(run(() -> {
-    // if (idleSpeed < 5) {
-    // setSpeed(0);
-    // idleSpeed = 0;
-    // } else {
-    // setVelocity(idleSpeed);
-    // }
-    // }));
+    setDefaultCommand(run(() -> {
+      if (targetSpeed == 0) {
+        if (idleSpeed < 5) {
+          setSpeed(0);
+          idleSpeed = 0;
+        } else {
+          // setVelocity(idleSpeed);
+          if (motor1 != null) {
+            motor1.setControl(m_request.withVelocity(idleSpeed));
+          }
+        }
+      } else {
+        setVelocity(targetSpeed);
+      }
+    }));
   }
 
   public Command setIdleSpeedCommand(double idle) {
     return runOnce(() -> {
+      targetSpeed = 0;
       idleSpeed = idle;
     });
   }
