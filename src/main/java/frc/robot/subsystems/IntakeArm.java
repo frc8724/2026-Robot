@@ -23,7 +23,8 @@ public class IntakeArm extends SubsystemBase {
   /** Creates a new IntakeArm. */
   TalonFX motor;
   // private double down = -18;
-  private double down = -21.5;
+  // private double down = -21.5;
+  private double down = -18.5;
   private double half = -5;
   private double up = 0;
   // private double up = -5;

@@ -56,7 +56,8 @@ public class RobotContainer {
 
         /* Setting up bindings for necessary control of the swerve drive platform */
         private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-                        .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.3) // Add a 10% deadband
+                        .withDeadband(MaxSpeed * 0.1) // Add a 10% deadband
+                        // .withRotationalDeadband(MaxAngularRate * 0.75)
                         .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive
                                                                                  // motors
 
@@ -399,11 +400,17 @@ public class RobotContainer {
                                                         multiplier *= regionMultiplier;
                                                         var rotMultiplier = multiplier * 1.375;
 
+                                                        double rotAxis = -driverStick.getRawAxis(Axis.Z);
+                                                        double deadband = .5;
+                                                        if (Math.abs(rotAxis) < deadband) {
+                                                                rotAxis = 0;
+                                                        }
+
                                                         double xCmd = -driverStick.getRawAxis(Axis.Y) * MaxSpeed
                                                                         * multiplier;
                                                         double yCmd = -driverStick.getRawAxis(Axis.X) * MaxSpeed
                                                                         * multiplier;
-                                                        double rotCmd = -driverStick.getRawAxis(Axis.Z) * MaxAngularRate
+                                                        double rotCmd = rotAxis * MaxAngularRate
                                                                         * rotMultiplier;
 
                                                         double xLimited = xLimiter.calculate(xCmd);

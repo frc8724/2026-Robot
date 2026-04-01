@@ -51,7 +51,7 @@ public class DrivePointToHub extends Command {
     // double txDeg = LimelightHelpers.getTX("limelight");
 
     var robotPose = RobotContainer.drivetrain.getState().Pose;
-    var shooterPose = robotPose.plus(new Transform2d(0, 0.05, Rotation2d.fromDegrees(180)));
+    var shooterPose = robotPose.plus(new Transform2d(0, 0.1, Rotation2d.fromDegrees(180)));
 
     Vector2D target = RobotContainer.drivetrain.getRegionTargetVector2D();
     SmartDashboard.putString("dynamic target", target.toString());

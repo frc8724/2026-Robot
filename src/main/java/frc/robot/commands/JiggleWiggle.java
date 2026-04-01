@@ -26,12 +26,23 @@ public class JiggleWiggle extends SequentialCommandGroup {
         rollers.intakeCommand(),
         new WaitCommand(.5),
         rollers.turnOffCommand(),
-        arm.goToHalfCommand(),
+        arm.goToUpCommand(),
         new WaitCommand(.5),
         arm.goToDownCommand(),
         rollers.intakeCommand(),
         new WaitCommand(.5),
         rollers.turnOffCommand(),
-        arm.goToHalfCommand());
+        arm.goToUpCommand());
+    // arm.goToDownCommand(),
+    // rollers.intakeCommand(),
+    // new WaitCommand(.5),
+    // rollers.turnOffCommand(),
+    // arm.goToHalfCommand(),
+    // new WaitCommand(.5),
+    // arm.goToDownCommand(),
+    // rollers.intakeCommand(),
+    // new WaitCommand(.5),
+    // rollers.turnOffCommand(),
+    // arm.goToHalfCommand());
   }
 }
