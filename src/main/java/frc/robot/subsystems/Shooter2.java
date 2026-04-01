@@ -108,6 +108,12 @@ public class Shooter2 extends SubsystemBase {
     setSpeed(0);
   }
 
+  public Command initCommand() {
+    return runOnce(() -> {
+      init();
+    });
+  }
+
   public void addOffset(double o) {
     offset += o;
   }

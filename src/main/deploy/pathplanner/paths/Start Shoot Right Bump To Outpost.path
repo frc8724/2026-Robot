@@ -1,0 +1,147 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.9619886363636363,
+        "y": 2.996
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.941375,
+        "y": 2.0148636363636365
+      },
+      "isLocked": false,
+      "linkedName": "Shoot Drum Right Bump"
+    },
+    {
+      "anchor": {
+        "x": 2.611556818181818,
+        "y": 0.6131363636363643
+      },
+      "prevControl": {
+        "x": 3.188738636363636,
+        "y": 0.6028295454545458
+      },
+      "nextControl": {
+        "x": 2.2876711526654367,
+        "y": 0.6189200362348712
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.4471249999999998,
+        "y": 0.6131363636363643
+      },
+      "prevControl": {
+        "x": 0.6971172970095045,
+        "y": 0.6150988711933956
+      },
+      "nextControl": {
+        "x": 0.1971327029904948,
+        "y": 0.6111738560793329
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.3023522727272723,
+        "y": 2.7260340909090917
+      },
+      "prevControl": {
+        "x": 1.6633295454545451,
+        "y": 2.334375000000001
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.6383647798742138,
+      "rotationDegrees": 180.0
+    },
+    {
+      "waypointRelativePos": 1.9716981132075575,
+      "rotationDegrees": 180.0
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 1.7127468581687606,
+      "maxWaypointRelativePos": 1.9066427289048489,
+      "constraints": {
+        "maxVelocity": 0.5,
+        "maxAcceleration": 0.5,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    },
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 1.4057450628366241,
+      "maxWaypointRelativePos": 1.8366247755834832,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 1.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    },
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 2.4991023339317766,
+      "maxWaypointRelativePos": 3.0,
+      "constraints": {
+        "maxVelocity": 2.0,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intake Down",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Intake Down"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -157.989
+  },
+  "reversed": false,
+  "folder": "Drum",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -157.989
+  },
+  "useDefaultConstraints": true
+}

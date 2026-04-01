@@ -52,6 +52,7 @@ import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.RobotContainer;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
@@ -112,7 +113,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public final Pose2d bumpRightClose = new Pose2d(13.2, 5.5, new Rotation2d(Units.degreesToRadians(225)));
     public final Pose2d bumpRightFar = new Pose2d(10.4, 5.5, new Rotation2d(Units.degreesToRadians(225)));
 
-    public final Pose2d hubMidPoint = new Pose2d(12.07, 3.93, new Rotation2d(Units.degreesToRadians(0)));
+    public final Pose2d hubMidPoint = new Pose2d(12.07, 3.93,
+            new Rotation2d(Units.degreesToRadians(0)));
+    public final Pose2d blueHubMidPoint = new Pose2d(Constants.fieldLength - 12.07, 3.93,
+            new Rotation2d(Units.degreesToRadians(0)));
+    public final Pose2d redHubMidPoint = new Pose2d(12.07, 3.93,
+            new Rotation2d(Units.degreesToRadians(0)));
     /*
      * SysId routine for characterizing translation. This is used to find PID gains
      * for the drive motors.
@@ -308,10 +314,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         public Vector2D getTarget(Pose2d pose) {
             return isInRegion(pose) ? target : new LaunchingTower.Vector2D(0, 0).fromPose2D(hubMidPoint);
         }
-
-        public Vector2D getTarget() {
-            return isInRegion() ? target : new LaunchingTower.Vector2D(0, 0).fromPose2D(hubMidPoint);
-        }
     }
 
     // public Region bumpBlueRegion = new Region(0, 0, 10, 10, .5);
@@ -319,9 +321,26 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public SpeedRegion[] speedRegions = new SpeedRegion[] {
             new SpeedRegion(10, 2.5, 20, 5.5, .1)
     };
-    public TargetRegion[] targetRegions = new TargetRegion[] {
-            new TargetRegion(0, 0, 4, 4, hubMidPoint)
-    };
+
+    final TargetRegion blueRightMidRegion = new TargetRegion(blueHubMidPoint.getX(), blueHubMidPoint.getY(),
+            Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY,
+            new Vector2D(1, 1));
+    final TargetRegion blueLeftMidRegion = new TargetRegion(blueHubMidPoint.getX(), blueHubMidPoint.getY(),
+            Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY,
+            new Vector2D(1, Constants.fieldWidth - 1));
+    final TargetRegion blueAllianceRegion = new TargetRegion(blueHubMidPoint.getX(), Double.NEGATIVE_INFINITY,
+            Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY,
+            new Vector2D(blueHubMidPoint.getX(), blueHubMidPoint.getY()));
+
+    final TargetRegion redRightMidRegion = new TargetRegion(redHubMidPoint.getX(), redHubMidPoint.getY(),
+            Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY,
+            new Vector2D(Constants.fieldLength - 1, Constants.fieldWidth - 1));
+    final TargetRegion redLeftMidRegion = new TargetRegion(redHubMidPoint.getX(), redHubMidPoint.getY(),
+            Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY,
+            new Vector2D(Constants.fieldLength - 1, 1));
+    final TargetRegion redAllianceRegion = new TargetRegion(redHubMidPoint.getX(), Double.NEGATIVE_INFINITY,
+            Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY,
+            new Vector2D(redHubMidPoint.getX(), redHubMidPoint.getY()));
 
     /**
      * Constructs a CTRE SwerveDrivetrain using the specified constants.
@@ -421,25 +440,27 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public Vector2D getRegionTargetVector2D() {
-        Vector2D t = new Vector2D(0, 0).fromPose2D(hubMidPoint);
-        for (int i = 0; i < targetRegions.length; i++) {
-            var reg = targetRegions[i];
-            if (reg.isInRegion()) {
-                t = reg.target;
+        if (DriverStation.getAlliance().get() == Alliance.Blue) {
+            if (blueLeftMidRegion.isInRegion()) {
+                return blueLeftMidRegion.target;
             }
+            if (blueRightMidRegion.isInRegion()) {
+                return blueRightMidRegion.target;
+            }
+            return blueAllianceRegion.target;
+        } else {
+            if (redLeftMidRegion.isInRegion()) {
+                return redLeftMidRegion.target;
+            }
+            if (redRightMidRegion.isInRegion()) {
+                return redRightMidRegion.target;
+            }
+            return redAllianceRegion.target;
         }
-        return t;
     }
 
     public Pose2d getRegionTargetPose2D() {
-        Vector2D t = new Vector2D(0, 0).fromPose2D(hubMidPoint);
-        for (int i = 0; i < targetRegions.length; i++) {
-            var reg = targetRegions[i];
-            if (reg.isInRegion()) {
-                t = reg.target;
-            }
-        }
-        return t.toPose2D();
+        return getRegionTargetVector2D().toPose2D();
     }
 
     public Command zeroBotRotationCommand() {
@@ -610,7 +631,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         });
     }
 
-    public double distanceToHub() {
+    private double distanceToHub() {
         var hubPose = translatePose(hubMidPoint);
         var robotPose = this.getState().Pose;
         var diff = hubPose.minus(robotPose);

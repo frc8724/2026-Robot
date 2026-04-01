@@ -49,7 +49,7 @@ public class LaunchingTower extends SubsystemBase {
     }
   };
 
-  static class Vector2D {
+  public static class Vector2D {
     public double x;
     public double y;
 
@@ -83,6 +83,14 @@ public class LaunchingTower extends SubsystemBase {
       x += v.x;
       y += v.y;
       return this;
+    }
+
+    public double distanceTo(Vector2D v) {
+      return Math.sqrt(Math.pow(x - v.x, 2) + Math.pow(y - v.y, 2));
+    }
+
+    public String toString() {
+      return "x: " + x + " y: " + y;
     }
   }
 
@@ -124,18 +132,30 @@ public class LaunchingTower extends SubsystemBase {
   }
 
   private Command prepareToFireAtCommand() {
+    var distance = getDistanceToTarget();
     DoubleSupplier dub1 = () -> {
-      var distance = RobotContainer.drivetrain.distanceToHub();
       return convertDistanceToHood(distance);
     };
     DoubleSupplier dub2 = () -> {
-      var distance = RobotContainer.drivetrain.distanceToHub();
-      return convertDistanceToShooterRPM(distance);
+      return convertDistanceToShooterRPS(distance);
     };
     return new ParallelCommandGroup(
         // hood.SetPositiongByMMCommand(dub1),
         hood.SetPositionByPidCommand(dub1),
-        shooter.setVelocityCommand(dub2));
+        shooter.setVelocityCommand(dub2)).finallyDo(() -> {
+          loader.setSpeed(0);
+          // shooter.setVelocity(0);
+          shooter.setSpeed(0);
+          hood.setPositionByPid(0);
+          hopper.setSpeed(0);
+        });
+  }
+
+  private double getDistanceToTarget() {
+    Vector2D target = RobotContainer.drivetrain.getRegionTargetVector2D();
+    var pos = RobotContainer.drivetrain.getState().Pose;
+    var robotV = new Vector2D(0, 0).fromPose2D(pos);
+    return target.distanceTo(robotV);
   }
 
   private Command fireCommand() {
@@ -144,13 +164,13 @@ public class LaunchingTower extends SubsystemBase {
 
   private Command fireLoaderShooterHoodCommand() {
     return run(() -> {
-      var currentDistance = RobotContainer.drivetrain.distanceToHub();
+      var currentDistance = getDistanceToTarget();
       // Temporarily always feed (test mode)
       loader.setSpeed(loaderSpeed);
       hopper.setSpeed(1);
 
       hood.setPositionByPid(convertDistanceToHood(currentDistance));
-      shooter.setVelocity(convertDistanceToShooterRPM(currentDistance));
+      shooter.setVelocity(convertDistanceToShooterRPS(currentDistance));
     }).finallyDo(() -> {
       loader.setSpeed(0);
       // shooter.setVelocity(0);
@@ -168,8 +188,8 @@ public class LaunchingTower extends SubsystemBase {
     }, new HashSet<Subsystem>(Arrays.asList(hood, shooter, loader, hopper)));
   }
 
-  public double convertDistanceToShooterRPM(double distance) {
-    // return 50;
+  public double convertDistanceToShooterRPS(double distance) {
+    // return 10;
     return getSolution(distance).shooterSpeed;
   }
 
@@ -220,6 +240,14 @@ public class LaunchingTower extends SubsystemBase {
     }
   }
 
+  public Command shutDownCommand() {
+    return new ParallelCommandGroup(
+        loader.setSpeedCommand(0),
+        shooter.initCommand(),
+        hood.SetPositionByPidCommand(0),
+        hopper.setSpeedCommand(0));
+  }
+
   /**
    * returns the position that the robot should point towards
    * 
@@ -229,7 +257,7 @@ public class LaunchingTower extends SubsystemBase {
     var loops = 5;
     var velocity = new Vector2D(RobotContainer.drivetrain.getState().Speeds.vxMetersPerSecond,
         RobotContainer.drivetrain.getState().Speeds.vxMetersPerSecond);
-    var solution = getSolution(RobotContainer.drivetrain.distanceToHub());
+    var solution = getSolution(getDistanceToTarget());
     var offset = velocity.clone().multiplyByDouble(-solution.airTime);
     var target = new Vector2D(0, 0).fromPose2D(RobotContainer.drivetrain.hubMidPoint).addVector(offset);
 
@@ -255,7 +283,7 @@ public class LaunchingTower extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    var solution = getSolution(RobotContainer.drivetrain.distanceToHub());
+    var solution = getSolution(getDistanceToTarget());
     SmartDashboard.putNumber("firing solution:distance", solution.distance);
     SmartDashboard.putNumber("firing solution:shooter_speed", solution.shooterSpeed);
     SmartDashboard.putNumber("firing solution:hood_position", solution.hoodPosition);

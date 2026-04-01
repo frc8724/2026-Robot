@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.LaunchingTower.Vector2D;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class DrivePointToHub extends Command {
@@ -48,14 +49,17 @@ public class DrivePointToHub extends Command {
 
     // --- Rotation control (tx -> 0), using your proven sign convention ---
     // double txDeg = LimelightHelpers.getTX("limelight");
-    // TODO: need to reverse alliances
-    var robotPose = RobotContainer.drivetrain.getState().Pose;
-    var shooterPose = robotPose.plus(new Transform2d(-.0, .254, Rotation2d.fromDegrees(180)));
-    var hubPoseX = isBlueAlliance ? 4.6 : Constants.fieldLength - 4.6;
-    var hubPoseY = 4;
 
-    var relativeX = hubPoseX - shooterPose.getX();
-    var relativeY = hubPoseY - shooterPose.getY();
+    var robotPose = RobotContainer.drivetrain.getState().Pose;
+    var shooterPose = robotPose.plus(new Transform2d(0, 0.05, Rotation2d.fromDegrees(180)));
+
+    Vector2D target = RobotContainer.drivetrain.getRegionTargetVector2D();
+    SmartDashboard.putString("dynamic target", target.toString());
+    var targetX = target.x;
+    var targetY = target.y;
+
+    var relativeX = targetX - shooterPose.getX();
+    var relativeY = targetY - shooterPose.getY();
     angleRad = Math.atan2(relativeY, relativeX) - shooterPose.getRotation().getRadians();
 
     if (angleRad > Math.PI) {

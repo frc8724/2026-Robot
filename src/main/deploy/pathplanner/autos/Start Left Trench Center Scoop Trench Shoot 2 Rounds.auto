@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Start Left Trench to Center Intake Over Bump New"
+            "pathName": "Start Left Trench Center Scoop Trench"
           }
         },
         {
@@ -32,6 +32,18 @@
           "type": "named",
           "data": {
             "name": "Shut Down Shooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Second Helpings Left Trench"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot 4s Intake Jiggle"
           }
         }
       ]

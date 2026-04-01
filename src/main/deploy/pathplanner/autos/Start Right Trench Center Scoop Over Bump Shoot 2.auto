@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Start Left Trench to Center Intake Over Bump New"
+            "pathName": "Start Right Trench to Center Intake Over Bump New"
           }
         },
         {
@@ -32,6 +32,18 @@
           "type": "named",
           "data": {
             "name": "Shut Down Shooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Start Right Shoot Under Trench To Center Second Time"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot 16s Intake Jiggle"
           }
         }
       ]

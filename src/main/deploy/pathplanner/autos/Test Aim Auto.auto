@@ -5,21 +5,15 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "Intake Down"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.25
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "Slow Test Start Left Trench Center Scoop Over Bump"
+            "pathName": "Test Aim Auto"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot 4s Intake Jiggle"
           }
         }
       ]
