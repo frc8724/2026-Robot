@@ -3,32 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0137613636363634,
-        "y": 2.282840909090909
+        "x": 0.47804545454545433,
+        "y": 6.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4262727272728073,
-        "y": 1.7262727272719598
+        "x": 1.4780454545454544,
+        "y": 6.0
       },
       "isLocked": false,
-      "linkedName": "Outpost align 1"
+      "linkedName": "Depo Collected"
     },
     {
       "anchor": {
-        "x": 0.48835227272727255,
-        "y": 0.6543636363636369
+        "x": 2.632170454545454,
+        "y": 5.498568181818182
       },
       "prevControl": {
-        "x": 1.0449204545454536,
-        "y": 1.1078636363636374
+        "x": 1.6736363636363634,
+        "y": 5.9108409090909095
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "outpost"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.38993710691823863,
+      "rotationDegrees": 180.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -42,13 +47,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 142.7651660184254
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Drum",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

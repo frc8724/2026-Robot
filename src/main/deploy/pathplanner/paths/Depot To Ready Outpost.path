@@ -1,0 +1,83 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.47804545454545433,
+        "y": 6.0
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.900147727272727,
+        "y": 6.457102272727273
+      },
+      "isLocked": false,
+      "linkedName": "Depo Collected"
+    },
+    {
+      "anchor": {
+        "x": 2.096215909090909,
+        "y": 3.251681818181819
+      },
+      "prevControl": {
+        "x": 2.1014446187894262,
+        "y": 4.269021027951444
+      },
+      "nextControl": {
+        "x": 2.0935497159090914,
+        "y": 2.7329261363636377
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.096215909090909,
+        "y": 0.6646704545454554
+      },
+      "prevControl": {
+        "x": 2.178670454545454,
+        "y": 1.4376818181818185
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Outpost ready"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.2547169811320755,
+      "rotationDegrees": 180.0
+    },
+    {
+      "waypointRelativePos": 0.7421383647798742,
+      "rotationDegrees": 90.0
+    },
+    {
+      "waypointRelativePos": 1.3867924528301978,
+      "rotationDegrees": 90.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": "Drum",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

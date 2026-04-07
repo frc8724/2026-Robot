@@ -16,6 +16,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ShooterHood extends SubsystemBase {
@@ -23,7 +24,7 @@ public class ShooterHood extends SubsystemBase {
   private final PositionVoltage position = new PositionVoltage(0);
   final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(0);
   public final double min = 0;
-  public final double max = 23;
+  public final double max = 19;
   private double target;
 
   private double counter = 0;
@@ -76,14 +77,14 @@ public class ShooterHood extends SubsystemBase {
   public void setPositionByMM(double pos) {
     if (motor != null) {
       // motor.setControl(position.withPosition(pos));
-      target = pos;
+      target = clamp(pos);
       motor.setControl(motionMagicRequest.withPosition(clamp(pos)));
     }
   }
 
   public void setPositionByPid(double pos) {
     if (motor != null) {
-      target = pos;
+      target = clamp(pos);
       motor.setControl(position.withPosition(clamp(pos)));
     }
   }
@@ -135,6 +136,7 @@ public class ShooterHood extends SubsystemBase {
   public Command offsetPositionCommand(double offset) {
     return defer(() -> {
       this.target += offset;
+      this.target = clamp(this.target);
       return setPositionCommand(this.target);
     });
   }
@@ -155,6 +157,20 @@ public class ShooterHood extends SubsystemBase {
     });
   }
 
+  public Command manualZeroCommand() {
+    return new SequentialCommandGroup(
+        putDownCommand(),
+        zeroCommand());
+  }
+
+  private Command putDownCommand() {
+    return run(() -> {
+      setPower(-.05);
+    }).finallyDo(() -> {
+      setPower(0);
+    }).withTimeout(1.0);
+  }
+
   public double getPosition() {
     if (motor == null) {
       return 0;
@@ -164,6 +180,7 @@ public class ShooterHood extends SubsystemBase {
 
   public boolean isAtPosition(double targetPos) {
     // return Math.abs(targetPos - getPosition()) < .02;
+    targetPos = clamp(targetPos);
     return (Math.abs(getPosition() - targetPos) < tolerance) && counter >= toloeranceCounter;
   }
 

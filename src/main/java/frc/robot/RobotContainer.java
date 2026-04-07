@@ -99,7 +99,8 @@ public class RobotContainer {
         public static final TalonFX shooterMotor1 = new TalonFX(33, canivore);
         public static final TalonFX shooterMotor2 = new TalonFX(34, canivore);
         public static final TalonFX shooterMotor3 = new TalonFX(35, canivore);
-        public static final TalonFX shooterMotor4 = new TalonFX(36, canivore);
+        // public static final TalonFX shooterMotor4 = new TalonFX(36, canivore);
+        public static final TalonFX shooterMotor4 = null;
 
         public static final TalonFX hoodMotor = new TalonFX(31, canivore);
         public static final TalonFX intakeRollerMotor = new TalonFX(27, canivore);
@@ -159,15 +160,17 @@ public class RobotContainer {
                 // new PathPlannerAuto("Center To Depo Test"));
                 // m_auto.addAuto("Center Depo Shoot Center",
                 // new PathPlannerAuto("Center Depo Shoot Center"));
-                m_auto.addAuto("Trench Left Shoot Once FROM TRENCH old!!!!!!",
-                                new PathPlannerAuto("Trench Left Shoot Once From Trench"));
-                m_auto.addAuto("Trench Right Shoot Once FROM TRENCH old!!!!!!",
-                                new PathPlannerAuto("Trench Right Shoot Once From Trench"));
+
+                // m_auto.addAuto("Trench Left Shoot Once FROM TRENCH old!!!!!!",
+                // new PathPlannerAuto("Trench Left Shoot Once From Trench"));
+                // m_auto.addAuto("Trench Right Shoot Once FROM TRENCH old!!!!!!",
+                // new PathPlannerAuto("Trench Right Shoot Once From Trench"));
                 // m_auto.addAuto("Center Depo Shoot Depo",
                 // new PathPlannerAuto("Center Depo Shoot Depo"));
                 // m_auto.addAuto("Wrecker", new PathPlannerAuto("Wrecker"));
                 m_auto.addAuto("Start Left Trench Center Scoop Over Bump Shoot 1",
                                 new PathPlannerAuto("Start Left Trench Center Scoop Over Bump Shoot 1"));
+
                 m_auto.addAuto("Start Right Trench Center Scoop Over Bump Shoot 1",
                                 new PathPlannerAuto("Start Right Trench Center Scoop Over Bump Shoot 1"));
                 m_auto.addAuto("Start Left Trench Center Scoop Over Bump Shoot 2",
@@ -176,21 +179,27 @@ public class RobotContainer {
                                 new PathPlannerAuto("Start Right Trench Center Scoop Over Bump Shoot 2"));
                 m_auto.addAuto("Start Right Trench Center Scoop Over Bump and Outpost Shoot 2",
                                 new PathPlannerAuto("Start Right Trench Center Scoop Over Bump and Outpost Shoot 2"));
-                m_auto.addAuto("Test Aim Auto",
-                                new PathPlannerAuto("Test Aim Auto"));
+                // m_auto.addAuto("Test Aim Auto",
+                // new PathPlannerAuto("Test Aim Auto"));
 
                 // m_auto.addAuto("Slow Test Left Trench Center Scoop Over Bump Shoot 1",
                 // new PathPlannerAuto("Slow Test Left Trench Center Scoop Over Bump Shoot 1"));
                 m_auto.addAuto("Start Left Trench Center Scoop Trench Shoot 1 Round",
                                 new PathPlannerAuto("Start Left Trench Center Scoop Trench Shoot 1 Round"));
+                m_auto.addAuto("Start Left Trench Center Scoop Trench Shoot 2 DEPOT",
+                                new PathPlannerAuto("Start Left Trench Center Scoop Trench Shoot 2 DEPOT"));
                 m_auto.addAuto("Start Left Trench Center Scoop Trench Shoot 2 Rounds",
                                 new PathPlannerAuto("Start Left Trench Center Scoop Trench Shoot 2 Rounds"));
-                m_auto.addAuto("Test Center Creep Forward",
-                                new PathPlannerAuto("Test Center Creep Forward"));
-                m_auto.addAuto("Test Center Creep Backward",
-                                new PathPlannerAuto("Test Center Creep Backward"));
-                m_auto.addAuto("test", new PathPlannerAuto("test"));
-                m_auto.addAuto("Shooter Test", new PathPlannerAuto("Shooter Test"));
+                m_auto.addAuto("Start Center Shoot Preload",
+                                new PathPlannerAuto("Start Center Shoot Preload"));
+                m_auto.addAuto("Start Center Depot And Outpost",
+                                new PathPlannerAuto("Start Center Depot And Outpost"));
+                // m_auto.addAuto("Test Center Creep Forward",
+                // new PathPlannerAuto("Test Center Creep Forward"));
+                // m_auto.addAuto("Test Center Creep Backward",
+                // new PathPlannerAuto("Test Center Creep Backward"));
+                // m_auto.addAuto("test", new PathPlannerAuto("test"));
+                // m_auto.addAuto("Shooter Test", new PathPlannerAuto("Shooter Test"));
 
         }
 
@@ -323,6 +332,8 @@ public class RobotContainer {
                 operatorPad.Button(6).onTrue(intakeArm.goToUpCommand());
                 operatorPad.Button(8).onTrue(intakeArm.goToDownCommand());
 
+                // put hood down and zero
+                operatorPad.Button(9).onTrue(shooterHood.manualZeroCommand());
                 // zero all
                 operatorPad.Button(10).onTrue(new SystemZero());
 

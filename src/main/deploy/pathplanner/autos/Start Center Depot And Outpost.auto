@@ -5,33 +5,45 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Intake Down"
+            "pathName": "Start Center To Depot"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.25
+            "waitTime": 0.5
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Start Left Trench Intake Center Trench To Shoot"
+            "pathName": "Depot To Ready Outpost"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Outpost Collect"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Outpost to Score"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot 4s Intake Jiggle"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shut Down Shooter"
+            "name": "Shoot 16s Intake Jiggle"
           }
         }
       ]
