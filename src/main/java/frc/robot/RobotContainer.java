@@ -6,6 +6,7 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.Map;
 import java.util.jar.Attributes.Name;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
@@ -18,6 +19,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
@@ -33,6 +35,7 @@ import frc.robot.controls.MayhemExtreme3dPro.Axis;
 import frc.robot.generated.TunerConstants;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.*;
 
@@ -69,7 +72,7 @@ public class RobotContainer {
         private final MayhemExtreme3dPro driverStick = new MayhemExtreme3dPro(0);
         // private final MayhemExtreme3dPro driverStick = null;
         private final MayhemOperatorPad operatorPad = new MayhemOperatorPad();
-        private final MayhemLogitechAttack3 debugStick = new MayhemLogitechAttack3(2);
+        private final MayhemLogitechAttack3 debugStick = null; // new MayhemLogitechAttack3(2);
 
         public static final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
         private final AutoChooser m_auto = new AutoChooser();
@@ -433,8 +436,23 @@ public class RobotContainer {
                                                                         .withRotationalRate(rotLimited);
                                                 }));
 
-                driverStick.Button(1)
-                                .whileTrue(new SequentialCommandGroup(new DrivePointToHub(), drivetrain.lockWheels()));
+                // driverStick.Button(1)
+                // .whileTrue(new SequentialCommandGroup(new DrivePointToHub(),
+                // drivetrain.lockWheels()));
+                driverStick.Button(1).whileTrue(new SelectCommand<Boolean>(
+                                Map.ofEntries(
+                                                Map.entry(false, new DrivePointToHub()),
+                                                Map.entry(true, drivetrain.lockWheels())),
+                                () -> Math.abs(drivetrain.robotOffsetAngleToHubRad()) < Units.degreesToRadians(1)));
+
+                // new SelectCommand(
+                // Map.ofEntries(
+                // Map.entry(false, new ArmSystemGoTo(Arm.ALMOST_STOW)),
+                // Map.entry(true, new WaitCommand(0.0))),
+                // () -> RobotContainer.arm.getCurrentPosition() < Arm.ALMOST_STOW + 1000), //
+                // check if the shoulder is
+                // close to position, also.
+
                 // driverStick.Button(5).onTrue(drivetrain.goToPoseCommand(drivetrain.shooterPose1Red));
                 driverStick.Button(6).whileTrue(drivetrain.lockWheels());
                 // driverStick.Button(8).onTrue(drivetrain.trenchRightOutCommand());
@@ -454,125 +472,126 @@ public class RobotContainer {
         }
 
         private void configureDebugBindings() {
-                // debugStick.Button(8).onTrue(intakeRollers.setSpeedCommand(0.1));
-                // debugStick.Button(8).onFalse(intakeRollers.setSpeedCommand(0.0));
-                // debugStick.Button(1).onTrue(intakeArm.setPowerCommand(0));
-                // debugStick.Button(4).onTrue(intakeArm.setPowerCommand(.1));
+                if (debugStick != null) {
+                        // debugStick.Button(8).onTrue(intakeRollers.setSpeedCommand(0.1));
+                        // debugStick.Button(8).onFalse(intakeRollers.setSpeedCommand(0.0));
+                        // debugStick.Button(1).onTrue(intakeArm.setPowerCommand(0));
+                        // debugStick.Button(4).onTrue(intakeArm.setPowerCommand(.1));
 
-                // debugStick.Button(1).onTrue(climberElevator.setPositionCommand(3.5));
-                // debugStick.Button(4).onTrue(climberElevator.setPositionCommand(0));
+                        // debugStick.Button(1).onTrue(climberElevator.setPositionCommand(3.5));
+                        // debugStick.Button(4).onTrue(climberElevator.setPositionCommand(0));
 
-                // climberElevator.setDefaultCommand(
-                // climberElevator.controlWithAxis(debugStick.Axis(MayhemLogitechAttack3.Axis.Y)));
-                // debugStick.Button(2).onTrue(climberElevator.zeroCommand());
+                        // climberElevator.setDefaultCommand(
+                        // climberElevator.controlWithAxis(debugStick.Axis(MayhemLogitechAttack3.Axis.Y)));
+                        // debugStick.Button(2).onTrue(climberElevator.zeroCommand());
 
-                // operatorPad.Button(3).onTrue(shooter.setShooterSpeedCommand(.2));
-                // operatorPad.Button(3).onFalse(shooter.setShooterSpeedCommand(0));
+                        // operatorPad.Button(3).onTrue(shooter.setShooterSpeedCommand(.2));
+                        // operatorPad.Button(3).onFalse(shooter.setShooterSpeedCommand(0));
 
-                // debugStick.Button(11).onTrue(shooter.offsetShooterVelocityCommand(5));
-                // debugStick.Button(10).onTrue(shooter.offsetShooterVelocityCommand(-2.5));
-                // operatorPad.Button(3).onTrue(shooter.setControlCommand(20));
-                // operatorPad.Button(3).onFalse(shooter.setControlCommand(0));
+                        // debugStick.Button(11).onTrue(shooter.offsetShooterVelocityCommand(5));
+                        // debugStick.Button(10).onTrue(shooter.offsetShooterVelocityCommand(-2.5));
+                        // operatorPad.Button(3).onTrue(shooter.setControlCommand(20));
+                        // operatorPad.Button(3).onFalse(shooter.setControlCommand(0));
 
-                // shooterHood.setDefaultCommand(shooterHood
-                // .controlWithAxis(operatorPad.Axis(frc.robot.controls.MayhemOperatorPad.Axis.LeftY)));
-                // debugStick.Button(6).onTrue(shooterHood.offsetPositionCommand(1));
-                // debugStick.Button(7).onTrue(shooterHood.offsetPositionCommand(-1));
-                // debugStick.Button(8).onTrue()
-                // operatorPad.Button(2).onTrue(hopper.turnOnCommand());
-                // operatorPad.Button(2).onFalse(hopper.turnOffCommand());
+                        // shooterHood.setDefaultCommand(shooterHood
+                        // .controlWithAxis(operatorPad.Axis(frc.robot.controls.MayhemOperatorPad.Axis.LeftY)));
+                        // debugStick.Button(6).onTrue(shooterHood.offsetPositionCommand(1));
+                        // debugStick.Button(7).onTrue(shooterHood.offsetPositionCommand(-1));
+                        // debugStick.Button(8).onTrue()
+                        // operatorPad.Button(2).onTrue(hopper.turnOnCommand());
+                        // operatorPad.Button(2).onFalse(hopper.turnOffCommand());
 
-                // climber elevator manual
-                // climberElevator.controlWithAxis(operatorPad.Axis(MayhemOperatorPad.Axis.LeftY));
+                        // climber elevator manual
+                        // climberElevator.controlWithAxis(operatorPad.Axis(MayhemOperatorPad.Axis.LeftY));
 
-                // operatorPad.Button(5).onTrue(intakeRollers.intakeCommand());
-                // operatorPad.Button(5).onFalse(intakeRollers.turnOffCommand());
+                        // operatorPad.Button(5).onTrue(intakeRollers.intakeCommand());
+                        // operatorPad.Button(5).onFalse(intakeRollers.turnOffCommand());
 
-                // operatorPad.Button(7).onTrue(intakeRollers.outtakeCommand());
-                // operatorPad.Button(7).onFalse(intakeRollers.turnOffCommand());
+                        // operatorPad.Button(7).onTrue(intakeRollers.outtakeCommand());
+                        // operatorPad.Button(7).onFalse(intakeRollers.turnOffCommand());
 
-                // operatorPad.Button(4).whileTrue(loader.setSpeedCommand(.2));
+                        // operatorPad.Button(4).whileTrue(loader.setSpeedCommand(.2));
 
-                // operatorPad.Button(2).onTrue(climberShortArmPivot.setPowerCommand(-.1));
-                // operatorPad.Button(2).onFalse(climberShortArmPivot.setPowerCommand(0));
-                // operatorPad.Button(3).onTrue(climberShortArmPivot.setPowerCommand(.1));
-                // operatorPad.Button(3).onFalse(climberShortArmPivot.setPowerCommand(0));
+                        // operatorPad.Button(2).onTrue(climberShortArmPivot.setPowerCommand(-.1));
+                        // operatorPad.Button(2).onFalse(climberShortArmPivot.setPowerCommand(0));
+                        // operatorPad.Button(3).onTrue(climberShortArmPivot.setPowerCommand(.1));
+                        // operatorPad.Button(3).onFalse(climberShortArmPivot.setPowerCommand(0));
 
-                // operatorPad.Button(4).onTrue(loader.setSpeedCommand(.5));
-                // operatorPad.Button(4).onFalse(loader.setSpeedCommand(0));
-                // intakeArm.setDefaultCommand(intakeArm.controlWithAxis(operatorPad.Axis(frc.robot.controls.MayhemOperatorPad.Axis.RightY)));
+                        // operatorPad.Button(4).onTrue(loader.setSpeedCommand(.5));
+                        // operatorPad.Button(4).onFalse(loader.setSpeedCommand(0));
+                        // intakeArm.setDefaultCommand(intakeArm.controlWithAxis(operatorPad.Axis(frc.robot.controls.MayhemOperatorPad.Axis.RightY)));
 
-                // debugStick.Button(3).onTrue(shooter.setSpeedCommand(.2));
-                // debugStick.Button(3).onFalse(shooter.setSpeedCommand(0));
+                        // debugStick.Button(3).onTrue(shooter.setSpeedCommand(.2));
+                        // debugStick.Button(3).onFalse(shooter.setSpeedCommand(0));
 
-                // debugStick.Button(2).onTrue(shooter.setVelocityCommand(50));
-                // debugStick.Button(2).onFalse(shooter.setSpeedCommand(0));
+                        // debugStick.Button(2).onTrue(shooter.setVelocityCommand(50));
+                        // debugStick.Button(2).onFalse(shooter.setSpeedCommand(0));
 
-                debugStick.Button(3).onTrue(shooter.offsetShooterVelocityCommand(2));
-                debugStick.Button(2).onTrue(shooter.offsetShooterVelocityCommand(-1));
+                        debugStick.Button(3).onTrue(shooter.offsetShooterVelocityCommand(2));
+                        debugStick.Button(2).onTrue(shooter.offsetShooterVelocityCommand(-1));
 
-                debugStick.Button(4).onTrue(shooterHood.offsetPositionCommand(1));
-                debugStick.Button(5).onTrue(shooterHood.offsetPositionCommand(-1));
+                        debugStick.Button(4).onTrue(shooterHood.offsetPositionCommand(1));
+                        debugStick.Button(5).onTrue(shooterHood.offsetPositionCommand(-1));
 
-                // debugStick.Button(4).onTrue(shooterHood.setPowerCommand(.1));
-                // debugStick.Button(4).onFalse(shooterHood.setPowerCommand(0));
-                // debugStick.Button(5).onTrue(shooterHood.setPowerCommand(-.1));
-                // debugStick.Button(5).onFalse(shooterHood.setPowerCommand(0));
-                // debugStick.Button(4).onTrue(shooterHood.setPositionCommand(5));
-                // debugStick.Button(5).onTrue(shooterHood.setPositionCommand(23));
+                        // debugStick.Button(4).onTrue(shooterHood.setPowerCommand(.1));
+                        // debugStick.Button(4).onFalse(shooterHood.setPowerCommand(0));
+                        // debugStick.Button(5).onTrue(shooterHood.setPowerCommand(-.1));
+                        // debugStick.Button(5).onFalse(shooterHood.setPowerCommand(0));
+                        // debugStick.Button(4).onTrue(shooterHood.setPositionCommand(5));
+                        // debugStick.Button(5).onTrue(shooterHood.setPositionCommand(23));
 
-                debugStick.Button(7).onTrue(loader.setSpeedCommand(.8));
-                debugStick.Button(7).onFalse(loader.setSpeedCommand(0));
+                        debugStick.Button(7).onTrue(loader.setSpeedCommand(.8));
+                        debugStick.Button(7).onFalse(loader.setSpeedCommand(0));
 
-                debugStick.Button(7).onTrue(hopper.setSpeedCommand(1));
-                debugStick.Button(7).onFalse(hopper.setSpeedCommand(0));
+                        debugStick.Button(7).onTrue(hopper.setSpeedCommand(1));
+                        debugStick.Button(7).onFalse(hopper.setSpeedCommand(0));
 
-                debugStick.Button(6).onTrue(shooter.setSpeedCommand(0));
+                        debugStick.Button(6).onTrue(shooter.setSpeedCommand(0));
 
-                // debugStick.Button(3).onTrue(shooterHood.SetPositiongByPidCommand(15));
-                // debugStick.Button(3).onFalse(shooterHood.SetPositiongByMMCommand(0));
+                        // debugStick.Button(3).onTrue(shooterHood.SetPositiongByPidCommand(15));
+                        // debugStick.Button(3).onFalse(shooterHood.SetPositiongByMMCommand(0));
 
-                // debugStick.Button(2).onTrue(shooterHood.SetPositiongByPidCommand(0));
-                // debugStick.Button(4).onTrue(shooterHood.SetPositiongByPidCommand(25));
+                        // debugStick.Button(2).onTrue(shooterHood.SetPositiongByPidCommand(0));
+                        // debugStick.Button(4).onTrue(shooterHood.SetPositiongByPidCommand(25));
 
-                // debugStick.Button(3).onTrue(
-                // hopper.setSpeedCommand(.5)
-                // new ParallelRaceGroup(new WaitCommand(8),
-                // new DrivePointToHub().repeatedly(),
-                // launchingTower.fireFuelCommand()
-                // intakeArm.jiggleCommand().repeatedly()
-                // );
-                // debugStick.Button(3).onFalse(hopper.setSpeedCommand(0));
+                        // debugStick.Button(3).onTrue(
+                        // hopper.setSpeedCommand(.5)
+                        // new ParallelRaceGroup(new WaitCommand(8),
+                        // new DrivePointToHub().repeatedly(),
+                        // launchingTower.fireFuelCommand()
+                        // intakeArm.jiggleCommand().repeatedly()
+                        // );
+                        // debugStick.Button(3).onFalse(hopper.setSpeedCommand(0));
 
-                // debugStick.Button(2).onFalse(shooterHood.setPowerCommand(0));
+                        // debugStick.Button(2).onFalse(shooterHood.setPowerCommand(0));
 
-                // debugStick.Button(6).onTrue(intakeArm.setPowerCommand(.2));
-                // debugStick.Button(6).onFalse(intakeArm.setPowerCommand(0));
+                        // debugStick.Button(6).onTrue(intakeArm.setPowerCommand(.2));
+                        // debugStick.Button(6).onFalse(intakeArm.setPowerCommand(0));
 
-                // debugStick.Button(7).onTrue(intakeArm.setPowerCommand(-.2));
-                // debugStick.Button(7).onFalse(intakeArm.setPowerCommand(0));
+                        // debugStick.Button(7).onTrue(intakeArm.setPowerCommand(-.2));
+                        // debugStick.Button(7).onFalse(intakeArm.setPowerCommand(0));
 
-                // debugStick.Button(11).onTrue(intakeArm.goToUpCommand());
-                // debugStick.Button(10).onTrue(intakeArm.goToDownCommand());
+                        // debugStick.Button(11).onTrue(intakeArm.goToUpCommand());
+                        // debugStick.Button(10).onTrue(intakeArm.goToDownCommand());
 
-                // debugStick.Button(3).onTrue(shooter.setVelocityCommand(10));
-                // debugStick.Button(3).onFalse(shooter.setSpeedCommand(0));
+                        // debugStick.Button(3).onTrue(shooter.setVelocityCommand(10));
+                        // debugStick.Button(3).onFalse(shooter.setSpeedCommand(0));
 
-                // debugStick.Button(6).onTrue(new ParallelCommandGroup(
-                // shooter.setVelocityCommand(80),
-                // shooterHood.SetPositiongByMMCommand(15)));
-                // debugStick.Button(6).onFalse(new ParallelCommandGroup(
-                // shooter.setVelocityCommand(0),
-                // shooterHood.SetPositiongByMMCommand(0)));
+                        // debugStick.Button(6).onTrue(new ParallelCommandGroup(
+                        // shooter.setVelocityCommand(80),
+                        // shooterHood.SetPositiongByMMCommand(15)));
+                        // debugStick.Button(6).onFalse(new ParallelCommandGroup(
+                        // shooter.setVelocityCommand(0),
+                        // shooterHood.SetPositiongByMMCommand(0)));
 
-                // debugStick.Button(7).onTrue(
-                // new ParallelCommandGroup(
-                // hopper.setSpeedCommand(.99),
-                // loader.setSpeedCommand(.99)));
-                // debugStick.Button(7).onFalse(
-                // new ParallelCommandGroup(hopper.setSpeedCommand(.0),
-                // loader.setSpeedCommand(.0)));
-
+                        // debugStick.Button(7).onTrue(
+                        // new ParallelCommandGroup(
+                        // hopper.setSpeedCommand(.99),
+                        // loader.setSpeedCommand(.99)));
+                        // debugStick.Button(7).onFalse(
+                        // new ParallelCommandGroup(hopper.setSpeedCommand(.0),
+                        // loader.setSpeedCommand(.0)));
+                }
         }
 
         public Command getAutonomousCommand() {

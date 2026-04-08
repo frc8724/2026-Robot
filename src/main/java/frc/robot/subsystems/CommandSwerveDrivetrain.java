@@ -28,6 +28,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -457,6 +458,28 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             }
             return redAllianceRegion.target;
         }
+    }
+
+    public double robotOffsetAngleToHubRad() {
+        var robotPose = RobotContainer.drivetrain.getState().Pose;
+        var shooterPose = robotPose.plus(new Transform2d(0, 0.2, Rotation2d.fromDegrees(180)));
+
+        Vector2D target = RobotContainer.drivetrain.getRegionTargetVector2D();
+        SmartDashboard.putString("dynamic target", target.toString());
+        var targetX = target.x;
+        var targetY = target.y;
+
+        var relativeX = targetX - shooterPose.getX();
+        var relativeY = targetY - shooterPose.getY();
+        var angleRad = Math.atan2(relativeY, relativeX) - shooterPose.getRotation().getRadians();
+
+        if (angleRad > Math.PI) {
+            angleRad = angleRad - 2 * Math.PI;
+        }
+        if (angleRad < -Math.PI) {
+            angleRad = angleRad + 2 * Math.PI;
+        }
+        return angleRad;
     }
 
     public Pose2d getRegionTargetPose2D() {

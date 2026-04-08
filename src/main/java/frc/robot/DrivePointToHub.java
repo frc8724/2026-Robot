@@ -50,24 +50,27 @@ public class DrivePointToHub extends Command {
     // --- Rotation control (tx -> 0), using your proven sign convention ---
     // double txDeg = LimelightHelpers.getTX("limelight");
 
-    var robotPose = RobotContainer.drivetrain.getState().Pose;
-    var shooterPose = robotPose.plus(new Transform2d(0, 0.2, Rotation2d.fromDegrees(180)));
+    // var robotPose = RobotContainer.drivetrain.getState().Pose;
+    // var shooterPose = robotPose.plus(new Transform2d(0, 0.2,
+    // Rotation2d.fromDegrees(180)));
 
-    Vector2D target = RobotContainer.drivetrain.getRegionTargetVector2D();
-    SmartDashboard.putString("dynamic target", target.toString());
-    var targetX = target.x;
-    var targetY = target.y;
+    // Vector2D target = RobotContainer.drivetrain.getRegionTargetVector2D();
+    // SmartDashboard.putString("dynamic target", target.toString());
+    // var targetX = target.x;
+    // var targetY = target.y;
 
-    var relativeX = targetX - shooterPose.getX();
-    var relativeY = targetY - shooterPose.getY();
-    angleRad = Math.atan2(relativeY, relativeX) - shooterPose.getRotation().getRadians();
+    // var relativeX = targetX - shooterPose.getX();
+    // var relativeY = targetY - shooterPose.getY();
+    // angleRad = Math.atan2(relativeY, relativeX) -
+    // shooterPose.getRotation().getRadians();
 
-    if (angleRad > Math.PI) {
-      angleRad = angleRad - 2 * Math.PI;
-    }
-    if (angleRad < -Math.PI) {
-      angleRad = angleRad + 2 * Math.PI;
-    }
+    // if (angleRad > Math.PI) {
+    // angleRad = angleRad - 2 * Math.PI;
+    // }
+    // if (angleRad < -Math.PI) {
+    // angleRad = angleRad + 2 * Math.PI;
+    // }
+    angleRad = RobotContainer.drivetrain.robotOffsetAngleToHubRad();
 
     SmartDashboard.putString("debug", "" + angleRad);
     double omegaRadPerSec = 0.0;
