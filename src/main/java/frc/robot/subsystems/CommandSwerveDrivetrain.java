@@ -495,10 +495,14 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     private final SwerveRequest.SwerveDriveBrake swerveBrake = new SwerveRequest.SwerveDriveBrake();
 
-    public Command lockWheels() {
+    public Command lockWheelsCommand() {
         return run(() -> {
             this.setControl(swerveBrake);
         });
+    }
+
+    public void lockWheels() {
+        this.setControl(swerveBrake);
     }
 
     public Command testTriangle() {
@@ -882,6 +886,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SmartDashboard.putNumber("robot_position:rotation", this.getState().Pose.getRotation().getDegrees());
         var distance = distanceToHub();
         SmartDashboard.putNumber("distance_to_hub", distance);
+        SmartDashboard.putNumber("hub offset", Units.radiansToDegrees(robotOffsetAngleToHubRad()));
 
     }
 

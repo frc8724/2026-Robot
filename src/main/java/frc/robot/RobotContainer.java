@@ -197,6 +197,7 @@ public class RobotContainer {
                                 new PathPlannerAuto("Start Center Shoot Preload"));
                 m_auto.addAuto("Start Center Depot And Outpost",
                                 new PathPlannerAuto("Start Center Depot And Outpost"));
+                m_auto.addAuto("test", new PathPlannerAuto("test"));
                 // m_auto.addAuto("Test Center Creep Forward",
                 // new PathPlannerAuto("Test Center Creep Forward"));
                 // m_auto.addAuto("Test Center Creep Backward",
@@ -436,25 +437,10 @@ public class RobotContainer {
                                                                         .withRotationalRate(rotLimited);
                                                 }));
 
-                // driverStick.Button(1)
-                // .whileTrue(new SequentialCommandGroup(new DrivePointToHub(),
-                // drivetrain.lockWheels()));
-                driverStick.Button(1).whileTrue(new SelectCommand<Boolean>(
-                                Map.ofEntries(
-                                                Map.entry(false, new DrivePointToHub()),
-                                                Map.entry(true, drivetrain.lockWheels())),
-                                () -> Math.abs(drivetrain.robotOffsetAngleToHubRad()) < Units.degreesToRadians(1)));
-
-                // new SelectCommand(
-                // Map.ofEntries(
-                // Map.entry(false, new ArmSystemGoTo(Arm.ALMOST_STOW)),
-                // Map.entry(true, new WaitCommand(0.0))),
-                // () -> RobotContainer.arm.getCurrentPosition() < Arm.ALMOST_STOW + 1000), //
-                // check if the shoulder is
-                // close to position, also.
+                driverStick.Button(1).whileTrue(new DrivePointToHub());
 
                 // driverStick.Button(5).onTrue(drivetrain.goToPoseCommand(drivetrain.shooterPose1Red));
-                driverStick.Button(6).whileTrue(drivetrain.lockWheels());
+                driverStick.Button(6).whileTrue(drivetrain.lockWheelsCommand());
                 // driverStick.Button(8).onTrue(drivetrain.trenchRightOutCommand());
                 // driverStick.Button(10).onTrue(drivetrain.trenchRightInCommand());
                 driverStick.Button(11).onTrue(drivetrain.zeroBotRotationCommand());

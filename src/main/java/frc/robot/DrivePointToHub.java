@@ -8,14 +8,9 @@ import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.LaunchingTower.Vector2D;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class DrivePointToHub extends Command {
@@ -26,6 +21,7 @@ public class DrivePointToHub extends Command {
   private int counter = 0;
 
   double angleRad;
+  static int initCounter = 0;
 
   /** Creates a new DrivePointToHub. */
   public DrivePointToHub() {
@@ -36,40 +32,34 @@ public class DrivePointToHub extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    initCounter += 1;
+    SmartDashboard.putNumber("point to hub init counter", initCounter);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    boolean isBlueAlliance = DriverStation.getAlliance().get() == Alliance.Blue;
+    var angleRad = RobotContainer.drivetrain.robotOffsetAngleToHubRad();
+    if (Math.abs(angleRad) > ROTATE_DEADBAND_RAD) {
+      aimAtTarget();
+      counter = 0;
+    } else {
+      counter += 1;
+      if (counter > 4) {
+        RobotContainer.drivetrain.lockWheels();
+      } else {
+        aimAtTarget();
+      }
+    }
+  }
+
+  public void aimAtTarget() {
+    // boolean isBlueAlliance = DriverStation.getAlliance().get() == Alliance.Blue;
 
     SwerveRequest.RobotCentric request = new SwerveRequest.RobotCentric()
         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage)
         .withSteerRequestType(SwerveModule.SteerRequestType.Position);
 
-    // --- Rotation control (tx -> 0), using your proven sign convention ---
-    // double txDeg = LimelightHelpers.getTX("limelight");
-
-    // var robotPose = RobotContainer.drivetrain.getState().Pose;
-    // var shooterPose = robotPose.plus(new Transform2d(0, 0.2,
-    // Rotation2d.fromDegrees(180)));
-
-    // Vector2D target = RobotContainer.drivetrain.getRegionTargetVector2D();
-    // SmartDashboard.putString("dynamic target", target.toString());
-    // var targetX = target.x;
-    // var targetY = target.y;
-
-    // var relativeX = targetX - shooterPose.getX();
-    // var relativeY = targetY - shooterPose.getY();
-    // angleRad = Math.atan2(relativeY, relativeX) -
-    // shooterPose.getRotation().getRadians();
-
-    // if (angleRad > Math.PI) {
-    // angleRad = angleRad - 2 * Math.PI;
-    // }
-    // if (angleRad < -Math.PI) {
-    // angleRad = angleRad + 2 * Math.PI;
-    // }
     angleRad = RobotContainer.drivetrain.robotOffsetAngleToHubRad();
 
     SmartDashboard.putString("debug", "" + angleRad);
@@ -100,11 +90,6 @@ public class DrivePointToHub extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Math.abs(angleRad) < ROTATE_DEADBAND_RAD) {
-      counter += 1;
-    } else {
-      counter = 0;
-    }
-    return (counter > 4);
+    return false;
   }
 }
