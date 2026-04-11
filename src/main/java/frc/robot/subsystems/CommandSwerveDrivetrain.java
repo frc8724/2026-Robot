@@ -460,6 +460,34 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         }
     }
 
+    public double fieldRelativeAngleToHubRad() {
+        var robotPose = RobotContainer.drivetrain.getState().Pose;
+        var shooterPose = robotPose.plus(new Transform2d(0, 0.2,
+                Rotation2d.fromDegrees(180)));
+
+        Vector2D target = RobotContainer.drivetrain.getRegionTargetVector2D().clone();
+
+        var speeds = getState().Speeds;
+        target.x += speeds.vxMetersPerSecond * 1.0;
+        target.y += speeds.vyMetersPerSecond * 1.0;
+
+        SmartDashboard.putString("dynamic target", target.toString());
+        var targetX = target.x;
+        var targetY = target.y;
+
+        var relativeX = targetX - shooterPose.getX();
+        var relativeY = targetY - shooterPose.getY();
+        var angleRad = Math.atan2(relativeY, relativeX);
+
+        if (angleRad > Math.PI) {
+            angleRad = angleRad - 2 * Math.PI;
+        }
+        if (angleRad < -Math.PI) {
+            angleRad = angleRad + 2 * Math.PI;
+        }
+        return angleRad;
+    }
+
     public double robotOffsetAngleToHubRad() {
         var robotPose = RobotContainer.drivetrain.getState().Pose;
         var shooterPose = robotPose.plus(new Transform2d(0, 0.2, Rotation2d.fromDegrees(180)));
@@ -794,7 +822,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     public Command fireWhileDriving(DoubleSupplier x, DoubleSupplier y) {
         return run(() -> {
-            var angleRad = angleToHubAdjustedForVelocityFieldReletive();
+            // var angleRad = angleToHubAdjustedForVelocityFieldReletive();
+            var angleRad = fieldRelativeAngleToHubRad() + Math.PI;
             SmartDashboard.putNumber("angle to hub", Units.radiansToDegrees(angleRad));
             var joystickX = -x.getAsDouble();
             var joystickY = -y.getAsDouble();
@@ -803,14 +832,15 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             // var vy = Math.sin(joystickY / d);
             var vx = joystickX / d;
             var vy = joystickY / d;
+            var speed = 0.5;
 
             // if we don't have a direction, lock the wheels
             if (Math.abs(joystickX) < .2 && Math.abs(joystickY) < .2) {
                 this.setControl(swerveBrake);
             } else {
                 this.setControl(
-                        fieldCentric.withVelocityX(vx)
-                                .withVelocityY(vy)
+                        fieldCentric.withVelocityX(vx * speed)
+                                .withVelocityY(vy * speed)
                                 .withHeadingPID(7, 0, 0)
                                 .withTargetDirection(new Rotation2d(angleRad)));
             }

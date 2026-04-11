@@ -102,8 +102,8 @@ public class RobotContainer {
         public static final TalonFX shooterMotor1 = new TalonFX(33, canivore);
         public static final TalonFX shooterMotor2 = new TalonFX(34, canivore);
         public static final TalonFX shooterMotor3 = new TalonFX(35, canivore);
-        // public static final TalonFX shooterMotor4 = new TalonFX(36, canivore);
-        public static final TalonFX shooterMotor4 = null;
+        public static final TalonFX shooterMotor4 = new TalonFX(36, canivore);
+        // public static final TalonFX shooterMotor4 = null;
 
         public static final TalonFX hoodMotor = new TalonFX(31, canivore);
         public static final TalonFX intakeRollerMotor = new TalonFX(27, canivore);
@@ -362,6 +362,7 @@ public class RobotContainer {
                 // shooter.setSpeedCommand(0),
                 // shooterHood.SetPositionByPidCommand(0)));
                 operatorPad.D_PAD_DOWN.whileTrue(launchingTower.shootCloseCommand());
+                operatorPad.D_PAD_DOWN.onFalse(shooter.setSpeedCommand(0));
                 operatorPad.Button(4).onTrue(new ShooterAddOffset(1));
                 operatorPad.Button(3).onTrue(new ShooterAddOffset(-1));
                 operatorPad.Button(1).onTrue(new ShooterSetOffset(0));

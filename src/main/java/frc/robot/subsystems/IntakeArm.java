@@ -8,6 +8,7 @@ import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -31,12 +32,15 @@ public class IntakeArm extends SubsystemBase {
   private final PositionVoltage position = new PositionVoltage(0);
   private double lastPosition;
 
+  final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(0);
+
   public IntakeArm(TalonFX motor) {
     this.motor = motor;
     TalonFXConfiguration configs = new TalonFXConfiguration();
     configs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-    configs.Slot0.kP = 0.5; // An error of 0.5 rotations results in 1.2 volts output
+    configs.Slot0.kP = 1.0; // An error of 0.5 rotations results in 1.2 volts output
     configs.Slot0.kD = 0.0; // A change of 1 rotation per second results in 0.1 volts output
+    configs.Slot0.kG = -0.2;
 
     configs.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.1;
 
@@ -46,6 +50,11 @@ public class IntakeArm extends SubsystemBase {
     configs.CurrentLimits.StatorCurrentLimitEnable = true;
     configs.CurrentLimits.StatorCurrentLimit = 20;
     configs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+
+    var motionMagicConfigs = configs.MotionMagic;
+    motionMagicConfigs.MotionMagicCruiseVelocity = 90;
+    motionMagicConfigs.MotionMagicAcceleration = 150;
+    motionMagicConfigs.MotionMagicJerk = 0;
 
     if (motor != null) {
       /* Retry config apply up to 5 times, report if failure */
@@ -86,6 +95,7 @@ public class IntakeArm extends SubsystemBase {
   public void setPosition(double pos) {
     if (motor != null) {
       motor.setControl(position.withPosition(pos));
+      // motor.setControl(motionMagicRequest.withPosition(pos));
     }
   }
 

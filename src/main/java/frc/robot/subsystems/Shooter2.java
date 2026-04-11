@@ -41,7 +41,7 @@ public class Shooter2 extends SubsystemBase {
     var slot0Configs = new Slot0Configs();
     slot0Configs.kS = 0.0; // Add 0.1 V output to overcome static friction
     slot0Configs.kV = 0.14; // A velocity target of 20rps results in 0.2 V output
-    slot0Configs.kP = 0.2;// 1.0; // An error of 1 rps results in 0.11 V output
+    slot0Configs.kP = 0.15;// 1.0; // An error of 1 rps results in 0.11 V output
     slot0Configs.kI = 0.0; // no output for integrated error
     slot0Configs.kD = 0.00; // no output for error derivative
     if (this.motor1 != null) {
@@ -51,7 +51,7 @@ public class Shooter2 extends SubsystemBase {
       TalonFXConfiguration configs = new TalonFXConfiguration();
       configs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
       configs.Slot0 = slot0Configs;
-      configs.Voltage.PeakReverseVoltage = 1;
+      configs.Voltage.PeakReverseVoltage = 0;
 
       this.motor1.getConfigurator().apply(configs);
       if (this.motor2 != null) {
