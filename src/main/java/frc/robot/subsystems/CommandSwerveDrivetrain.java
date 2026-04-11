@@ -441,22 +441,24 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public Vector2D getRegionTargetVector2D() {
+        var speeds = getState().Speeds;
+        var speedVector = new Vector2D(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
         if (DriverStation.getAlliance().get() == Alliance.Blue) {
             if (blueLeftMidRegion.isInRegion()) {
-                return blueLeftMidRegion.target;
+                return blueLeftMidRegion.target.clone().addVector(speedVector);
             }
             if (blueRightMidRegion.isInRegion()) {
-                return blueRightMidRegion.target;
+                return blueRightMidRegion.target.clone().addVector(speedVector);
             }
-            return blueAllianceRegion.target;
+            return blueAllianceRegion.target.clone().addVector(speedVector);
         } else {
             if (redLeftMidRegion.isInRegion()) {
-                return redLeftMidRegion.target;
+                return redLeftMidRegion.target.clone().addVector(speedVector);
             }
             if (redRightMidRegion.isInRegion()) {
-                return redRightMidRegion.target;
+                return redRightMidRegion.target.clone().addVector(speedVector);
             }
-            return redAllianceRegion.target;
+            return redAllianceRegion.target.clone().addVector(speedVector);
         }
     }
 
@@ -465,11 +467,11 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         var shooterPose = robotPose.plus(new Transform2d(0, 0.2,
                 Rotation2d.fromDegrees(180)));
 
-        Vector2D target = RobotContainer.drivetrain.getRegionTargetVector2D().clone();
+        Vector2D target = RobotContainer.drivetrain.getRegionTargetVector2D();
 
-        var speeds = getState().Speeds;
-        target.x += speeds.vxMetersPerSecond * 1.0;
-        target.y += speeds.vyMetersPerSecond * 1.0;
+        // var speeds = getState().Speeds;
+        // target.x += speeds.vxMetersPerSecond * 1.0;
+        // target.y += speeds.vyMetersPerSecond * 1.0;
 
         SmartDashboard.putString("dynamic target", target.toString());
         var targetX = target.x;
