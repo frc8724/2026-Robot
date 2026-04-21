@@ -416,14 +416,6 @@ public class RobotContainer {
         }
 
         private void configureDriverstickBindings() {
-                driverStick.Button(2).whileTrue(
-                                drivetrain.fireWhileDriving(driverStick.Axis(Axis.Y),
-                                                driverStick.Axis(Axis.X)));
-
-                driverStick.Button(5).whileTrue(
-                                drivetrain.tankDrive(driverStick.Axis(Axis.Y),
-                                                driverStick.Axis(Axis.X)));
-
                 // Note that X is defined as forward according to WPILib convention,
                 // and Y is defined as to the left according to WPILib convention.
                 drivetrain.setDefaultCommand(
@@ -467,7 +459,18 @@ public class RobotContainer {
 
                 driverStick.Button(1).whileTrue(new DrivePointToHub());
 
-                driverStick.Button(6).whileTrue(drivetrain.lockWheelsCommand());
+                driverStick.Button(2).whileTrue(
+                                drivetrain.fireWhileDriving(driverStick.Axis(Axis.Y),
+                                                driverStick.Axis(Axis.X)));
+
+                driverStick.Button(3).whileTrue(
+                                drivetrain.tankDrive(driverStick.Axis(Axis.Y),
+                                                driverStick.Axis(Axis.X)));
+                driverStick.Button(5).whileTrue(
+                                drivetrain.tankDrive(driverStick.Axis(Axis.Y),
+                                                driverStick.Axis(Axis.X)));
+
+                driverStick.Button(7).whileTrue(drivetrain.lockWheelsCommand());
                 driverStick.Button(11).onTrue(drivetrain.zeroBotRotationCommand());
 
                 // Idle while the robot is disabled. This ensures the configured
