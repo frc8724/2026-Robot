@@ -156,7 +156,19 @@
     }
   ],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Warmup Shooter Slow",
+      "waypointRelativePos": 3.473967684021548,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Warmup Shooter Slow"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 7.0,
     "maxAcceleration": 7.0,

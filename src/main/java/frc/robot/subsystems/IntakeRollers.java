@@ -21,6 +21,10 @@ public class IntakeRollers extends SubsystemBase {
     TalonFXConfiguration configs = new TalonFXConfiguration();
 
     configs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    configs.CurrentLimits.StatorCurrentLimitEnable = true;
+    configs.CurrentLimits.StatorCurrentLimit = 30;
+    configs.CurrentLimits.SupplyCurrentLimitEnable = true;
+    configs.CurrentLimits.SupplyCurrentLimit = 30;
     motor.getConfigurator().apply(configs);
   }
 
@@ -37,7 +41,7 @@ public class IntakeRollers extends SubsystemBase {
   }
 
   public Command intakeCommand() {
-    return setSpeedCommand(.8);
+    return setSpeedCommand(1);
   }
 
   public Command turnOffCommand() {

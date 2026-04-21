@@ -17,7 +17,9 @@ import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.epilogue.Logged;
 
+@Logged
 public class Shooter2 extends SubsystemBase {
   TalonFX motor1;
   TalonFX motor2;
@@ -28,7 +30,7 @@ public class Shooter2 extends SubsystemBase {
   final VelocityVoltage m_request;
   double p = 1.0;
   double offset = 0.0;
-  double idleSpeed = 0.0;
+  // double idleSpeed = 0.0;
 
   /** Creates a new Shooter. */
   public Shooter2(TalonFX motor1, TalonFX motor2, TalonFX motor3, TalonFX motor4) {
@@ -52,6 +54,10 @@ public class Shooter2 extends SubsystemBase {
       configs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
       configs.Slot0 = slot0Configs;
       configs.Voltage.PeakReverseVoltage = 0;
+      configs.CurrentLimits.StatorCurrentLimitEnable = true;
+      configs.CurrentLimits.StatorCurrentLimit = 45;
+      configs.CurrentLimits.SupplyCurrentLimitEnable = true;
+      configs.CurrentLimits.SupplyCurrentLimit = 45;
 
       this.motor1.getConfigurator().apply(configs);
       if (this.motor2 != null) {
@@ -68,29 +74,29 @@ public class Shooter2 extends SubsystemBase {
       }
     }
     m_request = new VelocityVoltage(0).withSlot(0);
-    setDefaultCommand(run(() -> {
-      if (targetSpeed == 0) {
-        if (idleSpeed < 5) {
-          setSpeed(0);
-          idleSpeed = 0;
-        } else {
-          // setVelocity(idleSpeed);
-          if (motor1 != null) {
-            motor1.setControl(m_request.withVelocity(idleSpeed));
-          }
-        }
-      } else {
-        setVelocity(targetSpeed);
-      }
-    }));
+    // setDefaultCommand(run(() -> {
+    // if (targetSpeed == 0) {
+    // if (idleSpeed < 5) {
+    // setSpeed(0);
+    // idleSpeed = 0;
+    // } else {
+    // // setVelocity(idleSpeed);
+    // if (motor1 != null) {
+    // motor1.setControl(m_request.withVelocity(idleSpeed));
+    // }
+    // }
+    // } else {
+    // setVelocity(targetSpeed);
+    // }
+    // }));
   }
 
-  public Command setIdleSpeedCommand(double idle) {
-    return runOnce(() -> {
-      targetSpeed = 0;
-      idleSpeed = idle;
-    });
-  }
+  // public Command setIdleSpeedCommand(double idle) {
+  // return runOnce(() -> {
+  // targetSpeed = 0;
+  // idleSpeed = idle;
+  // });
+  // }
 
   @Override
   public void periodic() {

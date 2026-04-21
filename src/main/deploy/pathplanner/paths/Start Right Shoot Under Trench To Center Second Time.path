@@ -21,7 +21,7 @@
       },
       "prevControl": {
         "x": 1.6466566076511673,
-        "y": 0.3233734536192525
+        "y": 0.32337345361925196
       },
       "nextControl": {
         "x": 4.930590909090908,
@@ -37,7 +37,7 @@
       },
       "prevControl": {
         "x": 5.930346488368965,
-        "y": 0.19284782215256213
+        "y": 0.19284782215256235
       },
       "nextControl": {
         "x": 8.078017014527717,
@@ -173,6 +173,17 @@
         "type": "named",
         "data": {
           "name": "Intake Down"
+        }
+      }
+    },
+    {
+      "name": "Warmup Shooter Slow",
+      "waypointRelativePos": 4.46140035906642,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Warmup Shooter Slow"
         }
       }
     }

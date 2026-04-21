@@ -5,21 +5,33 @@
     "data": {
       "commands": [
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.5
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Intake Down"
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "Start Right Trench to Center Intake Over Bump New"
+            "pathName": "Start Left Trench to Center Intake Over Bump With Nashoba"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot 3s Intake Jiggle"
+            "name": "Shoot 4s Intake Jiggle"
           }
         },
         {
@@ -31,7 +43,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Start Right Shoot Under Trench To Center Second Time"
+            "pathName": "Start Shoot Far Collect Depot Nashoba"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Nashoba Depot to Score Far Left"
           }
         },
         {

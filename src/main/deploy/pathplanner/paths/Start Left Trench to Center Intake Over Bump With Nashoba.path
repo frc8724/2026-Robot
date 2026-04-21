@@ -80,16 +80,16 @@
     },
     {
       "anchor": {
-        "x": 2.7046869409660106,
-        "y": 5.438497316636852
+        "x": 1.7560909090909091,
+        "y": 5.261511363636364
       },
       "prevControl": {
-        "x": 3.954042933810377,
-        "y": 5.535849731663685
+        "x": 3.0054469019352754,
+        "y": 5.358863778663197
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Shoot Drum Left Bump"
+      "linkedName": "Far Shoot With Nashoba"
     }
   ],
   "rotationTargets": [

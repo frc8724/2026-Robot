@@ -3,45 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.477531305903399,
-        "y": 5.016636851520572
+        "x": 2.7046869409660106,
+        "y": 5.438497316636852
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.178670454545454,
-        "y": 5.4573409090909095
+        "x": 2.4058260896080657,
+        "y": 5.879201374207189
       },
       "isLocked": false,
       "linkedName": "Shoot Drum Left Bump"
     },
     {
       "anchor": {
-        "x": 4.611079545454545,
-        "y": 7.5805454545454545
+        "x": 4.619284436493739,
+        "y": 7.4828980322003575
       },
       "prevControl": {
-        "x": 1.6466566076511673,
-        "y": 7.484918908164707
+        "x": 1.0010196779964229,
+        "y": 7.499123434704829
       },
       "nextControl": {
-        "x": 4.930590909090908,
-        "y": 7.590852272727272
+        "x": 4.9389587817611,
+        "y": 7.481464514957006
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.940420454545453,
-        "y": 6.962136363636364
+        "x": 6.793488372093024,
+        "y": 6.833881932021467
       },
       "prevControl": {
-        "x": 5.930352272727272,
-        "y": 7.807295454545455
+        "x": 5.7834201902748426,
+        "y": 7.679041022930559
       },
       "nextControl": {
-        "x": 8.078010499889846,
-        "y": 6.010275305286973
+        "x": 7.931078417437416,
+        "y": 5.882020873672076
       },
       "isLocked": false,
       "linkedName": null
@@ -80,12 +80,12 @@
     },
     {
       "anchor": {
-        "x": 2.477531305903399,
-        "y": 5.016636851520572
+        "x": 2.7046869409660106,
+        "y": 5.438497316636852
       },
       "prevControl": {
-        "x": 2.2341502683363155,
-        "y": 5.470948121645796
+        "x": 2.461305903398927,
+        "y": 5.892808586762075
       },
       "nextControl": null,
       "isLocked": false,
@@ -98,7 +98,7 @@
       "rotationDegrees": 180.0
     },
     {
-      "waypointRelativePos": 1.6084905660377395,
+      "waypointRelativePos": 1.9251336898395721,
       "rotationDegrees": 180.0
     },
     {
@@ -108,10 +108,6 @@
     {
       "waypointRelativePos": 2.7547169811320726,
       "rotationDegrees": -90.0
-    },
-    {
-      "waypointRelativePos": 3.4905660377358476,
-      "rotationDegrees": 90.0
     },
     {
       "waypointRelativePos": 4.323899371069183,
@@ -125,8 +121,8 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 4.308797127468581,
-      "maxWaypointRelativePos": 4.739676840215442,
+      "minWaypointRelativePos": 4.3559322033898304,
+      "maxWaypointRelativePos": 4.610169491525425,
       "constraints": {
         "maxVelocity": 2.0,
         "maxAcceleration": 2.0,
@@ -138,12 +134,12 @@
     },
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 4.593220338983053,
-      "maxWaypointRelativePos": 5.0,
+      "minWaypointRelativePos": 0.8813559322033895,
+      "maxWaypointRelativePos": 2.3967684021543985,
       "constraints": {
         "maxVelocity": 6.0,
-        "maxAcceleration": 5.0,
-        "maxAngularVelocity": 1000.0,
+        "maxAcceleration": 6.0,
+        "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 1000.0,
         "nominalVoltage": 12.0,
         "unlimited": false
@@ -151,11 +147,11 @@
     },
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0,
-      "maxWaypointRelativePos": 2.3967684021543985,
+      "minWaypointRelativePos": 2.531418312387792,
+      "maxWaypointRelativePos": 3.9676840215439766,
       "constraints": {
-        "maxVelocity": 6.0,
-        "maxAcceleration": 6.0,
+        "maxVelocity": 4.0,
+        "maxAcceleration": 4.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 1000.0,
         "nominalVoltage": 12.0,
@@ -175,6 +171,17 @@
           "name": "Intake Down"
         }
       }
+    },
+    {
+      "name": "Warmup Shooter Slow",
+      "waypointRelativePos": 4.210053859964086,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Warmup Shooter Slow"
+        }
+      }
     }
   ],
   "globalConstraints": {
@@ -187,13 +194,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 147.17145820858755
+    "rotation": 141.00900595749454
   },
   "reversed": false,
   "folder": "Drum",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 147.17145820858755
+    "rotation": 141.00900595749454
   },
   "useDefaultConstraints": false
 }

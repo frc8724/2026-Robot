@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 4.5
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Intake Down"
@@ -13,31 +19,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Start Right Trench to Center Intake Over Bump New"
+            "pathName": "Nashoba Start Right Trench to Center Intake Over Bump"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot 3s Intake Jiggle"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shut Down Shooter"
+            "name": "Shoot 5s Intake Jiggle"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Start Right Shoot Under Trench To Center Second Time"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot 16s Intake Jiggle"
+            "pathName": "Hide Nashoba"
           }
         }
       ]

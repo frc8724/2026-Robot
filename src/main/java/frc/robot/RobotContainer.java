@@ -198,6 +198,11 @@ public class RobotContainer {
                 m_auto.addAuto("Start Center Depot And Outpost",
                                 new PathPlannerAuto("Start Center Depot And Outpost"));
                 m_auto.addAuto("test", new PathPlannerAuto("test"));
+
+                m_auto.addAuto("Start Left Wait 2 Sec Collect Mid over Bump Score Depot",
+                                new PathPlannerAuto("Start Left Wait 2 Sec Collect Mid over Bump Score Depot"));
+                m_auto.addAuto("Right Nashoba",
+                                new PathPlannerAuto("Right Nashoba"));
                 // m_auto.addAuto("Test Center Creep Forward",
                 // new PathPlannerAuto("Test Center Creep Forward"));
                 // m_auto.addAuto("Test Center Creep Backward",
@@ -218,13 +223,34 @@ public class RobotContainer {
                 // launchingTower.fireFuelCommand().withTimeout(8)));
                 NamedCommands.registerCommand("Shoot-8s", shootForTimeCommand(8));
                 NamedCommands.registerCommand("Shoot-4s", shootForTimeCommand(4));
+                NamedCommands.registerCommand("Shoot-5s", shootForTimeCommand(5));
+                NamedCommands.registerCommand("Shoot-3s", shootForTimeCommand(3));
                 NamedCommands.registerCommand("Intake Down",
                                 new ParallelCommandGroup(intakeArm.goToDownCommand(), intakeRollers.intakeCommand()));
+                NamedCommands.registerCommand("Intake Depot Down",
+                                new ParallelCommandGroup(intakeArm.goToDepotCommand(), intakeRollers.intakeCommand()));
                 NamedCommands.registerCommand("Intake Up",
                                 new ParallelCommandGroup(intakeArm.goToUpCommand(), intakeRollers.turnOffCommand()));
+
+                NamedCommands.registerCommand("Shoot 3s Intake Jiggle",
+                                // new ParallelCommandGroup(shootForTimeCommand(3), intakeArm.jiggleCommand())
+                                new ParallelRaceGroup(new WaitCommand(3),
+                                                new DrivePointToHub().repeatedly(),
+                                                launchingTower.fireFuelCommand(),
+                                                // intakeArm.jiggleCommand().repeatedly()
+                                                new JiggleWiggle(intakeArm, intakeRollers).repeatedly()));
+
                 NamedCommands.registerCommand("Shoot 4s Intake Jiggle",
                                 // new ParallelCommandGroup(shootForTimeCommand(4), intakeArm.jiggleCommand())
                                 new ParallelRaceGroup(new WaitCommand(4),
+                                                new DrivePointToHub().repeatedly(),
+                                                launchingTower.fireFuelCommand(),
+                                                // intakeArm.jiggleCommand().repeatedly()
+                                                new JiggleWiggle(intakeArm, intakeRollers).repeatedly()));
+                NamedCommands.registerCommand("Shoot 5s Intake Jiggle",
+                                // new ParallelCommandGroup(shootForTimeCommand(5), intakeArm.jiggleCommand())
+                                new ParallelRaceGroup(new WaitCommand(5),
+
                                                 new DrivePointToHub().repeatedly(),
                                                 launchingTower.fireFuelCommand(),
                                                 // intakeArm.jiggleCommand().repeatedly()
@@ -246,6 +272,7 @@ public class RobotContainer {
                 NamedCommands.registerCommand("Intake Down No Rollers", intakeArm.goToDownCommand());
                 NamedCommands.registerCommand("Turn Off Rollers", intakeRollers.turnOffCommand());
                 NamedCommands.registerCommand("Warmup Shooter", shooter.setVelocityCommand(42));
+                NamedCommands.registerCommand("Warmup Shooter Slow", shooter.setVelocityCommand(20));
                 NamedCommands.registerCommand("Spit",
                                 new ParallelCommandGroup(intakeArm.goToDownCommand(), intakeRollers.outtakeCommand()));
                 NamedCommands.registerCommand("Shut Down Shooter", launchingTower.shutDownCommand());
@@ -350,9 +377,12 @@ public class RobotContainer {
                                 shooter.setSpeedCommand(0),
                                 shooterHood.SetPositionByPidCommand(0)));
 
-                operatorPad.D_PAD_UP.onFalse(shooter.setIdleSpeedCommand(0));
-                operatorPad.D_PAD_LEFT.onTrue(shooter.setIdleSpeedCommand(20));
-                operatorPad.D_PAD_RIGHT.onTrue(shooter.setIdleSpeedCommand(0));
+                // operatorPad.D_PAD_UP.onFalse(shooter.setIdleSpeedCommand(0));
+                // operatorPad.D_PAD_LEFT.onTrue(shooter.setIdleSpeedCommand(40));
+                // operatorPad.D_PAD_RIGHT.onTrue(shooter.setIdleSpeedCommand(0));
+                operatorPad.D_PAD_UP.onFalse(shooter.setVelocityCommand(0));
+                operatorPad.D_PAD_LEFT.onTrue(shooter.setVelocityCommand(20));
+                operatorPad.D_PAD_RIGHT.onTrue(shooter.setVelocityCommand(0));
 
                 // operatorPad.D_PAD_DOWN.onTrue(launchingTower.shootCloseCommand());
                 // operatorPad.D_PAD_DOWN.onFalse(new SequentialCommandGroup(
@@ -386,16 +416,13 @@ public class RobotContainer {
         }
 
         private void configureDriverstickBindings() {
-                // driverStick.Button(6).onTrue(drivetrain.goToPoseCommand(drivetrain.shooterPose2Red));
-                // driverStick.Button(4).onTrue(drivetrain.goToPoseCommand(drivetrain.climbRightRed));
-                // driverStick.Button(3).onTrue(drivetrain.goToPoseCommand(drivetrain.climbLeftRed));
                 driverStick.Button(2).whileTrue(
                                 drivetrain.fireWhileDriving(driverStick.Axis(Axis.Y),
                                                 driverStick.Axis(Axis.X)));
-                // driverStick.Button(9).whileTrue(drivetrain.strafeWhileFiringCommand());
-                // driverStick.Button(7).whileTrue(
-                // drivetrain.fireWhileDriving(driverStick.Axis(Axis.Y),
-                // driverStick.Axis(Axis.X)));
+
+                driverStick.Button(5).whileTrue(
+                                drivetrain.tankDrive(driverStick.Axis(Axis.Y),
+                                                driverStick.Axis(Axis.X)));
 
                 // Note that X is defined as forward according to WPILib convention,
                 // and Y is defined as to the left according to WPILib convention.
@@ -440,15 +467,8 @@ public class RobotContainer {
 
                 driverStick.Button(1).whileTrue(new DrivePointToHub());
 
-                // driverStick.Button(5).onTrue(drivetrain.goToPoseCommand(drivetrain.shooterPose1Red));
                 driverStick.Button(6).whileTrue(drivetrain.lockWheelsCommand());
-                // driverStick.Button(8).onTrue(drivetrain.trenchRightOutCommand());
-                // driverStick.Button(10).onTrue(drivetrain.trenchRightInCommand());
                 driverStick.Button(11).onTrue(drivetrain.zeroBotRotationCommand());
-                // driverStick.Button(12).onTrue(drivetrain.stopAllCommand());
-
-                // driverStick.Button(7).onTrue(drivetrain.bumpCommand());
-                // driverStick.Button(9).onTrue(drivetrain.trenchCommand());
 
                 // Idle while the robot is disabled. This ensures the configured
                 // neutral mode is applied to the drive motors while disabled.
