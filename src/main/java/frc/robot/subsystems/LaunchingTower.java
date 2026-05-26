@@ -112,15 +112,23 @@ public class LaunchingTower extends SubsystemBase {
       // new FiringSolution(3.65, 64, 19, 1),
       // new FiringSolution(5, 53, 17, 1),
 
-      new FiringSolution(0.0, 34, 12, 1),
-      new FiringSolution(1.36, 34, 12, 1), // 3/26/26
-      new FiringSolution(1.85, 36, 14, 1.05), // 3/27/26
-      new FiringSolution(2.35, 37, 17, 1.07), // 3/27/26
-      new FiringSolution(2.86, 40, 18.5, 1.25), // 3/27/26
-      new FiringSolution(3.37, 42, 22, 1.18), // 3/27/26
-      new FiringSolution(3.90, 43.5, 23, 1.18), // 3/27/26
+      new FiringSolution(0.0, 34, 11, 1),
+      new FiringSolution(1.36, 34, 11, 1), // 3/26/26
+      new FiringSolution(1.85, 36, 13, 1.05), // 3/27/26
+      new FiringSolution(2.35, 37, 16, 1.07), // 3/27/26
+      new FiringSolution(2.86, 40, 17.5, 1.25), // 3/27/26
+      new FiringSolution(3.37, 42, 21, 1.18), // 3/27/26
+      new FiringSolution(3.90, 43.5, 231, 1.18), // 3/27/26
       new FiringSolution(4.75, 45, 23, 1.20), // 3/27/26
       new FiringSolution(10, 45, 23, 4),
+
+      // new FiringSolution(0.0, 34, 10, 1),
+      // new FiringSolution(1.36, 34, 10, 1), // 3/26/26
+      // new FiringSolution(1.85, 36, 12, 1.05), // 3/27/26
+      // new FiringSolution(2.35, 37, 14, 1.07), // 3/27/26
+      // new FiringSolution(2.86, 39, 17, 1.25), // 3/27/26
+      // new FiringSolution(3.37, 41, 20, 1.18), // 3/27/26
+      // new FiringSolution(3.90, 41.5, 23, 1.18), // 3/27/26
 
   };
 

@@ -471,7 +471,7 @@ public class RobotContainer {
                                                 driverStick.Axis(Axis.X)));
 
                 driverStick.Button(7).whileTrue(drivetrain.lockWheelsCommand());
-                driverStick.Button(11).onTrue(drivetrain.zeroBotRotationCommand());
+                // driverStick.Button(11).onTrue(drivetrain.zeroBotRotationCommand());
 
                 // Idle while the robot is disabled. This ensures the configured
                 // neutral mode is applied to the drive motors while disabled.
