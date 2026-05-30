@@ -1,0 +1,75 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.7046869409660106,
+        "y": 5.438497316636852
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.003215909090909,
+        "y": 6.807534090909091
+      },
+      "isLocked": false,
+      "linkedName": "Shoot Drum Left Bump"
+    },
+    {
+      "anchor": {
+        "x": 3.9720568181818177,
+        "y": 7.477477272727273
+      },
+      "prevControl": {
+        "x": 2.9156296514168965,
+        "y": 7.395556275664743
+      },
+      "nextControl": {
+        "x": 5.028483984946739,
+        "y": 7.559398269789804
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.280306818181817,
+        "y": 7.477477272727273
+      },
+      "prevControl": {
+        "x": 7.280306818181817,
+        "y": 7.477477272727273
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.8962264150943395,
+      "rotationDegrees": 180.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": "battlecry",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 141.00900595749454
+  },
+  "useDefaultConstraints": true
+}

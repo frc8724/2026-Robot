@@ -203,6 +203,13 @@ public class RobotContainer {
                                 new PathPlannerAuto("Start Left Wait 2 Sec Collect Mid over Bump Score Depot"));
                 m_auto.addAuto("Right Nashoba",
                                 new PathPlannerAuto("Right Nashoba"));
+
+                // battlecry
+                m_auto.addAuto("Left Trench Shoot 1 Dot", new PathPlannerAuto("Left Trench Shoot 1 Dot"));
+                m_auto.addAuto("Right Trench Shoot 1 Dot", new PathPlannerAuto("Right Trench Shoot 1 Dot"));
+                m_auto.addAuto("Left Trench to Left Dot", new PathPlannerAuto("Left Trench to Left Dot"));
+                m_auto.addAuto("Right Trench to Right Dot", new PathPlannerAuto("Right Trench to Right Dot"));
+
                 // m_auto.addAuto("Test Center Creep Forward",
                 // new PathPlannerAuto("Test Center Creep Forward"));
                 // m_auto.addAuto("Test Center Creep Backward",
@@ -276,6 +283,7 @@ public class RobotContainer {
                 NamedCommands.registerCommand("Spit",
                                 new ParallelCommandGroup(intakeArm.goToDownCommand(), intakeRollers.outtakeCommand()));
                 NamedCommands.registerCommand("Shut Down Shooter", launchingTower.shutDownCommand());
+                NamedCommands.registerCommand("lock", drivetrain.lockWheelsCommand());
 
                 // NamedCommands.registerCommand("IntakeDownWithWait", new ());
 

@@ -3,11 +3,12 @@
   "robotLength": 0.91,
   "holonomicMode": true,
   "pathFolders": [
-    "New Folder",
-    "Drum"
+    "Drum",
+    "battlecry"
   ],
   "autoFolders": [
-    "Drum"
+    "Drum",
+    "battlecry"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
