@@ -1,0 +1,210 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.3745,
+        "y": 2.952784090909091
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.0756385801079045,
+        "y": 2.5120804188873627
+      },
+      "isLocked": false,
+      "linkedName": "Shoot Drum Right Bump"
+    },
+    {
+      "anchor": {
+        "x": 4.611079545454545,
+        "y": 0.419
+      },
+      "prevControl": {
+        "x": 1.6466566076511673,
+        "y": 0.32337345361925196
+      },
+      "nextControl": {
+        "x": 4.930590909090908,
+        "y": 0.42930681818181693
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.940420454545453,
+        "y": 1.038
+      },
+      "prevControl": {
+        "x": 5.930346488368965,
+        "y": 0.19284782215256235
+      },
+      "nextControl": {
+        "x": 8.078017014527717,
+        "y": 1.9898532725085323
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.377602862254025,
+        "y": 4.622
+      },
+      "prevControl": {
+        "x": 6.594512814833276,
+        "y": 3.999124365163416
+      },
+      "nextControl": {
+        "x": 8.090647153864845,
+        "y": 5.189160720873086
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.377602862254025,
+        "y": 2.659
+      },
+      "prevControl": {
+        "x": 8.657169961788906,
+        "y": 3.0256441181246196
+      },
+      "nextControl": {
+        "x": 6.192421691858809,
+        "y": 2.3194010018736706
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.3745,
+        "y": 2.952784090909091
+      },
+      "prevControl": {
+        "x": 2.1311157123277633,
+        "y": 2.4984745619265905
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Shoot Drum Right Bump"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.9779874213836477,
+      "rotationDegrees": 180.0
+    },
+    {
+      "waypointRelativePos": 1.6084905660377395,
+      "rotationDegrees": 180.0
+    },
+    {
+      "waypointRelativePos": 2.35,
+      "rotationDegrees": 90.0
+    },
+    {
+      "waypointRelativePos": 2.7547169811320726,
+      "rotationDegrees": 90.0
+    },
+    {
+      "waypointRelativePos": 3.4905660377358476,
+      "rotationDegrees": -90.0
+    },
+    {
+      "waypointRelativePos": 4.323899371069183,
+      "rotationDegrees": -45.0
+    },
+    {
+      "waypointRelativePos": 4.756289308176103,
+      "rotationDegrees": -45.0
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 4.308797127468581,
+      "maxWaypointRelativePos": 4.739676840215442,
+      "constraints": {
+        "maxVelocity": 2.0,
+        "maxAcceleration": 2.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    },
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 4.593220338983053,
+      "maxWaypointRelativePos": 5.0,
+      "constraints": {
+        "maxVelocity": 6.0,
+        "maxAcceleration": 5.0,
+        "maxAngularVelocity": 1000.0,
+        "maxAngularAcceleration": 1000.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    },
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 2.3967684021543985,
+      "constraints": {
+        "maxVelocity": 6.0,
+        "maxAcceleration": 6.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 1000.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intake Down",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Intake Down"
+        }
+      }
+    },
+    {
+      "name": "Warmup Shooter Slow",
+      "waypointRelativePos": 4.46140035906642,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Warmup Shooter Slow"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 1000.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -157.989
+  },
+  "reversed": false,
+  "folder": "Drum",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -157.989
+  },
+  "useDefaultConstraints": false
+}

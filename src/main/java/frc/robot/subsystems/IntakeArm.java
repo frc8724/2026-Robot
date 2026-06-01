@@ -4,10 +4,12 @@
 
 package frc.robot.subsystems;
 
+import java.lang.module.ModuleReader;
 import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -15,27 +17,35 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.epilogue.Logged;
 
+@Logged
 public class IntakeArm extends SubsystemBase {
   /** Creates a new IntakeArm. */
   TalonFX motor;
   // private double down = -18;
-  private double down = -21.5;
-  private double half = -21.5 / 2;
+  // private double down = -21.5;
+  private double down = -21;
+  private double depot = -18;
+  private double half = -5;
   private double up = 0;
   // private double up = -5;
   private final PositionVoltage position = new PositionVoltage(0);
   private double lastPosition;
 
+  final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(0);
+
   public IntakeArm(TalonFX motor) {
     this.motor = motor;
     TalonFXConfiguration configs = new TalonFXConfiguration();
     configs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-    configs.Slot0.kP = 0.5; // An error of 0.5 rotations results in 1.2 volts output
+    configs.Slot0.kP = 1.0; // An error of 0.5 rotations results in 1.2 volts output
     configs.Slot0.kD = 0.0; // A change of 1 rotation per second results in 0.1 volts output
+    // configs.Slot0.kG = -0.2;
 
     configs.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.1;
 
@@ -45,6 +55,11 @@ public class IntakeArm extends SubsystemBase {
     configs.CurrentLimits.StatorCurrentLimitEnable = true;
     configs.CurrentLimits.StatorCurrentLimit = 20;
     configs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+
+    var motionMagicConfigs = configs.MotionMagic;
+    motionMagicConfigs.MotionMagicCruiseVelocity = 90;
+    motionMagicConfigs.MotionMagicAcceleration = 150;
+    motionMagicConfigs.MotionMagicJerk = 0;
 
     if (motor != null) {
       /* Retry config apply up to 5 times, report if failure */
@@ -61,16 +76,46 @@ public class IntakeArm extends SubsystemBase {
     lastPosition = getPosition();
   }
 
+  public void brake() {
+    motor.setNeutralMode(NeutralModeValue.Brake);
+  }
+
+  public Command brakeCommand() {
+    return runOnce(() -> {
+      brake();
+    });
+  }
+
+  public void coast() {
+    motor.setNeutralMode(NeutralModeValue.Coast);
+  }
+
+  public Command coastCommand() {
+    return runOnce(() -> {
+      coast();
+    });
+  }
+
   public Command goToDownCommand() {
     // return setPositionCommand(down);
     return runOnce(() -> {
+      // brake();
       setPosition(down);
+    });
+  }
+
+  public Command goToDepotCommand() {
+    // return setPositionCommand(down);
+    return runOnce(() -> {
+      // brake();
+      setPosition(depot);
     });
   }
 
   public Command goToHalfCommand() {
     // return setPositionCommand(down);
     return runOnce(() -> {
+      coast();
       setPosition(half);
     });
   }
@@ -78,6 +123,7 @@ public class IntakeArm extends SubsystemBase {
   public Command goToUpCommand() {
     // return setPositionCommand(up);
     return runOnce(() -> {
+      coast();
       setPosition(up);
     });
   }
@@ -85,6 +131,7 @@ public class IntakeArm extends SubsystemBase {
   public void setPosition(double pos) {
     if (motor != null) {
       motor.setControl(position.withPosition(pos));
+      // motor.setControl(motionMagicRequest.withPosition(pos));
     }
   }
 

@@ -1,0 +1,49 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Trench Right To Intake Center"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Warmup Shooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Intake Center Right To Right Trench"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot 8s Intake Jiggle"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot 8s Intake Jiggle"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Up"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

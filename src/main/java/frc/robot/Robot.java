@@ -5,13 +5,13 @@
 package frc.robot;
 
 import com.ctre.phoenix6.HootAutoReplay;
-import com.pathplanner.lib.commands.PathfindingCommand;
 
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.epilogue.Logged;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
+@Logged
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
 
@@ -30,9 +30,6 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         m_timeAndJoystickReplay.update();
         CommandScheduler.getInstance().run();
-
-        // double omegaRps =
-        // Units.degreesToRotations(m_robotContainer.drivetrain.getTurn))
     }
 
     @Override

@@ -1,0 +1,73 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Down"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Start Left Trench Intake Center Trench To Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot 4s Intake Jiggle"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shut Down Shooter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Down"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Start Left Shoot To Depot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Depot To Score Left"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot 16s Intake Jiggle"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Drum",
+  "choreoAuto": false
+}

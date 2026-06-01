@@ -15,12 +15,6 @@
           "data": {
             "name": "Shoot-8s"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Shoot Center 1 Climb"
-          }
         }
       ]
     }

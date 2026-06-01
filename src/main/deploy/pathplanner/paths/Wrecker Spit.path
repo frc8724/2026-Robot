@@ -1,0 +1,101 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.785579545454546,
+        "y": 5.302738636363637
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.3629999999999995,
+        "y": 5.972681818181818
+      },
+      "isLocked": false,
+      "linkedName": "End Of Wrecker Start"
+    },
+    {
+      "anchor": {
+        "x": 6.940420454545453,
+        "y": 7.415636363636363
+      },
+      "prevControl": {
+        "x": 7.704996285504607,
+        "y": 7.415636363636363
+      },
+      "nextControl": {
+        "x": 6.409844514893453,
+        "y": 7.415636363636363
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.6417613636363635,
+        "y": 7.415636363636363
+      },
+      "prevControl": {
+        "x": 7.1105462406620425,
+        "y": 7.415636363636363
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "End Of Wrecker Spit"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.9842767295597483,
+      "rotationDegrees": 180.0
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.7540394973070018,
+      "maxWaypointRelativePos": 2.0,
+      "constraints": {
+        "maxVelocity": 2.0,
+        "maxAcceleration": 5.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "",
+      "waypointRelativePos": 0.8186714542190284,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Spit"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "useDefaultConstraints": true
+}

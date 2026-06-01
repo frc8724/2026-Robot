@@ -5,51 +5,51 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Intake Down"
+            "pathName": "Start Center To Depot"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.5
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "New Path"
+            "pathName": "Depot To Ready Outpost"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Intake Left Center End To Trench Left Shoot"
+            "pathName": "Outpost Collect"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Outpost to Score"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot 8s Intake Jiggle"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot 8s Intake Jiggle"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Up"
+            "name": "Shoot 16s Intake Jiggle"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Drum",
   "choreoAuto": false
 }

@@ -1,0 +1,31 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Hide Nashoba"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot 4s Intake Jiggle"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shut Down Shooter"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Drum",
+  "choreoAuto": false
+}

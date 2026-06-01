@@ -1,0 +1,117 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.5,
+        "y": 4.0
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.7558262172511148,
+        "y": 4.0
+      },
+      "isLocked": false,
+      "linkedName": "start center"
+    },
+    {
+      "anchor": {
+        "x": 2.5497159090909087,
+        "y": 4.0
+      },
+      "prevControl": {
+        "x": 3.1989096770077086,
+        "y": 4.0
+      },
+      "nextControl": {
+        "x": 1.900522141174109,
+        "y": 4.0
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.0652954545454545,
+        "y": 5.395499999999999
+      },
+      "prevControl": {
+        "x": 2.0652954545454545,
+        "y": 4.83923450828243
+      },
+      "nextControl": {
+        "x": 2.0652954545454545,
+        "y": 5.951765491717569
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.65,
+        "y": 6.0
+      },
+      "prevControl": {
+        "x": 2.568832118366857,
+        "y": 6.0
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Depo Collected"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 2.731132075471722,
+      "rotationDegrees": -160.0
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 2.7253141831238787,
+      "maxWaypointRelativePos": 3.0,
+      "constraints": {
+        "maxVelocity": 0.75,
+        "maxAcceleration": 0.75,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intake Depot Down",
+      "waypointRelativePos": 2.752244165170557,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Intake Depot Down"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 2.5,
+    "maxAcceleration": 2.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": "Drum",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": false
+}

@@ -1,0 +1,89 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.6417613636363635,
+        "y": 7.415636363636363
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.569375,
+        "y": 6.9002954545454545
+      },
+      "isLocked": false,
+      "linkedName": "End Of Wrecker Spit"
+    },
+    {
+      "anchor": {
+        "x": 7.3,
+        "y": 7.116738636363636
+      },
+      "prevControl": {
+        "x": 7.3,
+        "y": 7.64618530951258
+      },
+      "nextControl": {
+        "x": 7.3,
+        "y": 6.5872919632146925
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.3,
+        "y": 4.313284090909091
+      },
+      "prevControl": {
+        "x": 7.3,
+        "y": 4.869852272727273
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "End Of Wrecker Out Again"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.9999999999999999,
+      "rotationDegrees": -90.0
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 1.3824057450628362,
+      "maxWaypointRelativePos": 2.0,
+      "constraints": {
+        "maxVelocity": 3.0,
+        "maxAcceleration": 1.5,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

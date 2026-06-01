@@ -1,0 +1,61 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center to Depo"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Down"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Depo Collect"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Warmup Shooter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Turn Off Rollers"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Depot Collected To Shoot From Depot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot 16s Intake Jiggle"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

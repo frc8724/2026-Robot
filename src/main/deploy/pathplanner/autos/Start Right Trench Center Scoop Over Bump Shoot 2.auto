@@ -1,0 +1,49 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Down"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Start Right Trench to Center Intake Over Bump New"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot 3s Intake Jiggle"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shut Down Shooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Start Right Shoot Under Trench To Center Second Time"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot 16s Intake Jiggle"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Drum",
+  "choreoAuto": false
+}

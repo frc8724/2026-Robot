@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import java.lang.annotation.Retention;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -12,7 +13,11 @@ import java.util.function.Supplier;
 
 import com.ctre.phoenix6.controls.FireAnimation;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.util.struct.Struct;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
@@ -24,23 +29,70 @@ import frc.robot.RobotContainer;
 
 public class LaunchingTower extends SubsystemBase {
   /** Creates a new LaunchingTower. */
-  private Shooter shooter;
+  private Shooter2 shooter;
   private ShooterHood hood;
   private Loader loader;
   private Hopper hopper;
-  private IntakeRollers rollers;
+  private final double loaderSpeed = 0.8;
 
   class FiringSolution {
     public double distance;
     public double shooterSpeed;
     public double hoodPosition;
+    public double airTime;
 
-    public FiringSolution(double distance, double shooterSpeed, double hoodPosition) {
+    public FiringSolution(double distance, double shooterSpeed, double hoodPosition, double airTime) {
       this.distance = distance;
       this.shooterSpeed = shooterSpeed;
       this.hoodPosition = hoodPosition;
+      this.airTime = airTime;
     }
   };
+
+  public static class Vector2D {
+    public double x;
+    public double y;
+
+    public Vector2D(double x, double y) {
+      this.x = x;
+      this.y = y;
+    }
+
+    public Vector2D multiplyByDouble(double a) {
+      this.x *= a;
+      this.y *= a;
+      return this;
+    }
+
+    public Vector2D clone() {
+      return new Vector2D(x, y);
+    }
+
+    public Vector2D fromPose2D(Pose2d pose) {
+      // return new Vector2D(pose.getX(), pose.getY());
+      x = pose.getX();
+      y = pose.getY();
+      return this;
+    }
+
+    public Pose2d toPose2D() {
+      return new Pose2d(x, y, new Rotation2d(0.0));
+    }
+
+    public Vector2D addVector(Vector2D v) {
+      x += v.x;
+      y += v.y;
+      return this;
+    }
+
+    public double distanceTo(Vector2D v) {
+      return Math.sqrt(Math.pow(x - v.x, 2) + Math.pow(y - v.y, 2));
+    }
+
+    public String toString() {
+      return "x: " + x + " y: " + y;
+    }
+  }
 
   FiringSolution[] solutions = new FiringSolution[] {
       // new FiringSolution(0, 46, 7),
@@ -51,79 +103,87 @@ public class LaunchingTower extends SubsystemBase {
       // new FiringSolution(3.34, 57, 17), // 2/26/26
       // new FiringSolution(4.14, 56, 23),
       // new FiringSolution(5.36, 62, 30),
-      new FiringSolution(0, 42, 4),
-      new FiringSolution(0.8, 42, 4),
-      new FiringSolution(1.23, 42, 8),
-      new FiringSolution(2.6, 46, 20), // good
-      new FiringSolution(3.45, 56, 18),
-      new FiringSolution(5, 53, 17),
+
+      // new FiringSolution(0, 42, 3, 1),
+      // new FiringSolution(0.8, 42, 4, 1),
+      // new FiringSolution(1.23, 42, 8, 1),
+      // new FiringSolution(2.6, 48, 20, 1), // good
+      // new FiringSolution(3.45, 58, 18, 1),
+      // new FiringSolution(3.65, 64, 19, 1),
+      // new FiringSolution(5, 53, 17, 1),
+
+      new FiringSolution(0.0, 34, 11, 1),
+      new FiringSolution(1.36, 34, 11, 1), // 3/26/26
+      new FiringSolution(1.85, 36, 13, 1.05), // 3/27/26
+      new FiringSolution(2.35, 37, 16, 1.07), // 3/27/26
+      new FiringSolution(2.86, 40, 17.5, 1.25), // 3/27/26
+      new FiringSolution(3.37, 42, 21, 1.18), // 3/27/26
+      new FiringSolution(3.90, 43.5, 231, 1.18), // 3/27/26
+      new FiringSolution(4.75, 45, 23, 1.20), // 3/27/26
+      new FiringSolution(10, 45, 23, 4),
+
+      // new FiringSolution(0.0, 34, 10, 1),
+      // new FiringSolution(1.36, 34, 10, 1), // 3/26/26
+      // new FiringSolution(1.85, 36, 12, 1.05), // 3/27/26
+      // new FiringSolution(2.35, 37, 14, 1.07), // 3/27/26
+      // new FiringSolution(2.86, 39, 17, 1.25), // 3/27/26
+      // new FiringSolution(3.37, 41, 20, 1.18), // 3/27/26
+      // new FiringSolution(3.90, 41.5, 23, 1.18), // 3/27/26
+
   };
 
-  public LaunchingTower(Shooter shooter, ShooterHood hood, Loader loader, Hopper hopper, IntakeRollers rollers) {
+  public LaunchingTower(Shooter2 shooter, ShooterHood hood, Loader loader, Hopper hopper) {
     this.shooter = shooter;
     this.hood = hood;
     this.loader = loader;
     this.hopper = hopper;
-    this.rollers = rollers;
   }
 
   private Command prepareToFireAtCommand() {
+    var distance = getDistanceToTarget();
     DoubleSupplier dub1 = () -> {
-      var distance = RobotContainer.drivetrain.distanceToHub();
       return convertDistanceToHood(distance);
     };
     DoubleSupplier dub2 = () -> {
-      var distance = RobotContainer.drivetrain.distanceToHub();
-      return convertDistanceToShooterRPM(distance);
+      return convertDistanceToShooterRPS(distance);
     };
     return new ParallelCommandGroup(
         // hood.SetPositiongByMMCommand(dub1),
         hood.SetPositionByPidCommand(dub1),
-        shooter.setVelocityCommand(dub2));
+        shooter.setVelocityCommand(dub2)).finallyDo(() -> {
+          loader.setSpeed(0);
+          // shooter.setVelocity(0);
+          shooter.setSpeed(0);
+          hood.setPositionByPid(0);
+          hopper.setSpeed(0);
+        });
+  }
+
+  private double getDistanceToTarget() {
+    Vector2D target = RobotContainer.drivetrain.getRegionTargetVector2D();
+    var pos = RobotContainer.drivetrain.getState().Pose;
+    var robotV = new Vector2D(0, 0).fromPose2D(pos);
+    return target.distanceTo(robotV);
   }
 
   private Command fireCommand() {
-    // return run(() -> {
-    // var currentDistance = RobotContainer.drivetrain.distanceToHub();
-    // if (shooter.isAtTargetSpeed()) {
-    // loader.setSpeed(.75);
-    // hopper.setSpeed(.75);
-    // rollers.setSpeed(0.5);
-    // } else {
-    // loader.setSpeed(0);
-    // hopper.setSpeed(0);
-    // rollers.setSpeed(0.0);
-    // }
-    // hood.setPositionByMM(convertDistanceToHood(currentDistance));
-    // shooter.setVelocity(convertDistanceToShooterRPM(currentDistance));
-    // }).finallyDo(() -> {
-    // loader.setSpeed(0);
-    // shooter.setShooterSpeed(0);
-    // hood.setPositionByMM(0);
-    // hopper.setSpeed(0);
-    // rollers.setSpeed(0.0);
-    // });
-    return new ParallelCommandGroup(fireLoaderShooterHoodCommand()
-    // ,
-    // hopper.jiggleWiggleCommand()
-    );
+    return new ParallelCommandGroup(fireLoaderShooterHoodCommand());
   }
 
   private Command fireLoaderShooterHoodCommand() {
     return run(() -> {
-      var currentDistance = RobotContainer.drivetrain.distanceToHub();
+      var currentDistance = getDistanceToTarget();
       // Temporarily always feed (test mode)
-      loader.setSpeed(1);
+      loader.setSpeed(loaderSpeed);
       hopper.setSpeed(1);
 
       hood.setPositionByPid(convertDistanceToHood(currentDistance));
-      shooter.setVelocity(convertDistanceToShooterRPM(currentDistance));
+      shooter.setVelocity(convertDistanceToShooterRPS(currentDistance));
     }).finallyDo(() -> {
       loader.setSpeed(0);
       // shooter.setVelocity(0);
       shooter.setSpeed(0);
       hood.setPositionByPid(0);
-      rollers.setSpeed(0.0);
       hopper.setSpeed(0);
     });
   }
@@ -133,11 +193,11 @@ public class LaunchingTower extends SubsystemBase {
       return new SequentialCommandGroup(
           prepareToFireAtCommand(),
           fireCommand());
-    }, new HashSet<Subsystem>(Arrays.asList(hood, shooter, loader, hopper, rollers)));
+    }, new HashSet<Subsystem>(Arrays.asList(hood, shooter, loader, hopper)));
   }
 
-  public double convertDistanceToShooterRPM(double distance) {
-    // return 50;
+  public double convertDistanceToShooterRPS(double distance) {
+    // return 10;
     return getSolution(distance).shooterSpeed;
   }
 
@@ -161,13 +221,77 @@ public class LaunchingTower extends SubsystemBase {
     var lowerW = 1 - upperW;
     return new FiringSolution(distance,
         (upper.shooterSpeed * upperW + lower.shooterSpeed * lowerW) / (lowerW + upperW),
-        (upper.hoodPosition * upperW + lower.hoodPosition * lowerW) / (lowerW + upperW));
+        (upper.hoodPosition * upperW + lower.hoodPosition * lowerW) / (lowerW + upperW),
+        (upper.airTime * upperW + lower.airTime * lowerW) / (lowerW + upperW));
+  }
+
+  public Command shootCloseCommand() {
+    return run(() -> {
+      shootClose();
+    }).finallyDo(() -> {
+      shooter.setSpeed(0);
+      hood.setPositionByPid(0);
+      hopper.setSpeed(0);
+      loader.setSpeed(0);
+    });
+  }
+
+  public void shootClose() {
+    shooter.setVelocity(10);
+    hood.setPositionByPid(4);
+    if (shooter.isAtTargetSpeed()) {
+      loader.setSpeed(loaderSpeed);
+      hopper.setSpeed(1);
+    } else {
+      loader.setSpeed(0);
+      hopper.setSpeed(0);
+    }
+  }
+
+  public Command shutDownCommand() {
+    return new ParallelCommandGroup(
+        loader.setSpeedCommand(0),
+        shooter.initCommand(),
+        hood.SetPositionByPidCommand(0),
+        hopper.setSpeedCommand(0));
+  }
+
+  /**
+   * returns the position that the robot should point towards
+   * 
+   * @return
+   */
+  public Vector2D getActualTarget() {
+    var loops = 5;
+    var velocity = new Vector2D(RobotContainer.drivetrain.getState().Speeds.vxMetersPerSecond,
+        RobotContainer.drivetrain.getState().Speeds.vxMetersPerSecond);
+    var solution = getSolution(getDistanceToTarget());
+    var offset = velocity.clone().multiplyByDouble(-solution.airTime);
+    var target = new Vector2D(0, 0).fromPose2D(RobotContainer.drivetrain.hubMidPoint).addVector(offset);
+
+    for (int i = 0; i < loops; i++) {
+      solution = getSolution(distanceToVector(target));
+      offset = velocity.clone().multiplyByDouble(-solution.airTime);
+      target = new Vector2D(0, 0).fromPose2D(RobotContainer.drivetrain.hubMidPoint).addVector(offset);
+    }
+    return target;
+  }
+
+  private double distanceToVector(Vector2D v) {
+    var robotPose = RobotContainer.drivetrain.getState().Pose;
+    return Math.sqrt(Math.pow(v.x - robotPose.getX(), 2) + Math.pow(v.y - robotPose.getY(), 2));
+  }
+
+  public Vector2D getVectorToHub() {
+    var robotPose = RobotContainer.drivetrain.getState().Pose;
+    var hubPose = RobotContainer.drivetrain.hubMidPoint;
+    return new Vector2D(hubPose.getX() - robotPose.getX(), hubPose.getY() - robotPose.getY());
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    var solution = getSolution(RobotContainer.drivetrain.distanceToHub());
+    var solution = getSolution(getDistanceToTarget());
     SmartDashboard.putNumber("firing solution:distance", solution.distance);
     SmartDashboard.putNumber("firing solution:shooter_speed", solution.shooterSpeed);
     SmartDashboard.putNumber("firing solution:hood_position", solution.hoodPosition);
